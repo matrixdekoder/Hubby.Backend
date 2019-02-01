@@ -23,10 +23,11 @@ namespace Library.EventStore
             var events = new List<IEvent>();
             StreamEventsSlice currentSlice;
             long nextSliceStart = StreamPosition.Start;
+            var streamName = GetStreamName(id);
 
             do
             {
-                currentSlice = await _eventStoreContext.Connection.ReadStreamEventsForwardAsync(EventStoreConstants.Stream, nextSliceStart, 200, false);
+                currentSlice = await _eventStoreContext.Connection.ReadStreamEventsForwardAsync(streamName, nextSliceStart, 200, false);
                 nextSliceStart = currentSlice.NextEventNumber;
                 events.AddRange(currentSlice.Events.Select(x => x.DeserializeEvent()));
             } while (!currentSlice.IsEndOfStream);
@@ -38,10 +39,21 @@ namespace Library.EventStore
         {
             var events = aggregate.GetUncommittedEvents().ToArray();
             if (!events.Any()) return;
-            
+
+            var streamName = GetStreamName(aggregate.GetType(), aggregate.Id);
             var eventsToSave = events.Select(x => x.ToEventData()).ToList();
-            await _eventStoreContext.Connection.AppendToStreamAsync(EventStoreConstants.Stream, ExpectedVersion.Any, eventsToSave);
+            await _eventStoreContext.Connection.AppendToStreamAsync(streamName, ExpectedVersion.Any, eventsToSave);
             aggregate.ClearUncommittedEvents();
+        }
+
+        private string GetStreamName(Guid id)
+        {
+            return GetStreamName(typeof(T), id);
+        }
+
+        private static string GetStreamName(Type type, Guid id)
+        {
+            return $"{type.Name}-{id}";
         }
     }
 }

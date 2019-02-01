@@ -2,6 +2,6 @@
 {
     public static class EventStoreConstants
     {
-        public const string Stream = "HubbyStream";
+        public const string PositionKey = "Position";
     }
 }

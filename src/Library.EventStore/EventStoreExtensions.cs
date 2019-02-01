@@ -14,6 +14,7 @@ namespace Library.EventStore
 
         public static IEvent DeserializeEvent(this ResolvedEvent resolvedEvent)
         {
+            if (resolvedEvent.OriginalStreamId.StartsWith("$")) return null;
             var eventTypeName = JObject.Parse(Encoding.UTF8.GetString(resolvedEvent.OriginalEvent.Metadata)).Property("Type").Value;
             var type = Type.GetType((string)eventTypeName);
             return (IEvent)JsonConvert.DeserializeObject(Encoding.UTF8.GetString(resolvedEvent.OriginalEvent.Data), type);

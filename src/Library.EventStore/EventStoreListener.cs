@@ -21,15 +21,15 @@ namespace Library.EventStore
 
         public async Task Listen()
         {
-            var position = await _collection.Find(x => x.Stream == EventStoreConstants.Stream).FirstOrDefaultAsync();
-            _eventStoreContext.Connection.SubscribeToStreamFrom(EventStoreConstants.Stream, position?.Position ?? -1, CatchUpSubscriptionSettings.Default, HandleEvent);
+            var position = await _collection.Find(x => x.Name == EventStoreConstants.PositionKey).FirstOrDefaultAsync();
+            _eventStoreContext.Connection.SubscribeToAllFrom(position.Position ?? Position.Start, CatchUpSubscriptionSettings.Default, HandleEvent);
         }
 
         private async Task HandleEvent(EventStoreCatchUpSubscription subscription, ResolvedEvent resolvedEvent)
         {
             var @event = resolvedEvent.DeserializeEvent();
             await _mediator.Publish(@event);
-            await _collection.ReplaceOneAsync(x => x.Stream == EventStoreConstants.Stream, new EventStorePosition(resolvedEvent.OriginalEventNumber));
+            await _collection.ReplaceOneAsync(x => x.Name == EventStoreConstants.PositionKey, new EventStorePosition(resolvedEvent.OriginalPosition));
         }
     }
 }

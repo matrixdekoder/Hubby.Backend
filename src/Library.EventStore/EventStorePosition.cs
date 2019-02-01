@@ -1,12 +1,14 @@
-﻿namespace Library.EventStore
+﻿using EventStore.ClientAPI;
+
+namespace Library.EventStore
 {
     public class EventStorePosition
     {
-        public string Stream => EventStoreConstants.Stream;
+        public string Name => EventStoreConstants.PositionKey;
 
-        public long? Position { get; }
+        public Position? Position { get; }
 
-        public EventStorePosition(long? position)
+        public EventStorePosition(Position? position)
         {
             Position = position;
         }
