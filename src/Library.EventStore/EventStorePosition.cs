@@ -1,16 +1,21 @@
-﻿using EventStore.ClientAPI;
+﻿using System;
+using Core.Application;
 
 namespace Library.EventStore
 {
-    public class EventStorePosition
+    public class EventStorePosition: IReadModel
     {
-        public string Name => EventStoreConstants.PositionKey;
+        public Guid Id { get; set; }
+        public string Name { get; set; }
+        public long CommitPosition { get; set; }
+        public long PreparedPosition { get; }
+        public long PreparePosition { get; set; }
 
-        public Position? Position { get; }
-
-        public EventStorePosition(Position? position)
+        public EventStorePosition(string name, long commitPosition, long preparedPosition)
         {
-            Position = position;
+            Name = name;
+            CommitPosition = commitPosition;
+            PreparedPosition = preparedPosition;
         }
     }
 }
