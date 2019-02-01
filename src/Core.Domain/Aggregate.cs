@@ -1,0 +1,44 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Core.Domain
+{
+    public abstract class Aggregate: IAggregate
+    {
+        private readonly IList<IEvent> _uncommittedEvents = new List<IEvent>();
+
+        protected Aggregate(IEnumerable<IEvent> events)
+        {
+            foreach (var @event in events)
+            {
+                Apply(@event);
+            }
+        }
+
+        public int Version { get; private set; }
+        public Guid Id { get; protected set; }
+
+        public IEnumerable<IEvent> GetUncommittedEvents()
+        {
+            return _uncommittedEvents.AsEnumerable();
+        }
+
+        public void ClearUncommittedEvents()
+        {
+            _uncommittedEvents.Clear();
+        }
+
+        protected void Publish(IEvent e)
+        {
+            _uncommittedEvents.Add(e);
+            Apply(e);
+        }
+
+        protected void Apply(IEvent @event)
+        {
+            Version++;
+            RedirectToWhen.InvokeEventOptional(this, @event);
+        }
+    }
+}
