@@ -17,6 +17,7 @@ namespace Library.EventStore
             
             services.AddSingleton<IEventStoreContext, EventStoreContext>();
             services.AddTransient(typeof(IEventStoreRepository<>), typeof(EventStoreRepository<>));
+            services.AddTransient<IEventHandler, EventHandler>();
             services.AddTransient<IEventStoreListener, EventStoreListener>();
         }
     }

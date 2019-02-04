@@ -8,14 +8,6 @@ namespace Library.EventStore
         public Guid Id { get; set; }
         public string Name { get; set; }
         public long CommitPosition { get; set; }
-        public long PreparedPosition { get; }
-        public long PreparePosition { get; set; }
-
-        public EventStorePosition(string name, long commitPosition, long preparedPosition)
-        {
-            Name = name;
-            CommitPosition = commitPosition;
-            PreparedPosition = preparedPosition;
-        }
+        public long PreparedPosition { get; set; }
     }
 }

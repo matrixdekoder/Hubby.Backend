@@ -27,7 +27,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Account.Application.Command
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core.Infrastructure", "src\Core.Infrastructure\Core.Infrastructure.csproj", "{AC370AB1-94B6-492C-AF18-4BC44D67EFDF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Account.Application.QueryService", "src\Account.Application.QueryService\Account.Application.QueryService.csproj", "{D6FAC431-BDBB-4C45-B8C0-56E2F344C543}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Account.Application.QueryService", "src\Account.Application.QueryService\Account.Application.QueryService.csproj", "{D6FAC431-BDBB-4C45-B8C0-56E2F344C543}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -103,8 +103,8 @@ Global
 		{AC370AB1-94B6-492C-AF18-4BC44D67EFDF}.Release|x64.Build.0 = Release|x64
 		{D6FAC431-BDBB-4C45-B8C0-56E2F344C543}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D6FAC431-BDBB-4C45-B8C0-56E2F344C543}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D6FAC431-BDBB-4C45-B8C0-56E2F344C543}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{D6FAC431-BDBB-4C45-B8C0-56E2F344C543}.Debug|x64.Build.0 = Debug|Any CPU
+		{D6FAC431-BDBB-4C45-B8C0-56E2F344C543}.Debug|x64.ActiveCfg = Debug|x64
+		{D6FAC431-BDBB-4C45-B8C0-56E2F344C543}.Debug|x64.Build.0 = Debug|x64
 		{D6FAC431-BDBB-4C45-B8C0-56E2F344C543}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D6FAC431-BDBB-4C45-B8C0-56E2F344C543}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D6FAC431-BDBB-4C45-B8C0-56E2F344C543}.Release|x64.ActiveCfg = Release|Any CPU

@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Account.Application.CommandService.Register;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -19,8 +20,15 @@ namespace Host.Api.Controllers
         [HttpPost]
         public async Task<IActionResult> RegisterAccount([FromBody] RegisterAccount registerAccount)
         {
-            var response = await _mediator.Send(registerAccount);
-            return Ok(response);
+            try
+            {
+                var response = await _mediator.Send(registerAccount);
+                return Ok(response);
+            }
+            catch (InvalidOperationException e)
+            {
+                return BadRequest(e.Message);
+            }
         }
     }
 }

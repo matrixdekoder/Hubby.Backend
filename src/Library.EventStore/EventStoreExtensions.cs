@@ -35,11 +35,5 @@ namespace Library.EventStore
 
             return new EventData(eventId, typeName, true, data, metadata);
         }
-
-        public static EventStorePosition ToEventStorePosition(this Position? from)
-        {
-            if (from == null) throw new ArgumentNullException(nameof(from));
-            return new EventStorePosition(EventStoreConstants.PositionKey, @from.Value.CommitPosition, @from.Value.PreparePosition);
-        }
     }
 }

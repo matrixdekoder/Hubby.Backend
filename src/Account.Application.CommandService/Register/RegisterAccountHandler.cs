@@ -3,7 +3,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using Core.Infrastructure;
 using Library.EventStore;
+using Library.Mongo;
 using MediatR;
+using MongoDB.Driver;
 
 namespace Account.Application.CommandService.Register
 {
@@ -11,15 +13,20 @@ namespace Account.Application.CommandService.Register
     {
         private readonly IEventStoreRepository<Domain.Account> _repository;
         private readonly IPasswordComputer _passwordComputer;
+        private readonly IMongoCollection<LoginReadModel> _collection;
 
-        public RegisterAccountHandler(IEventStoreRepository<Domain.Account> repository, IPasswordComputer passwordComputer)
+        public RegisterAccountHandler(IEventStoreRepository<Domain.Account> repository, IPasswordComputer passwordComputer, IMongoContext context)
         {
             _repository = repository;
             _passwordComputer = passwordComputer;
+            _collection = context.GetCollection<LoginReadModel>();
         }
 
         public async Task<RegisterAccountResponse> Handle(RegisterAccount notification, CancellationToken cancellationToken)
         {
+            var account = await _collection.Find(x => x.Username == notification.Username).FirstOrDefaultAsync(cancellationToken);
+            if (account != null) throw new InvalidOperationException($"Account with username {notification.Username} already exists");
+
             var id = Guid.NewGuid();
             var hashedPassword = _passwordComputer.Hash(notification.Password);
 
