@@ -1,9 +1,9 @@
 ﻿using System;
-using Core.Application;
+using Core.Domain;
 
 namespace Library.EventStore
 {
-    public class EventStorePosition: IReadModel
+    public class EventStorePosition: IEntity
     {
         public Guid Id { get; set; }
         public string Name { get; set; }

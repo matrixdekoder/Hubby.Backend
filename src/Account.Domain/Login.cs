@@ -1,9 +1,9 @@
 ﻿using System;
-using Core.Application;
+using Core.Domain;
 
-namespace Account.Application.CommandService.Register
+namespace Account.Domain
 {
-    public class LoginReadModel: IReadModel
+    public class Login: IEntity
     {
         public Guid Id { get; set; }
         public string Username { get; set; }

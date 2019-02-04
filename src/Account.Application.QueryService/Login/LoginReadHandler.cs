@@ -8,16 +8,16 @@ namespace Account.Application.QueryService.Login
 {
     public class LoginReadHandler: INotificationHandler<AccountRegistered>
     {
-        private readonly IProjectionWriter<LoginReadModel> _writer;
+        private readonly IProjectionWriter<Domain.Login> _writer;
 
-        public LoginReadHandler(IProjectionWriter<LoginReadModel> writer)
+        public LoginReadHandler(IProjectionWriter<Domain.Login> writer)
         {
             _writer = writer;
         }
 
         public async Task Handle(AccountRegistered notification, CancellationToken cancellationToken)
         {
-            var view = new LoginReadModel
+            var view = new Domain.Login
             {
                 Id = notification.Id, 
                 Username = notification.Username, 

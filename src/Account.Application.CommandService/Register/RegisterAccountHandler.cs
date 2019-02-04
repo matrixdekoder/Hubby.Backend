@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Account.Domain;
 using Core.Infrastructure;
 using Library.EventStore;
 using Library.Mongo;
@@ -13,13 +14,13 @@ namespace Account.Application.CommandService.Register
     {
         private readonly IEventStoreRepository<Domain.Account> _repository;
         private readonly IPasswordComputer _passwordComputer;
-        private readonly IMongoCollection<LoginReadModel> _collection;
+        private readonly IMongoCollection<Login> _collection;
 
         public RegisterAccountHandler(IEventStoreRepository<Domain.Account> repository, IPasswordComputer passwordComputer, IMongoContext context)
         {
             _repository = repository;
             _passwordComputer = passwordComputer;
-            _collection = context.GetCollection<LoginReadModel>();
+            _collection = context.GetCollection<Domain.Login>();
         }
 
         public async Task<RegisterAccountResponse> Handle(RegisterAccount notification, CancellationToken cancellationToken)
