@@ -1,34 +1,31 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Account.Application.CommandService.Register;
+using Account.Application.QueryService.Login;
+using Host.Api.Exceptions;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Host.Api.Controllers
 {
     [Route("api/[controller]")]
-    [ApiController]
-    public class AccountController: ControllerBase
+    public class AccountController: BaseController
     {
-        private readonly IMediator _mediator;
-
-        public AccountController(IMediator mediator)
+        public AccountController(IMediator mediator, IExceptionHandler exceptionHandler): base(mediator, exceptionHandler)
         {
-            _mediator = mediator;
         }
 
         [HttpPost]
-        public async Task<IActionResult> RegisterAccount([FromBody] RegisterAccount registerAccount)
+        public async Task<IActionResult> Register([FromBody] RegisterAccount request)
         {
-            try
-            {
-                var response = await _mediator.Send(registerAccount);
-                return Ok(response);
-            }
-            catch (InvalidOperationException e)
-            {
-                return BadRequest(e.Message);
-            }
+            return await SendRequest<RegisterAccount, RegisterAccountResponse>(request);
+        }
+
+        [HttpPost("token")]
+        public async Task<IActionResult> Login([FromBody] LoginQueryModel request)
+        {
+            return await SendRequest<LoginQueryModel, LoginTokenResponse>(request);
         }
     }
 }

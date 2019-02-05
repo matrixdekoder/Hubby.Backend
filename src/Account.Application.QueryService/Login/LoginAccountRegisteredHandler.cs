@@ -6,11 +6,11 @@ using MediatR;
 
 namespace Account.Application.QueryService.Login
 {
-    public class LoginReadHandler: INotificationHandler<AccountRegistered>
+    public class LoginAccountRegisteredHandler: INotificationHandler<AccountRegistered>
     {
         private readonly IProjectionWriter<LoginReadModel> _writer;
 
-        public LoginReadHandler(IProjectionWriter<LoginReadModel> writer)
+        public LoginAccountRegisteredHandler(IProjectionWriter<LoginReadModel> writer)
         {
             _writer = writer;
         }

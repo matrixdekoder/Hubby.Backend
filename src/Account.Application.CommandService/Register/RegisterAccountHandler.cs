@@ -1,11 +1,8 @@
-﻿using System;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
-using Account.Domain;
-using Core.Infrastructure;
+using Core.Infrastructure.Security;
 using Library.EventStore;
 using MediatR;
-using MongoDB.Driver;
 
 namespace Account.Application.CommandService.Register
 {

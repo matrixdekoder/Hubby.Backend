@@ -1,7 +1,7 @@
-﻿using System;
+using System;
 using System.Security.Cryptography;
 
-namespace Core.Infrastructure
+namespace Core.Infrastructure.Security
 {
     public class PasswordComputer : IPasswordComputer
     {
@@ -43,7 +43,7 @@ namespace Core.Infrastructure
 
             for (var i = 0; i < HashSize; i++)
             {
-                if (storedPassword[i + SaltSize] != inputPasswordHash[i])
+                if (storedPasswordHash[i + SaltSize] != inputPasswordHash[i])
                     result = false;
             }
 

@@ -11,7 +11,7 @@ namespace Account.Application.CommandService
         {
             // Library services
             services.AddMediatR(typeof(AccountCommandServiceBootstrap));
-
+            
             // Domain services
             services.AddTransient<IAggregateFactory<Domain.Account>, AccountFactory>();
         }
