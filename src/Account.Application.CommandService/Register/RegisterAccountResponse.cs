@@ -4,13 +4,13 @@ namespace Account.Application.CommandService.Register
 {
     public class RegisterAccountResponse
     {
-        public Guid Id { get; }
-        public string Username { get; }
-
-        public RegisterAccountResponse(Guid id, string username)
+        public RegisterAccountResponse(string id, string username)
         {
             Id = id;
             Username = username;
         }
+        
+        public string Id { get; }
+        public string Username { get; }
     }
 }

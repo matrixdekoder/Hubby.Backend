@@ -20,7 +20,7 @@ namespace Library.Mongo
             await _collection.InsertOneAsync(view);
         }
 
-        public async Task Update(Guid id, Action<T> updateActions)
+        public async Task Update(string id, Action<T> updateActions)
         {
             var view = await _collection.Find(x => x.Id == id).FirstOrDefaultAsync();
             if (view != null)

@@ -4,7 +4,13 @@ namespace Account.Application.CommandService.Register
 {
     public class RegisterAccount : IRequest<RegisterAccountResponse>
     {
-        public string Username { get; set; }
-        public string Password { get; set; }
+        public RegisterAccount(string username, string password)
+        {
+            Username = username;
+            Password = password;
+        }
+
+        public string Username { get; }
+        public string Password { get; }
     }
 }

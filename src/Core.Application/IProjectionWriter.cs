@@ -7,6 +7,6 @@ namespace Core.Application
     public interface IProjectionWriter<T> where T : IEntity
     {
         Task Add(T view);
-        Task Update(Guid id, Action<T> updateActions);
+        Task Update(string id, Action<T> updateActions);
     }
 }

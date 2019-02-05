@@ -7,20 +7,19 @@ namespace Account.Domain
     public class Account: Aggregate
     {
         private string _password;
+        private string _username;
 
         public Account(IEnumerable<IEvent> events): base(events)
         {
         }
 
-        public string Username { get; private set; }
-
-        public void Register(Guid id, string username, string password)
+        public void Register(string id, string username, string password)
         {
             if(Version > 0)
-                throw new InvalidOperationException("Can't register an account twice.");
+                throw new InvalidOperationException($"Account with username {username} already exists.");
 
             Id = id;
-            Username = username;
+            _username = username;
             _password = password;
 
             var e = new AccountRegistered(Id, username, password);
@@ -31,7 +30,7 @@ namespace Account.Domain
         private void When(AccountRegistered e)
         {
             Id = e.Id;
-            Username = e.Username;
+            _username = e.Username;
             _password = e.Password;
         }
     }

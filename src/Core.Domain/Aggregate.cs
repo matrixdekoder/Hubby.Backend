@@ -15,9 +15,9 @@ namespace Core.Domain
                 Apply(@event);
             }
         }
-
-        public int Version { get; private set; }
-        public Guid Id { get; protected set; }
+        
+        public string Id { get; protected set; }
+        protected int Version { get; private set; }
 
         public IEnumerable<IEvent> GetUncommittedEvents()
         {
@@ -35,7 +35,7 @@ namespace Core.Domain
             Apply(e);
         }
 
-        protected void Apply(IEvent @event)
+        private void Apply(IEvent @event)
         {
             Version++;
             RedirectToWhen.InvokeEventOptional(this, @event);

@@ -18,7 +18,7 @@ namespace Library.EventStore
             _aggregateFactory = aggregateFactory;
         }
 
-        public async Task<T> GetById(Guid id)
+        public async Task<T> GetById(string id)
         {
             var events = new List<IEvent>();
             StreamEventsSlice currentSlice;
@@ -46,14 +46,16 @@ namespace Library.EventStore
             aggregate.ClearUncommittedEvents();
         }
 
-        private string GetStreamName(Guid id)
+        private string GetStreamName(string id)
         {
             return GetStreamName(typeof(T), id);
         }
 
-        private static string GetStreamName(Type type, Guid id)
+        private static string GetStreamName(Type type, string id)
         {
             return $"{type.Name}-{id}";
         }
+
+        
     }
 }
