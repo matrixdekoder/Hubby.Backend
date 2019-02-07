@@ -16,27 +16,73 @@ namespace Core.Infrastructure.Security
             _configuration = options.Value;
         }
 
-        public string Handle(string username)
+        public TokenModel Handle(string username)
         {
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var descriptor = GetDescriptor(username);
-            var securityToken = tokenHandler.CreateToken(descriptor);
-            return tokenHandler.WriteToken(securityToken);
+            var accessToken = GetTokenString(username, _configuration.AccessExpirationSeconds);
+            var refreshToken = GetTokenString(username, _configuration.RefreshExpirationSeconds);
+            return new TokenModel(accessToken, refreshToken);
         }
 
-        private SecurityTokenDescriptor GetDescriptor(string username)
+        public bool IsTokenExpired(string token)
+        {
+            var tokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateAudience = false,
+                ValidateIssuer = false,
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.Secret)),
+                ValidateLifetime = false
+            };
+            
+            var tokenHandler = new JwtSecurityTokenHandler();
+            
+            tokenHandler.ValidateToken(token, tokenValidationParameters, out var securityToken);
+            if (!(securityToken is JwtSecurityToken jwtSecurityToken) || !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase))
+                throw new SecurityTokenException("Invalid token");
+            
+            return securityToken.ValidTo < DateTime.Now;
+        }
+
+        public ClaimsPrincipal GetExpiredTokenClaimPrincipal(string token)
+        {
+            var tokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateAudience = false,
+                ValidateIssuer = false,
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.Secret)),
+                ValidateLifetime = false
+            };
+            
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var principal = tokenHandler.ValidateToken(token, tokenValidationParameters, out var securityToken);
+            
+            if (!(securityToken is JwtSecurityToken jwtSecurityToken) || !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase))
+                throw new SecurityTokenException("Invalid token");
+            
+            return principal;
+        }
+
+        private string GetTokenString(string username, int expirationSeconds)
+        {
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var tokenDescriptor = GetDescriptor(username, expirationSeconds);
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            return tokenHandler.WriteToken(token);
+        }
+
+        private SecurityTokenDescriptor GetDescriptor(string username, int expirationSeconds)
         {
             var key = Encoding.ASCII.GetBytes(_configuration.Secret);
 
             return new SecurityTokenDescriptor
             {
-                Subject = new ClaimsIdentity(new Claim[]
+                Subject = new ClaimsIdentity(new[]
                 {
                     new Claim(ClaimTypes.Name, username)
                 }),
-                Expires = DateTime.Now.AddSeconds(_configuration.ExpirationSeconds),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key),
-                    SecurityAlgorithms.HmacSha256Signature)
+                Expires = DateTime.Now.AddSeconds(expirationSeconds),
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key),SecurityAlgorithms.HmacSha256Signature)
             };
         }
     }

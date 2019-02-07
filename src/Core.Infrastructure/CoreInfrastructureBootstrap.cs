@@ -8,10 +8,11 @@ namespace Core.Infrastructure
     {
         public static void ConfigureCoreInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
-            services.Configure<Security.TokenConfiguration>(cfg =>
+            services.Configure<TokenConfiguration>(cfg =>
             {
                 cfg.Secret = configuration.GetSection("Token:Secret").Value;
-                cfg.ExpirationSeconds = int.Parse(configuration.GetSection("Token:ExpirationSeconds").Value);
+                cfg.AccessExpirationSeconds = int.Parse(configuration.GetSection("Token:AccessExpirationSeconds").Value);
+                cfg.RefreshExpirationSeconds = int.Parse(configuration.GetSection("Token:RefreshExpirationSeconds").Value);
             });
 
             services.AddTransient<IPasswordComputer, PasswordComputer>();

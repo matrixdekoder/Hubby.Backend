@@ -1,7 +1,7 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Account.Application.CommandService.Register;
 using Account.Application.QueryService.Login;
+using Account.Application.QueryService.Token;
 using Host.Api.Exceptions;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -16,6 +16,13 @@ namespace Host.Api.Controllers
         {
         }
 
+        [HttpGet]
+        [Authorize]
+        public IActionResult Test()
+        {
+            return Ok("YAY");
+        }
+
         [HttpPost]
         public async Task<IActionResult> Register([FromBody] RegisterAccount request)
         {
@@ -26,6 +33,12 @@ namespace Host.Api.Controllers
         public async Task<IActionResult> Login([FromBody] LoginQueryModel request)
         {
             return await SendRequest<LoginQueryModel, LoginTokenResponse>(request);
+        }
+
+        [HttpPost("refresh")]
+        public async Task<IActionResult> Refresh([FromBody] TokenQueryModel request)
+        {
+            return await SendRequest<TokenQueryModel, LoginTokenResponse>(request);
         }
     }
 }

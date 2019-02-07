@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
 using System.Text;
 using Account.Application.CommandService;
 using Account.Application.QueryService;
@@ -80,7 +81,8 @@ namespace Host.Api
                         ValidateIssuerSigningKey = true,
                         IssuerSigningKey = new SymmetricSecurityKey(key),
                         ValidateIssuer = false,
-                        ValidateAudience = false
+                        ValidateAudience = false, 
+                        ClockSkew = TimeSpan.Zero
                     };
                 });
         }

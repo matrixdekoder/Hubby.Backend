@@ -1,7 +1,11 @@
+using System.Security.Claims;
+
 namespace Core.Infrastructure.Security
 {
     public interface ITokenHandler
     {
-        string Handle(string username);
+        TokenModel Handle(string username);
+        ClaimsPrincipal GetExpiredTokenClaimPrincipal(string token);
+        bool IsTokenExpired(string token);
     }
 }
