@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Account.Application.CommandService.Register;
 using Account.Application.QueryService.Login;
+using Account.Application.QueryService.Refresh;
 using Account.Application.QueryService.Token;
 using Host.Api.Exceptions;
 using MediatR;
@@ -32,13 +33,13 @@ namespace Host.Api.Controllers
         [HttpPost("token")]
         public async Task<IActionResult> Login([FromBody] LoginQueryModel request)
         {
-            return await SendRequest<LoginQueryModel, LoginTokenResponse>(request);
+            return await SendRequest<LoginQueryModel, TokenResponseModel>(request);
         }
 
         [HttpPost("refresh")]
-        public async Task<IActionResult> Refresh([FromBody] TokenQueryModel request)
+        public async Task<IActionResult> Refresh([FromBody] RefreshTokenQueryModel request)
         {
-            return await SendRequest<TokenQueryModel, LoginTokenResponse>(request);
+            return await SendRequest<RefreshTokenQueryModel, TokenResponseModel>(request);
         }
     }
 }

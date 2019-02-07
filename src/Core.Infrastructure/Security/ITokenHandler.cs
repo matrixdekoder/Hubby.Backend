@@ -4,7 +4,7 @@ namespace Core.Infrastructure.Security
 {
     public interface ITokenHandler
     {
-        TokenModel Handle(string username);
+        TokenModel Create(string username);
         ClaimsPrincipal GetExpiredTokenClaimPrincipal(string token);
         bool IsTokenExpired(string token);
     }

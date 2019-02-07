@@ -1,4 +1,3 @@
-using System;
 using Core.Domain;
 
 namespace Account.Application.QueryService.Login

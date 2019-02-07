@@ -1,11 +1,16 @@
-using Account.Application.QueryService.Login;
 using MediatR;
 
 namespace Account.Application.QueryService.Token
 {
-    public class TokenQueryModel : IRequest<LoginTokenResponse>
+    public class TokenQueryModel: IRequest<TokenResponseModel>
     {
-        public string AccessToken { get; set; }
-        public string RefreshToken { get; set; }
+        public TokenQueryModel(string username, bool isRefresh)
+        {
+            Username = username;
+            IsRefresh = isRefresh;
+        }
+        
+        public string Username { get; }
+        public bool IsRefresh { get; }
     }
 }
