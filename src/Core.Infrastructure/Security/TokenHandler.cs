@@ -16,31 +16,10 @@ namespace Core.Infrastructure.Security
             _configuration = options.Value;
         }
 
-        public TokenModel Create(string username)
-        {
-            var accessToken = GetTokenString(username, _configuration.AccessExpirationSeconds);
-            var refreshToken = GetTokenString(username, _configuration.RefreshExpirationSeconds);
-            return new TokenModel(accessToken, refreshToken);
-        }
-
-        public bool IsTokenExpired(string token)
-        {   
-            new JwtSecurityTokenHandler().ValidateToken(token, GetExpiredTokenParameters(), out var securityToken);
-            IsTokenValid(securityToken);
-            return securityToken.ValidTo < DateTime.Now;
-        }
-
-        public ClaimsPrincipal GetExpiredTokenClaimPrincipal(string token)
-        {
-            var principal = new JwtSecurityTokenHandler().ValidateToken(token, GetExpiredTokenParameters(), out var securityToken);
-            IsTokenValid(securityToken);
-            return principal;
-        }
-
-        private string GetTokenString(string username, int expirationSeconds)
+        public string Create(string username)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
-            var tokenDescriptor = GetDescriptor(username, expirationSeconds);
+            var tokenDescriptor = GetDescriptor(username, _configuration.Expiration);
             var token = tokenHandler.CreateToken(tokenDescriptor);
             return tokenHandler.WriteToken(token);
         }
@@ -58,24 +37,6 @@ namespace Core.Infrastructure.Security
                 Expires = DateTime.Now.AddSeconds(expirationSeconds),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key),SecurityAlgorithms.HmacSha256Signature)
             };
-        }
-
-        private TokenValidationParameters GetExpiredTokenParameters()
-        {
-            return new TokenValidationParameters
-            {
-                ValidateAudience = false,
-                ValidateIssuer = false,
-                ValidateIssuerSigningKey = true,
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.Secret)),
-                ValidateLifetime = false
-            };
-        }
-
-        private static void IsTokenValid(SecurityToken securityToken)
-        {
-            if (!(securityToken is JwtSecurityToken jwtSecurityToken) || !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase))
-                throw new SecurityTokenException("Invalid token");
         }
     }
 }
