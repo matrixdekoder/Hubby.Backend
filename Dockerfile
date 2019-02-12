@@ -1,6 +1,5 @@
 FROM microsoft/dotnet:aspnetcore-runtime AS base
 WORKDIR /app
-EXPOSE 5000:5000
 
 FROM microsoft/dotnet:sdk AS build
 WORKDIR /src
