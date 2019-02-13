@@ -4,7 +4,7 @@ using Core.Domain;
 
 namespace Account.Domain
 {
-    public class Account: Aggregate
+    public class Account: Aggregate<Account>
     {
         private string _password;
         private string _username;
@@ -18,12 +18,7 @@ namespace Account.Domain
             if(Version > 0)
                 throw new InvalidOperationException($"Account with username {username} already exists.");
 
-            Id = id;
-            _username = username;
-            _password = password;
-
-            var e = new AccountRegistered(Id, username, password);
-
+            var e = new AccountRegistered(id, username, password);
             Publish(e);
         }
 

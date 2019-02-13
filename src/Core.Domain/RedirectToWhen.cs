@@ -20,10 +20,10 @@ namespace Core.Domain
         }
 
         [DebuggerNonUserCode]
-        public static void InvokeEventOptional<T>(T instance, object @event)
+        public static void InvokeEventOptional<T, TEntity>(T instance, object @event)
         {
             var type = @event.GetType();
-            if (!Cache<T>.Dict.TryGetValue(type, out var info)) return;
+            if (!Cache<TEntity>.Dict.TryGetValue(type, out var info)) return;
 
             try
             {

@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Core.Domain
 {
-    public abstract class Aggregate: IAggregate
+    public abstract class Aggregate<TEntity>: IAggregate
     {
         private readonly IList<IEvent> _uncommittedEvents = new List<IEvent>();
 
@@ -38,7 +38,7 @@ namespace Core.Domain
         private void Apply(IEvent @event)
         {
             Version++;
-            RedirectToWhen.InvokeEventOptional(this, @event);
+            RedirectToWhen.InvokeEventOptional<Aggregate<TEntity>, TEntity>(this, @event);
         }
     }
 }
