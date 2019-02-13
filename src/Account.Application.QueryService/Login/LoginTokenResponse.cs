@@ -2,13 +2,13 @@ namespace Account.Application.QueryService.Login
 {
     public class LoginTokenResponse
     {
-        public LoginTokenResponse(string username, string accessToken)
+        public LoginTokenResponse(string id, string accessToken)
         {
-            Username = username;
+            Id = id;
             AccessToken = accessToken;
         }
         
-        public string Username { get; }
+        public string Id { get; }
         public string AccessToken { get; }
     }
 }

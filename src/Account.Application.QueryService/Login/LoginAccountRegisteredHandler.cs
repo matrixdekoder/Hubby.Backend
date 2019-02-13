@@ -20,7 +20,6 @@ namespace Account.Application.QueryService.Login
             var view = new LoginReadModel
             {
                 Id = notification.Id, 
-                Username = notification.Username, 
                 Password = notification.Password
             };
 

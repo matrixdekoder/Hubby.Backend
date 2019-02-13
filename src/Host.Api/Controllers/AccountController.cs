@@ -25,11 +25,5 @@ namespace Host.Api.Controllers
         {
             return await SendRequest<LoginQueryModel, LoginTokenResponse>(request);
         }
-
-        [HttpGet]
-        public IActionResult Test()
-        {
-            return Ok("Test Works");
-        }
     }
 }

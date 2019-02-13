@@ -21,10 +21,10 @@ namespace Account.Application.CommandService.Register
         {
             var hashedPassword = _passwordComputer.Hash(notification.Password);
 
-            var aggregate = await _repository.GetById(notification.Username);
-            aggregate.Register(notification.Username, notification.Username, hashedPassword);
+            var aggregate = await _repository.GetById(notification.Id);
+            aggregate.Register(notification.Id, hashedPassword);
             await _repository.Save(aggregate);
-            return new RegisterAccountResponse(notification.Username, notification.Username);
+            return new RegisterAccountResponse(notification.Id);
         }
     }
 }

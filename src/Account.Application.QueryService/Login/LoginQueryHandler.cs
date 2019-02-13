@@ -24,14 +24,14 @@ namespace Account.Application.QueryService.Login
 
         public async Task<LoginTokenResponse> Handle(LoginQueryModel request, CancellationToken cancellationToken)
         {
-            var view = await _context.GetCollection<LoginReadModel>().Find(x => x.Username == request.Username).FirstOrDefaultAsync(cancellationToken);
-            if (view == null) throw new ItemNotFoundException($"Account with username {request.Username} not found");
+            var view = await _context.GetCollection<LoginReadModel>().Find(x => x.Id == request.Id).FirstOrDefaultAsync(cancellationToken);
+            if (view == null) throw new ItemNotFoundException($"Account with username {request.Id} not found");
 
             var isAuthorized = _passwordComputer.Compare(request.Password, view.Password);
             if (!isAuthorized) throw new UnauthorizedAccessException("Password incorrect.");
             
-            var token = _tokenHandler.Create(request.Username);
-            return new LoginTokenResponse(request.Username, token);
+            var token = _tokenHandler.Create(request.Id);
+            return new LoginTokenResponse(view.Id, token);
         }
     }
 }
