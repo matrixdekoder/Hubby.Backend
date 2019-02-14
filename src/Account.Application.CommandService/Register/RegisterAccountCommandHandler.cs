@@ -7,13 +7,13 @@ using MediatR;
 
 namespace Account.Application.CommandService.Register
 {
-    public class RegisterAccountHandler: INotificationHandler<RegisterAccount>
+    public class RegisterAccountCommandHandler: INotificationHandler<RegisterAccountCommand>
     {
         private readonly IEventStoreRepository<Account.Domain.Account> _accountRepository;
         private readonly IEventStoreRepository<Buddy.Domain.Buddy> _buddyRepository;
         private readonly IPasswordComputer _passwordComputer;
         
-        public RegisterAccountHandler(
+        public RegisterAccountCommandHandler(
             IEventStoreRepository<Account.Domain.Account> accountRepository, 
             IEventStoreRepository<Buddy.Domain.Buddy> buddyRepository,
             IPasswordComputer passwordComputer)
@@ -23,7 +23,7 @@ namespace Account.Application.CommandService.Register
             _passwordComputer = passwordComputer;
         }
 
-        public async Task Handle(RegisterAccount notification, CancellationToken cancellationToken)
+        public async Task Handle(RegisterAccountCommand notification, CancellationToken cancellationToken)
         {
             // Create account
             var hashedPassword = _passwordComputer.Hash(notification.Password);

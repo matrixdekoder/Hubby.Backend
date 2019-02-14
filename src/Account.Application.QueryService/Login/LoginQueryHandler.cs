@@ -10,22 +10,22 @@ using MongoDB.Driver;
 
 namespace Account.Application.QueryService.Login
 {
-    public class LoginQueryHandler : IRequestHandler<LoginQueryModel, LoginQueryResponse>
+    public class LoginQueryHandler : IRequestHandler<LoginQuery, LoginQueryResponse>
     {
         private readonly IPasswordComputer _passwordComputer;
         private readonly ITokenHandler _tokenHandler;
-        private readonly IMongoContext _context;
+        private readonly IMongoCollection<AccountReadModel> _collection;
 
         public LoginQueryHandler(IMongoContext context, IPasswordComputer passwordComputer, ITokenHandler tokenHandler)
         {
             _passwordComputer = passwordComputer;
             _tokenHandler = tokenHandler;
-            _context = context;
+            _collection = context.GetCollection<AccountReadModel>();
         }
 
-        public async Task<LoginQueryResponse> Handle(LoginQueryModel request, CancellationToken cancellationToken)
+        public async Task<LoginQueryResponse> Handle(LoginQuery request, CancellationToken cancellationToken)
         {
-            var view = await _context.GetCollection<AccountReadModel>().Find(x => x.Id == request.Id).FirstOrDefaultAsync(cancellationToken);
+            var view = await _collection.Find(x => x.Id == request.Id).FirstOrDefaultAsync(cancellationToken);
             if (view == null) throw new ItemNotFoundException($"Account with username {request.Id} not found");
 
             var isAuthorized = _passwordComputer.Compare(request.Password, view.Password);

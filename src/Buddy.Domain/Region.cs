@@ -4,12 +4,13 @@ namespace Buddy.Domain
 {
     public class Region: IEntity
     {
-        public Region(string name)
+        public Region(string id, string name)
         {
+            Id = id;
             Name = name;
         }
 
-        public string Id { get; set; }
+        public string Id { get; }
         public string Name { get; }
     }
 }

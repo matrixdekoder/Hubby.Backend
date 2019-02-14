@@ -2,9 +2,9 @@
 
 namespace Account.Application.CommandService.Register
 {
-    public class RegisterAccount : INotification
+    public class RegisterAccountCommand : INotification
     {
-        public RegisterAccount(string id, string password)
+        public RegisterAccountCommand(string id, string password)
         {
             Id = id;
             Password = password;

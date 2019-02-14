@@ -15,7 +15,7 @@ namespace Core.Domain
             }
         }
         
-        public string Id { get; set; }
+        public string Id { get; protected set; }
         protected int Version { get; private set; }
 
         public IEnumerable<IEvent> GetUncommittedEvents()

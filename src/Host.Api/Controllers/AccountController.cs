@@ -15,15 +15,15 @@ namespace Host.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Register([FromBody] RegisterAccount request)
+        public async Task<IActionResult> Register([FromBody] RegisterAccountCommand command)
         {
-            return await Publish(request);
+            return await Publish(command);
         }
 
         [HttpPost("token")]
-        public async Task<IActionResult> Login([FromBody] LoginQueryModel request)
+        public async Task<IActionResult> Login([FromBody] LoginQuery query)
         {
-            return await SendRequest<LoginQueryModel, LoginQueryResponse>(request);
+            return await SendRequest<LoginQuery, LoginQueryResponse>(query);
         }
     }
 }

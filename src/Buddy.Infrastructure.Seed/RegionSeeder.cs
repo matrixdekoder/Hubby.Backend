@@ -1,33 +1,46 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Buddy.Domain;
 using Core.Infrastructure;
 using Library.Mongo;
+using MongoDB.Driver;
 
 namespace Buddy.Infrastructure.Seed
 {
-    public class RegionSeeder: Seeder<Region>
+    public class RegionSeeder : ISeeder
     {
+        private readonly IMongoCollection<Region> _collection;
 
-        public RegionSeeder(IMongoContext mongoContext): base(mongoContext)
+        public RegionSeeder(IMongoContext mongoContext)
         {
+            _collection = mongoContext.GetCollection<Region>();
         }
 
-        public override async Task Seed()
+        public async Task Seed()
         {
             var regions = new List<Region>
             {
-                new Region("Europe"),
-                new Region("Asia"),
-                new Region("Africa"),
-                new Region("Australia"),
-                new Region("North America"),
-                new Region("South America")
+                new Region(Guid.NewGuid().ToString(), "Europe"),
+                new Region(Guid.NewGuid().ToString(), "Asia"),
+                new Region(Guid.NewGuid().ToString(), "Africa"),
+                new Region(Guid.NewGuid().ToString(), "Australia"),
+                new Region(Guid.NewGuid().ToString(), "North America"),
+                new Region(Guid.NewGuid().ToString(), "South America")
             };
 
             foreach (var region in regions)
             {
-                await Store(region, x => x.Name == region.Name);
+                var storedRegion = await _collection.Find(x => x.Name == region.Name).FirstOrDefaultAsync();
+                if (storedRegion == null)
+                {
+                    await _collection.InsertOneAsync(region);
+                }
+                else
+                {
+                    var newRegion = new Region(storedRegion.Id, region.Name);
+                    await _collection.ReplaceOneAsync(x => x.Id == storedRegion.Id, newRegion);
+                }
             }
         }
     }

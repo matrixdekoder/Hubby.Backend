@@ -5,6 +5,8 @@ namespace Buddy.Domain
 {
     public class Buddy: Aggregate<Buddy>
     {
+        private string _regionId;
+
         public Buddy(IEnumerable<IEvent> events) : base(events)
         {
         }
@@ -15,9 +17,20 @@ namespace Buddy.Domain
             Publish(e);
         }
 
+        public void ChooseRegion(string regionId)
+        {
+            var e = new RegionChosen(Id, regionId);
+            Publish(e);
+        }
+
         private void When(BuddyCreated e)
         {
             Id = e.Id;
+        }
+
+        private void When(RegionChosen e)
+        {
+            _regionId = e.RegionId;
         }
     }
 }
