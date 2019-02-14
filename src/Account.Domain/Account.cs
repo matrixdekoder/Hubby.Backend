@@ -6,7 +6,7 @@ namespace Account.Domain
 {
     public class Account: Aggregate<Account>
     {
-        private string _password;
+        private string _buddyId;
 
         public Account(IEnumerable<IEvent> events): base(events)
         {
@@ -21,10 +21,23 @@ namespace Account.Domain
             Publish(e);
         }
 
+        public void LinkBuddy(string buddyId)
+        {
+            if(!string.IsNullOrEmpty(_buddyId))
+                throw new InvalidOperationException($"Account {Id} has already a Buddy linked.");
+
+            var e = new BuddyLinked(Id, buddyId);
+            Publish(e);
+        }
+
         private void When(AccountRegistered e)
         {
             Id = e.Id;
-            _password = e.Password;
+        }
+
+        private void When(BuddyLinked e)
+        {
+            _buddyId = e.BuddyId;
         }
     }
 }

@@ -7,8 +7,7 @@ namespace Account.Domain
     {
         public Account Create(IList<IEvent> events)
         {
-            var account = new Account(events);
-            return account;
+            return new Account(events);
         }
     }
 }

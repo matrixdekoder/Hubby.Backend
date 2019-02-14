@@ -2,7 +2,7 @@
 
 namespace Account.Application.CommandService.Register
 {
-    public class RegisterAccount : IRequest<RegisterAccountResponse>
+    public class RegisterAccount : INotification
     {
         public RegisterAccount(string id, string password)
         {

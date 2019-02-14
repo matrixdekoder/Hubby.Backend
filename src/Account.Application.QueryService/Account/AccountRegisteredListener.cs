@@ -4,20 +4,20 @@ using Account.Domain;
 using Core.Application;
 using MediatR;
 
-namespace Account.Application.QueryService.Login
+namespace Account.Application.QueryService.Account
 {
-    public class LoginAccountRegisteredHandler: INotificationHandler<AccountRegistered>
+    public class AccountRegisteredListener: INotificationHandler<AccountRegistered>
     {
-        private readonly IProjectionWriter<LoginReadModel> _writer;
+        private readonly IProjectionWriter<AccountReadModel> _writer;
 
-        public LoginAccountRegisteredHandler(IProjectionWriter<LoginReadModel> writer)
+        public AccountRegisteredListener(IProjectionWriter<AccountReadModel> writer)
         {
             _writer = writer;
         }
 
         public async Task Handle(AccountRegistered notification, CancellationToken cancellationToken)
         {
-            var view = new LoginReadModel
+            var view = new AccountReadModel
             {
                 Id = notification.Id, 
                 Password = notification.Password

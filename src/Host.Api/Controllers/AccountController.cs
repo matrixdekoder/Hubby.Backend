@@ -17,13 +17,13 @@ namespace Host.Api.Controllers
         [HttpPost]
         public async Task<IActionResult> Register([FromBody] RegisterAccount request)
         {
-            return await SendRequest<RegisterAccount, RegisterAccountResponse>(request);
+            return await Publish(request);
         }
 
         [HttpPost("token")]
         public async Task<IActionResult> Login([FromBody] LoginQueryModel request)
         {
-            return await SendRequest<LoginQueryModel, LoginTokenResponse>(request);
+            return await SendRequest<LoginQueryModel, LoginQueryResponse>(request);
         }
     }
 }

@@ -14,6 +14,8 @@
   <ItemGroup>
     <ProjectReference Include="..\Account.Application.CommandService\Account.Application.CommandService.csproj" />
     <ProjectReference Include="..\Account.Application.QueryService\Account.Application.QueryService.csproj" />
+    <ProjectReference Include="..\Buddy.Application.CommandService\Buddy.Application.CommandService.csproj" />
+    <ProjectReference Include="..\Buddy.Application.QueryService\Buddy.Application.QueryService.csproj" />
     <ProjectReference Include="..\Core.Infrastructure\Core.Infrastructure.csproj" />
     <ProjectReference Include="..\Library.EventStore\Library.EventStore.csproj" />
     <ProjectReference Include="..\Library.Mongo\Library.Mongo.csproj" />

@@ -3,6 +3,8 @@ using System.Reflection;
 using System.Text;
 using Account.Application.CommandService;
 using Account.Application.QueryService;
+using Buddy.Application.CommandService;
+using Buddy.Application.QueryService;
 using Core.Infrastructure;
 using Host.Api.Exceptions;
 using Library.EventStore;
@@ -47,6 +49,8 @@ namespace Host.Api
             services.AddTransient<IExceptionHandler, ExceptionHandler>();
             services.ConfigureAccountCommandServices();
             services.ConfigureAccountQueryServices();
+            services.ConfigureBuddyCommandServices();
+            services.ConfigureBuddyQueryServices();
         }
 
         public void Configure(IApplicationBuilder app)
