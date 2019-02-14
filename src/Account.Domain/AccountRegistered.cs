@@ -10,7 +10,7 @@ namespace Account.Domain
             Password = password;
         }
 
-        public string Id { get; }
+        public string Id { get; set; }
         public string Password { get; }
     }
 }

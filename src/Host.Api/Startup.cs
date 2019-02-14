@@ -5,6 +5,7 @@ using Account.Application.CommandService;
 using Account.Application.QueryService;
 using Buddy.Application.CommandService;
 using Buddy.Application.QueryService;
+using Buddy.Infrastructure.Seed;
 using Core.Infrastructure;
 using Host.Api.Exceptions;
 using Library.EventStore;
@@ -51,17 +52,29 @@ namespace Host.Api
             services.ConfigureAccountQueryServices();
             services.ConfigureBuddyCommandServices();
             services.ConfigureBuddyQueryServices();
+            services.ConfigureBuddyInfrastructureSeed();
         }
 
         public void Configure(IApplicationBuilder app)
         {
+            SeedDatabase(app);
             CatchUpEvents(app);
             app.UseCors("AllowAll");
             app.UseAuthentication();
             app.UseMvc();
         }
 
-        private void CatchUpEvents(IApplicationBuilder app)
+        private static void SeedDatabase(IApplicationBuilder app)
+        {
+            var scope = app.ApplicationServices.CreateScope();
+            var seeders = scope.ServiceProvider.GetServices<ISeeder>();
+            foreach (var seeder in seeders)
+            {
+                seeder.Seed();
+            }
+        }
+
+        private static void CatchUpEvents(IApplicationBuilder app)
         {
             var scope = app.ApplicationServices.CreateScope();
             var eventStoreListener = scope.ServiceProvider.GetService<IEventStoreListener>();

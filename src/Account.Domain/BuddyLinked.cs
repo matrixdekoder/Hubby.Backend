@@ -10,7 +10,7 @@ namespace Account.Domain
             BuddyId = buddyId;
         }
 
-        public string Id { get; }
+        public string Id { get; set; }
         public string BuddyId { get; }
     }
 }
