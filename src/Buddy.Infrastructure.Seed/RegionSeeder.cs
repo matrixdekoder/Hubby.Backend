@@ -12,9 +12,9 @@ namespace Buddy.Infrastructure.Seed
     {
         private readonly IMongoCollection<Region> _collection;
 
-        public RegionSeeder(IMongoContext mongoContext)
+        public RegionSeeder(IMongoContext context)
         {
-            _collection = mongoContext.GetCollection<Region>();
+            _collection = context.GetCollection<Region>();
         }
 
         public async Task Seed()
@@ -29,6 +29,7 @@ namespace Buddy.Infrastructure.Seed
                 new Region(Guid.NewGuid().ToString(), "South America")
             };
 
+            // Seed
             foreach (var region in regions)
             {
                 var storedRegion = await _collection.Find(x => x.Name == region.Name).FirstOrDefaultAsync();
