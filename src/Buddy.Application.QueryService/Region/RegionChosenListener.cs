@@ -1,10 +1,11 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using Buddy.Domain;
+using Buddy.Application.QueryService.Buddy;
+using Buddy.Domain.Events;
 using Core.Application;
 using MediatR;
 
-namespace Buddy.Application.QueryService.Buddy
+namespace Buddy.Application.QueryService.Region
 {
     public class RegionChosenListener: INotificationHandler<RegionChosen>
     {

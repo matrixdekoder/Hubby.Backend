@@ -10,12 +10,12 @@ namespace Account.Application.CommandService.Register
     public class RegisterAccountCommandHandler: INotificationHandler<RegisterAccountCommand>
     {
         private readonly IEventStoreRepository<Account.Domain.Account> _accountRepository;
-        private readonly IEventStoreRepository<Buddy.Domain.Buddy> _buddyRepository;
+        private readonly IEventStoreRepository<Buddy.Domain.Entities.Buddy> _buddyRepository;
         private readonly IPasswordComputer _passwordComputer;
         
         public RegisterAccountCommandHandler(
             IEventStoreRepository<Account.Domain.Account> accountRepository, 
-            IEventStoreRepository<Buddy.Domain.Buddy> buddyRepository,
+            IEventStoreRepository<Buddy.Domain.Entities.Buddy> buddyRepository,
             IPasswordComputer passwordComputer)
         {
             _accountRepository = accountRepository;

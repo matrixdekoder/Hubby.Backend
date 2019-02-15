@@ -1,6 +1,6 @@
 ﻿using Core.Domain;
 
-namespace Buddy.Domain
+namespace Buddy.Domain.Events
 {
     public class RegionChosen : IEvent
     {

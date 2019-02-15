@@ -1,4 +1,5 @@
-﻿using Core.Domain;
+﻿using System.Collections.Generic;
+using Core.Domain;
 
 namespace Buddy.Application.QueryService.Buddy
 {
@@ -6,5 +7,6 @@ namespace Buddy.Application.QueryService.Buddy
     {
         public string Id { get; set; }
         public string RegionId { get; set; }
+        public IList<string> GenreIds { get; set; }
     }
 }

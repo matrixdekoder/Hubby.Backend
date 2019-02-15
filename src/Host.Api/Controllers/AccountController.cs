@@ -3,6 +3,7 @@ using Account.Application.CommandService.Register;
 using Account.Application.QueryService.Login;
 using Host.Api.Exceptions;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Host.Api.Controllers
@@ -15,12 +16,14 @@ namespace Host.Api.Controllers
         }
 
         [HttpPost]
+        [AllowAnonymous]
         public async Task<IActionResult> Register([FromBody] RegisterAccountCommand command)
         {
             return await Publish(command);
         }
 
         [HttpPost("token")]
+        [AllowAnonymous]
         public async Task<IActionResult> Login([FromBody] LoginQuery query)
         {
             return await SendRequest<LoginQuery, LoginQueryResponse>(query);

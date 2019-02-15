@@ -7,9 +7,9 @@ namespace Buddy.Application.CommandService.ChooseRegion
 {
     public class ChooseRegionCommandHandler: INotificationHandler<ChooseRegionCommand>
     {
-        private readonly IEventStoreRepository<Domain.Buddy> _repository;
+        private readonly IEventStoreRepository<Domain.Entities.Buddy> _repository;
 
-        public ChooseRegionCommandHandler(IEventStoreRepository<Domain.Buddy> repository)
+        public ChooseRegionCommandHandler(IEventStoreRepository<Domain.Entities.Buddy> repository)
         {
             _repository = repository;
         }

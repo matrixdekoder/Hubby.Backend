@@ -2,11 +2,13 @@ using System;
 using System.Threading.Tasks;
 using Host.Api.Exceptions;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Host.Api.Controllers
 {
     [ApiController]
+    [Authorize]
     public abstract class BaseController: ControllerBase
     {
         private readonly IMediator _mediator;

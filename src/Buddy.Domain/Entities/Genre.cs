@@ -1,10 +1,8 @@
-﻿using Core.Domain;
-
-namespace Buddy.Domain
+﻿namespace Buddy.Domain.Entities
 {
-    public class Region: IEntity
+    public class Genre
     {
-        public Region(string id, string name)
+        public Genre(string id, string name)
         {
             Id = id;
             Name = name;
