@@ -24,8 +24,6 @@ namespace Core.Infrastructure.Security
             Array.Copy(salt, 0, hashBytes, 0, SaltSize);
             Array.Copy(hash, 0, hashBytes, SaltSize, HashSize);
 
-            Console.WriteLine();
-
             return Convert.ToBase64String(hashBytes);
         }
 
