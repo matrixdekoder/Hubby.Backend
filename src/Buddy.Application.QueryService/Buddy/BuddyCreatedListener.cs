@@ -1,6 +1,5 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using Buddy.Domain;
 using Buddy.Domain.Events;
 using Core.Application;
 using MediatR;
