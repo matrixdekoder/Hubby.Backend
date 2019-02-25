@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Buddy.Domain.Enums;
 using Buddy.Domain.Events;
 using Core.Domain;
@@ -9,13 +10,15 @@ namespace Buddy.Domain.Entities
     public class Buddy: Aggregate<Buddy>
     {
         private const int GenresAmount = 5;
-        private string _regionId;
         private IList<string> _genreIds;
         private BuddyStatus _status;
 
         public Buddy(IEnumerable<IEvent> events) : base(events)
         {
         }
+        
+        public string RegionId { get; private set; }
+        public IEnumerable<string> GenreIds => _genreIds.AsEnumerable();
 
         public void Create(string buddyId)
         {
@@ -45,7 +48,7 @@ namespace Buddy.Domain.Entities
         {
             var status = BuddyStatus.New;
 
-            if (_regionId != null && _genreIds != null && _genreIds.Count == 5)
+            if (RegionId != null && _genreIds != null && _genreIds.Count == 5)
                 status = BuddyStatus.Complete;
 
             var e = new StatusComputed(Id, status);
@@ -59,7 +62,7 @@ namespace Buddy.Domain.Entities
 
         private void When(RegionChosen e)
         {
-            _regionId = e.RegionId;
+            RegionId = e.RegionId;
         }
 
         private void When(GenresChosen e)
