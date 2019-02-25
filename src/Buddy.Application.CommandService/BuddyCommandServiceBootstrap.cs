@@ -1,5 +1,4 @@
-﻿using Buddy.Domain;
-using Buddy.Domain.Factories;
+﻿using Buddy.Domain.Factories;
 using Core.Domain;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
@@ -12,6 +11,7 @@ namespace Buddy.Application.CommandService
         {
             services.AddMediatR(typeof(BuddyCommandServiceBootstrap));
             services.AddTransient<IAggregateFactory<Domain.Entities.Buddy>, BuddyFactory>();
+            services.AddTransient<IAggregateFactory<Domain.Entities.Group>, GroupFactory>();
         }
     }
 }
