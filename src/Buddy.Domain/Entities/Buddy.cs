@@ -12,6 +12,7 @@ namespace Buddy.Domain.Entities
         private const int GenresAmount = 5;
         private IList<string> _genreIds;
         private string _currentGroupId;
+        private List<string> _previousGroups;
 
         public Buddy(IEnumerable<IEvent> events) : base(events)
         {
@@ -51,6 +52,15 @@ namespace Buddy.Domain.Entities
             Publish(e);
         }
 
+        public void LeaveGroup(string groupId)
+        {
+            if(_currentGroupId != groupId)
+                throw new InvalidOperationException("Buddy can't leave a group he's not in yet");
+
+            var e = new GroupLeft(Id, groupId);
+            Publish(e);
+        }
+
         private void ComputeStatus()
         {
             var status = BuddyStatus.New;
@@ -85,6 +95,15 @@ namespace Buddy.Domain.Entities
         private void When(GroupJoined e)
         {
             _currentGroupId = e.GroupId;
+        }
+
+        private void When(GroupLeft e)
+        {
+            if (_previousGroups == null)
+                _previousGroups = new List<string>();
+
+            _currentGroupId = null;
+            _previousGroups.Add(e.GroupId);
         }
     }
 }
