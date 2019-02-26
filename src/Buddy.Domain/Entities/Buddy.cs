@@ -11,7 +11,6 @@ namespace Buddy.Domain.Entities
     {
         private const int GenresAmount = 5;
         private IList<string> _genreIds;
-        private BuddyStatus _status;
         private string _currentGroupId;
 
         public Buddy(IEnumerable<IEvent> events) : base(events)
@@ -20,6 +19,7 @@ namespace Buddy.Domain.Entities
         
         public string RegionId { get; private set; }
         public IEnumerable<string> GenreIds => _genreIds.AsEnumerable();
+        public BuddyStatus Status { get; private set; }
 
         public void Create(string buddyId)
         {
@@ -79,7 +79,7 @@ namespace Buddy.Domain.Entities
 
         private void When(StatusComputed e)
         {
-            _status = e.Status;
+            Status = e.Status;
         }
 
         private void When(GroupJoined e)

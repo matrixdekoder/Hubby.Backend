@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Buddy.Domain.Enums;
 using Buddy.Domain.Events;
 using Core.Domain;
 
@@ -46,6 +47,9 @@ namespace Buddy.Domain.Entities
 
             if (_buddyIds.Count >= GroupSize)
                 return 0.0;
+
+            if(buddy.Status != BuddyStatus.Complete)
+                throw new InvalidOperationException("Buddy not activated yet, please complete the basic setup");
 
             var genresAmount = buddy.GenreIds.Count();
             var delta = _genreIds.Except(buddy.GenreIds).Count();

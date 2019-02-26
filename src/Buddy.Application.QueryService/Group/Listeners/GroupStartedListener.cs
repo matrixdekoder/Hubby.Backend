@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using Buddy.Domain.Events;
 using Core.Application;
@@ -21,7 +22,8 @@ namespace Buddy.Application.QueryService.Group.Listeners
             {
                 Id = notification.Id, 
                 RegionId = notification.RegionId, 
-                GenreIds = notification.GenreIds
+                GenreIds = notification.GenreIds, 
+                BuddyIds = new List<string>()
             };
 
             await _writer.Add(view);

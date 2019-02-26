@@ -35,7 +35,7 @@ namespace Buddy.Application.CommandService.MatchBuddy
 
             var matchedGroup = await _matchService.GetBestGroup(buddy, groups);
 
-            matchedGroup.AddBuddy(matchedGroup.Id);
+            matchedGroup.AddBuddy(buddy.Id);
             buddy.JoinGroup(matchedGroup.Id);
 
             await _groupRepository.Save(matchedGroup);
