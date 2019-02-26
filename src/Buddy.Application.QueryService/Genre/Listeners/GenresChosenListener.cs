@@ -5,7 +5,7 @@ using Buddy.Domain.Events;
 using Core.Application;
 using MediatR;
 
-namespace Buddy.Application.QueryService.Genre
+namespace Buddy.Application.QueryService.Genre.Listeners
 {
     public class GenresChosenListener: INotificationHandler<GenresChosen>
     {

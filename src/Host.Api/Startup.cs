@@ -1,11 +1,10 @@
 ﻿using System;
-using System.Reflection;
 using System.Text;
 using Account.Application.CommandService;
 using Account.Application.QueryService;
 using Buddy.Application.CommandService;
 using Buddy.Application.QueryService;
-using Buddy.Infrastructure.Seed;
+using Buddy.Infrastructure;
 using Core.Infrastructure;
 using Host.Api.Exceptions;
 using Library.EventStore;

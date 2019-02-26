@@ -4,7 +4,7 @@ using Buddy.Domain.Events;
 using Core.Application;
 using MediatR;
 
-namespace Buddy.Application.QueryService.Buddy
+namespace Buddy.Application.QueryService.Buddy.Listeners
 {
     public class BuddyCreatedListener: INotificationHandler<BuddyCreated>
     {

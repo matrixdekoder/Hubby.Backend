@@ -16,7 +16,7 @@
     <ProjectReference Include="..\Account.Application.QueryService\Account.Application.QueryService.csproj" />
     <ProjectReference Include="..\Buddy.Application.CommandService\Buddy.Application.CommandService.csproj" />
     <ProjectReference Include="..\Buddy.Application.QueryService\Buddy.Application.QueryService.csproj" />
-    <ProjectReference Include="..\Buddy.Infrastructure.Seed\Buddy.Infrastructure.Seed.csproj" />
+    <ProjectReference Include="..\Buddy.Infrastructure\Buddy.Infrastructure.csproj" />
     <ProjectReference Include="..\Core.Infrastructure\Core.Infrastructure.csproj" />
     <ProjectReference Include="..\Library.EventStore\Library.EventStore.csproj" />
     <ProjectReference Include="..\Library.Mongo\Library.Mongo.csproj" />

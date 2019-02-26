@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Buddy.Domain;
 using Buddy.Domain.Entities;
 using Core.Infrastructure;
 using Library.Mongo;
 using MongoDB.Driver;
 
-namespace Buddy.Infrastructure.Seed
+namespace Buddy.Infrastructure.Seeders
 {
     public class RegionSeeder : ISeeder
     {

@@ -5,7 +5,7 @@ using Buddy.Domain.Events;
 using Core.Application;
 using MediatR;
 
-namespace Buddy.Application.QueryService.Region
+namespace Buddy.Application.QueryService.Region.Listeners
 {
     public class RegionChosenListener: INotificationHandler<RegionChosen>
     {

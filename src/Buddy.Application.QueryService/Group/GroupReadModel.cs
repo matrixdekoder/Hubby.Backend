@@ -1,15 +1,13 @@
 ﻿using System.Collections.Generic;
-using Buddy.Domain.Enums;
 using Core.Domain;
 
-namespace Buddy.Application.QueryService.Buddy
+namespace Buddy.Application.QueryService.Group
 {
-    public class BuddyReadModel: IEntity
+    public class GroupReadModel: IEntity
     {
         public string Id { get; set; }
         public string RegionId { get; set; }
         public IList<string> GenreIds { get; set; }
-        public BuddyStatus Status { get; set; }
-        public string GroupId { get; set; }
+        public IList<string> BuddyIds { get; set; }
     }
 }

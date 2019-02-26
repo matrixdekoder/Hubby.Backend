@@ -12,6 +12,7 @@ namespace Buddy.Domain.Entities
         private const int GenresAmount = 5;
         private IList<string> _genreIds;
         private BuddyStatus _status;
+        private string _currentGroupId;
 
         public Buddy(IEnumerable<IEvent> events) : base(events)
         {
@@ -44,6 +45,12 @@ namespace Buddy.Domain.Entities
             ComputeStatus();
         }
 
+        public void JoinGroup(string groupId)
+        {
+            var e = new GroupJoined(Id, groupId);
+            Publish(e);
+        }
+
         private void ComputeStatus()
         {
             var status = BuddyStatus.New;
@@ -73,6 +80,11 @@ namespace Buddy.Domain.Entities
         private void When(StatusComputed e)
         {
             _status = e.Status;
+        }
+
+        private void When(GroupJoined e)
+        {
+            _currentGroupId = e.GroupId;
         }
     }
 }
