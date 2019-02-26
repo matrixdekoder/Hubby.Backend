@@ -20,7 +20,10 @@ namespace Buddy.Domain.Entities
         {
         }
 
-        private int CurrentGroupSize => _buddyIds.Count;
+        public int CurrentGroupSize => _buddyIds.Count;
+        public int FreeSpace => MaximumGroupSize - CurrentGroupSize;
+        public IEnumerable<string> GenreIds => _genreIds.AsEnumerable();
+        public IEnumerable<string> BuddyIds => _buddyIds.AsEnumerable();
 
         public void Start(string groupId, string regionId, IList<string> genreIds)
         {
@@ -66,6 +69,16 @@ namespace Buddy.Domain.Entities
             return genreMatchWeight / (MaximumGroupSize - CurrentGroupSize);
         }
 
+        public Group Match(IList<Group> otherGroups)
+        {
+            var matchedGroups = otherGroups
+                .Where(CompareGenres)
+                .Where(otherGroup => CurrentGroupSize <= otherGroup.FreeSpace)
+                .ToList();
+
+            return matchedGroups.OrderByDescending(x => x.FreeSpace).First();
+        }
+
         public void RemoveBuddy(string buddyId)
         {
             if(!_buddyIds.Any())
@@ -94,6 +107,13 @@ namespace Buddy.Domain.Entities
         private void When(BuddyRemoved e)
         {
             _buddyIds.Remove(e.BuddyId);
+        }
+
+        private bool CompareGenres(Group otherGroup)
+        {
+            var currentGroupGenres = _genreIds.ToList();
+            var otherGroupGenres = otherGroup.GenreIds.ToList();
+            return !currentGroupGenres.Except(otherGroupGenres).Any() && !otherGroupGenres.Except(currentGroupGenres).Any();
         }
     }
 }

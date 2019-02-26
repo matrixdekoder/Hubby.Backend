@@ -51,9 +51,12 @@ namespace Host.Api.Controllers
             return await Publish(command);
         }
 
-        [HttpPost("leave")]
-        public async Task<IActionResult> LeaveGroup([FromBody] LeaveGroupCommand command)
+        [HttpPost("{buddyId}/leave")]
+        public async Task<IActionResult> LeaveGroup(string buddyId)
         {
+            var buddy = (await _mediator.Send(new BuddyQuery(x => x.Id == buddyId))).First();
+            var groups = await _mediator.Send(new GroupQuery(x => x.RegionId == buddy.RegionId));
+            var command = new LeaveGroupCommand(buddy.Id, groups.Select(x => x.Id).ToList());
             return await Publish(command);
         }
     }

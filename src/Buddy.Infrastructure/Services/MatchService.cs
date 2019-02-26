@@ -11,10 +11,14 @@ namespace Buddy.Infrastructure.Services
     public class MatchService: IMatchService
     {
         private readonly IEventStoreRepository<Group> _groupRepository;
+        private readonly IEventStoreRepository<Domain.Entities.Buddy> _buddyRepository;
 
-        public MatchService(IEventStoreRepository<Group> groupRepository)
+        public MatchService(
+            IEventStoreRepository<Group> groupRepository,
+            IEventStoreRepository<Domain.Entities.Buddy> buddyRepository)
         {
             _groupRepository = groupRepository;
+            _buddyRepository = buddyRepository;
         }
 
         public async Task<Group> GetBestGroup(Domain.Entities.Buddy buddy, IList<Group> groups)
@@ -45,6 +49,23 @@ namespace Buddy.Infrastructure.Services
             }
 
             return matchedGroup;
+        }
+
+        public async Task MergeGroups(Group currentGroup, Group matchedGroup)
+        {
+            foreach (var mergedBuddyId in matchedGroup.BuddyIds)
+            {
+                var mergedBuddy = await _buddyRepository.GetById(mergedBuddyId);
+                matchedGroup.RemoveBuddy(mergedBuddy.Id);
+                currentGroup.AddBuddy(mergedBuddy.Id);
+
+                mergedBuddy.LeaveGroup();
+                mergedBuddy.JoinGroup(currentGroup.Id);
+
+                await _groupRepository.Save(currentGroup);
+                await _groupRepository.Save(matchedGroup);
+                await _buddyRepository.Save(mergedBuddy);
+            }
         }
     }
 }
