@@ -79,6 +79,7 @@ namespace Buddy.Domain.Entities
         private void When(BuddyCreated e)
         {
             Id = e.Id;
+            _previousGroups = new List<string>();
         }
 
         private void When(RegionChosen e)
@@ -103,9 +104,6 @@ namespace Buddy.Domain.Entities
 
         private void When(GroupLeft e)
         {
-            if (_previousGroups == null)
-                _previousGroups = new List<string>();
-
             _previousGroups.Add(CurrentGroupId);
             CurrentGroupId = null;
         }
