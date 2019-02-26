@@ -56,6 +56,7 @@ namespace Buddy.Infrastructure.Services
             foreach (var mergedBuddyId in matchedGroup.BuddyIds)
             {
                 var mergedBuddy = await _buddyRepository.GetById(mergedBuddyId);
+
                 matchedGroup.RemoveBuddy(mergedBuddy.Id);
                 currentGroup.AddBuddy(mergedBuddy.Id);
 

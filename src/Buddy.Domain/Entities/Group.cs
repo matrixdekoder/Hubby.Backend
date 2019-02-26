@@ -72,10 +72,10 @@ namespace Buddy.Domain.Entities
         public Group Match(IList<Group> otherGroups)
         {
             var matchedGroups = otherGroups
-                .Where(CompareGenres)
+                .Where(HasSameGenres)
                 .Where(otherGroup => CurrentGroupSize <= otherGroup.FreeSpace)
                 .ToList();
-
+            
             return matchedGroups.OrderByDescending(x => x.FreeSpace).First();
         }
 
@@ -109,7 +109,7 @@ namespace Buddy.Domain.Entities
             _buddyIds.Remove(e.BuddyId);
         }
 
-        private bool CompareGenres(Group otherGroup)
+        private bool HasSameGenres(Group otherGroup)
         {
             var currentGroupGenres = _genreIds.ToList();
             var otherGroupGenres = otherGroup.GenreIds.ToList();
