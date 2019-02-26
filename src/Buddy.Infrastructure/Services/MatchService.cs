@@ -22,6 +22,9 @@ namespace Buddy.Infrastructure.Services
             var scoreByGroup = new Dictionary<string, double>();
             foreach (var group in groups)
             {
+                if(buddy.PreviousGroupIds.Contains(group.Id))
+                    continue;
+
                 var score = group.Match(buddy);
                 scoreByGroup.Add(group.Id, score);
             }

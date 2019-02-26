@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Buddy.Application.CommandService.ChooseGenres;
 using Buddy.Application.CommandService.ChooseRegion;
+using Buddy.Application.CommandService.LeaveGroup;
 using Buddy.Application.CommandService.MatchBuddy;
 using Buddy.Application.QueryService.Buddy;
 using Buddy.Application.QueryService.Group;
@@ -47,6 +48,12 @@ namespace Host.Api.Controllers
             var buddy = (await _mediator.Send(new BuddyQuery(x => x.Id == buddyId))).First();
             var groups = await _mediator.Send(new GroupQuery(x => x.RegionId == buddy.RegionId));
             var command = new MatchBuddyCommand(buddy.Id, groups.Select(x => x.Id).ToList());
+            return await Publish(command);
+        }
+
+        [HttpPost("leave")]
+        public async Task<IActionResult> LeaveGroup([FromBody] LeaveGroupCommand command)
+        {
             return await Publish(command);
         }
     }

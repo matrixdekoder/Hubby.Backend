@@ -11,7 +11,6 @@ namespace Buddy.Domain.Entities
     {
         private const int GenresAmount = 5;
         private IList<string> _genreIds;
-        private string _currentGroupId;
         private List<string> _previousGroups;
 
         public Buddy(IEnumerable<IEvent> events) : base(events)
@@ -21,6 +20,8 @@ namespace Buddy.Domain.Entities
         public string RegionId { get; private set; }
         public IEnumerable<string> GenreIds => _genreIds.AsEnumerable();
         public BuddyStatus Status { get; private set; }
+        public string CurrentGroupId { get; private set; }
+        public IEnumerable<string> PreviousGroupIds => _previousGroups.AsEnumerable();
 
         public void Create(string buddyId)
         {
@@ -48,16 +49,19 @@ namespace Buddy.Domain.Entities
 
         public void JoinGroup(string groupId)
         {
+            if(_previousGroups.Contains(groupId))
+                throw new InvalidOperationException("Already been in this group");
+
             var e = new GroupJoined(Id, groupId);
             Publish(e);
         }
 
-        public void LeaveGroup(string groupId)
+        public void LeaveGroup()
         {
-            if(_currentGroupId != groupId)
-                throw new InvalidOperationException("Buddy can't leave a group he's not in yet");
+            if(CurrentGroupId == null)
+                throw new InvalidOperationException($"Buddy {Id} isn't in a group yet");
 
-            var e = new GroupLeft(Id, groupId);
+            var e = new GroupLeft(Id);
             Publish(e);
         }
 
@@ -94,7 +98,7 @@ namespace Buddy.Domain.Entities
 
         private void When(GroupJoined e)
         {
-            _currentGroupId = e.GroupId;
+            CurrentGroupId = e.GroupId;
         }
 
         private void When(GroupLeft e)
@@ -102,8 +106,8 @@ namespace Buddy.Domain.Entities
             if (_previousGroups == null)
                 _previousGroups = new List<string>();
 
-            _currentGroupId = null;
-            _previousGroups.Add(e.GroupId);
+            _previousGroups.Add(CurrentGroupId);
+            CurrentGroupId = null;
         }
     }
 }
