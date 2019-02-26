@@ -66,6 +66,18 @@ namespace Buddy.Domain.Entities
             return genreMatchWeight / (MaximumGroupSize - CurrentGroupSize);
         }
 
+        public void RemoveBuddy(string buddyId)
+        {
+            if(!_buddyIds.Any())
+                throw new InvalidOperationException("Group is already empty");
+
+            if(!_buddyIds.Contains(buddyId))
+                throw new InvalidOperationException($"Buddy {buddyId} isn't present in the current group");
+
+            var e = new BuddyRemoved(Id, buddyId);
+            Publish(e);
+        }
+
         private void When(GroupStarted e)
         {
             Id = e.Id;
@@ -77,6 +89,11 @@ namespace Buddy.Domain.Entities
         private void When(BuddyAdded e)
         {
             _buddyIds.Add(e.BuddyId);
+        }
+
+        private void When(BuddyRemoved e)
+        {
+            _buddyIds.Remove(e.BuddyId);
         }
     }
 }
