@@ -9,19 +9,33 @@ namespace Buddy.Domain.Entities
 {
     public class Buddy: Aggregate<Buddy>
     {
+        #region Fields
+
         private const int GenresAmount = 5;
         private IList<string> _genreIds;
         private List<string> _previousGroups;
 
+        #endregion
+
+        #region Constructor
+
         public Buddy(IEnumerable<IEvent> events) : base(events)
         {
         }
-        
+
+        #endregion
+
+        #region Properties
+
         public string RegionId { get; private set; }
         public IEnumerable<string> GenreIds => _genreIds.AsEnumerable();
         public BuddyStatus Status { get; private set; }
         public string CurrentGroupId { get; private set; }
         public IEnumerable<string> PreviousGroupIds => _previousGroups.AsEnumerable();
+
+        #endregion
+
+        #region Public Methods
 
         public void Create(string buddyId)
         {
@@ -39,7 +53,7 @@ namespace Buddy.Domain.Entities
 
         public void ChooseGenres(IList<string> genreIds)
         {
-            if(genreIds.Count != GenresAmount)
+            if (genreIds.Count != GenresAmount)
                 throw new InvalidOperationException($"You have to pick exactly {GenresAmount} genres");
 
             var e = new GenresChosen(Id, genreIds);
@@ -49,7 +63,7 @@ namespace Buddy.Domain.Entities
 
         public void JoinGroup(string groupId)
         {
-            if(_previousGroups.Contains(groupId))
+            if (_previousGroups.Contains(groupId))
                 throw new InvalidOperationException("Already been in this group");
 
             var e = new GroupJoined(Id, groupId);
@@ -58,23 +72,16 @@ namespace Buddy.Domain.Entities
 
         public void LeaveGroup()
         {
-            if(CurrentGroupId == null)
+            if (CurrentGroupId == null)
                 throw new InvalidOperationException($"Buddy {Id} isn't in a group yet");
 
             var e = new GroupLeft(Id);
             Publish(e);
         }
 
-        private void ComputeStatus()
-        {
-            var status = BuddyStatus.New;
+        #endregion
 
-            if (RegionId != null && _genreIds != null && _genreIds.Count == 5)
-                status = BuddyStatus.Complete;
-
-            var e = new StatusComputed(Id, status);
-            Publish(e);
-        }
+        #region Private Methods: Events
 
         private void When(BuddyCreated e)
         {
@@ -107,5 +114,23 @@ namespace Buddy.Domain.Entities
             _previousGroups.Add(CurrentGroupId);
             CurrentGroupId = null;
         }
+
+
+        #endregion
+
+        #region Private Methods
+
+        private void ComputeStatus()
+        {
+            var status = BuddyStatus.New;
+
+            if (RegionId != null && _genreIds != null && _genreIds.Count == 5)
+                status = BuddyStatus.Complete;
+
+            var e = new StatusComputed(Id, status);
+            Publish(e);
+        }
+
+        #endregion
     }
 }
