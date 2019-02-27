@@ -15,9 +15,9 @@ namespace Buddy.Domain.Entities
         private const double MinimumGenreMatchWeight = 0.6;
 
         private string _regionId;
-        private IList<string> _genreIds;
-        private IList<string> _buddyIds;
-        private IList<string> _buddyIdsBlackList;
+        private List<string> _genreIds;
+        private List<string> _buddyIds;
+        private List<string> _buddyIdsBlackList;
 
         #endregion
 
@@ -35,7 +35,7 @@ namespace Buddy.Domain.Entities
         public int FreeSpace => MaximumGroupSize - CurrentGroupSize;
         public IEnumerable<string> GenreIds => _genreIds.AsEnumerable();
         public IEnumerable<string> BuddyIds => _buddyIds.AsEnumerable();
-
+        public IEnumerable<string> Blacklist => _buddyIdsBlackList.AsEnumerable();
 
         #endregion
 
@@ -50,15 +50,18 @@ namespace Buddy.Domain.Entities
             Publish(e);
         }
 
-        public void AddBuddy(string buddyId)
+        public void AddBuddy(Buddy buddy)
         {
-            if (_buddyIds.Contains(buddyId))
-                throw new InvalidOperationException($"Buddy {buddyId} is already in the group");
+            if (_buddyIdsBlackList.Contains(buddy.Id))
+                throw new InvalidOperationException("Buddy is on this group's blacklist");
+
+            if (_buddyIds.Contains(buddy.Id))
+                throw new InvalidOperationException($"Buddy {buddy.Id} is already in the group");
 
             if (_buddyIds.Count >= MaximumGroupSize)
                 throw new InvalidOperationException($"Only {MaximumGroupSize} buddies are allowed per group");
 
-            var e = new BuddyAdded(Id, buddyId);
+            var e = new BuddyAdded(Id, buddy.Id);
             Publish(e);
         }
 
@@ -67,11 +70,14 @@ namespace Buddy.Domain.Entities
             if (buddy.RegionId != _regionId)
                 throw new InvalidOperationException("Group region different from group's region");
 
+            if (buddy.Status != BuddyStatus.Complete)
+                throw new InvalidOperationException("Buddy not activated yet, please complete the basic setup");
+
             if (CurrentGroupSize >= MaximumGroupSize)
                 return 0.0;
 
-            if (buddy.Status != BuddyStatus.Complete)
-                throw new InvalidOperationException("Buddy not activated yet, please complete the basic setup");
+            if (_buddyIdsBlackList.Contains(buddy.Id))
+                return 0.0;
 
             // Calculate match based on genre
             var genresAmount = buddy.GenreIds.Count();
@@ -96,7 +102,7 @@ namespace Buddy.Domain.Entities
             return matchedGroups.OrderByDescending(x => x.FreeSpace).FirstOrDefault();
         }
 
-        public void RemoveBuddy(string buddyId)
+        public void RemoveBuddy(string buddyId, IList<string> groupIds)
         {
             if (!_buddyIds.Any())
                 throw new InvalidOperationException("Group is already empty");
@@ -104,8 +110,22 @@ namespace Buddy.Domain.Entities
             if (!_buddyIds.Contains(buddyId))
                 throw new InvalidOperationException($"Buddy {buddyId} isn't present in the current group");
 
-            var e = new BuddyRemoved(Id, buddyId);
+            var e = new BuddyRemoved(Id, buddyId, groupIds);
             Publish(e);
+        }
+
+        public void MergeBlacklist(Group otherGroup)
+        {
+            if(Id == otherGroup.Id)
+                throw new InvalidOperationException("Can't merge the 2 same groups");
+
+            var e = new BlacklistMerged(Id, otherGroup.Blacklist.ToList());
+            Publish(e);
+        }
+
+        public void Clear()
+        {
+            Publish(new GroupCleared(Id));
         }
 
         #endregion
@@ -116,7 +136,7 @@ namespace Buddy.Domain.Entities
         {
             Id = e.Id;
             _regionId = e.RegionId;
-            _genreIds = e.GenreIds;
+            _genreIds = e.GenreIds.ToList();
             _buddyIds = new List<string>();
             _buddyIdsBlackList = new List<string>();
         }
@@ -130,6 +150,17 @@ namespace Buddy.Domain.Entities
         {
             _buddyIds.Remove(e.BuddyId);
             _buddyIdsBlackList.Add(e.BuddyId);
+        }
+
+        private void When(BlacklistMerged e)
+        {
+            _buddyIdsBlackList.AddRange(e.BlackListedIds.Where(x => !_buddyIdsBlackList.Contains(x)));
+        }
+
+        private void When(GroupCleared e)
+        {
+            _buddyIds.Clear();
+            _buddyIdsBlackList.Clear();
         }
 
         #endregion

@@ -26,17 +26,15 @@ namespace Buddy.Infrastructure.Services
             var scoreByGroup = new Dictionary<string, double>();
             foreach (var group in groups)
             {
-                if(buddy.PreviousGroupIds.Contains(group.Id))
-                    continue;
-
                 var score = group.Match(buddy);
-                scoreByGroup.Add(group.Id, score);
+                if(Math.Abs(score) > 0.0)
+                    scoreByGroup.Add(group.Id, score);
             }
             
             string matchedGroupId;
             Group matchedGroup;
 
-            if (scoreByGroup.Values.All(score => Math.Abs(score) <= 0.0))
+            if (scoreByGroup.Any())
             {
                 matchedGroupId = Guid.NewGuid().ToString();
                 matchedGroup = await _groupRepository.GetById(matchedGroupId);
@@ -51,22 +49,24 @@ namespace Buddy.Infrastructure.Services
             return matchedGroup;
         }
 
-        public async Task MergeGroups(Group currentGroup, Group matchedGroup)
+        public async Task MergeGroups(Group currentGroup, Group matchedGroup, IList<string> otherGroupIds)
         {
+            currentGroup.MergeBlacklist(matchedGroup);
+
             foreach (var mergedBuddyId in matchedGroup.BuddyIds)
             {
                 var mergedBuddy = await _buddyRepository.GetById(mergedBuddyId);
+                mergedBuddy.LeaveGroup(otherGroupIds);
+                currentGroup.AddBuddy(mergedBuddy);
+                mergedBuddy.JoinGroup(matchedGroup.Id);
 
-                matchedGroup.RemoveBuddy(mergedBuddy.Id);
-                currentGroup.AddBuddy(mergedBuddy.Id);
-
-                mergedBuddy.LeaveGroup();
-                mergedBuddy.JoinGroup(currentGroup.Id);
-
-                await _groupRepository.Save(currentGroup);
-                await _groupRepository.Save(matchedGroup);
                 await _buddyRepository.Save(mergedBuddy);
             }
+
+            matchedGroup.Clear();
+
+            await _groupRepository.Save(currentGroup);
+            await _groupRepository.Save(matchedGroup);
         }
     }
 }

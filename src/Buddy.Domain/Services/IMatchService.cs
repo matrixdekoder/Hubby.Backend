@@ -7,6 +7,6 @@ namespace Buddy.Domain.Services
     public interface IMatchService
     {
         Task<Group> GetBestGroup(Entities.Buddy buddy, IList<Group> groups);
-        Task MergeGroups(Group currentGroup, Group matchedGroup);
+        Task MergeGroups(Group currentGroup, Group matchedGroup, IList<string> otherGroupIds);
     }
 }

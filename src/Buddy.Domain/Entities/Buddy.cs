@@ -13,7 +13,6 @@ namespace Buddy.Domain.Entities
 
         private const int GenresAmount = 5;
         private IList<string> _genreIds;
-        private List<string> _previousGroups;
 
         #endregion
 
@@ -31,7 +30,6 @@ namespace Buddy.Domain.Entities
         public IEnumerable<string> GenreIds => _genreIds.AsEnumerable();
         public BuddyStatus Status { get; private set; }
         public string CurrentGroupId { get; private set; }
-        public IEnumerable<string> PreviousGroupIds => _previousGroups.AsEnumerable();
 
         #endregion
 
@@ -63,19 +61,19 @@ namespace Buddy.Domain.Entities
 
         public void JoinGroup(string groupId)
         {
-            if (_previousGroups.Contains(groupId))
-                throw new InvalidOperationException("Already been in this group");
+            if(Status != BuddyStatus.Complete)
+                throw new InvalidOperationException("Buddy not activated yet, please complete the basic setup");
 
             var e = new GroupJoined(Id, groupId);
             Publish(e);
         }
 
-        public void LeaveGroup()
+        public void LeaveGroup(IList<string> groupIds)
         {
             if (CurrentGroupId == null)
                 throw new InvalidOperationException($"Buddy {Id} isn't in a group yet");
 
-            var e = new GroupLeft(Id);
+            var e = new GroupLeft(Id, CurrentGroupId, groupIds);
             Publish(e);
         }
 
@@ -86,7 +84,6 @@ namespace Buddy.Domain.Entities
         private void When(BuddyCreated e)
         {
             Id = e.Id;
-            _previousGroups = new List<string>();
         }
 
         private void When(RegionChosen e)
@@ -111,7 +108,6 @@ namespace Buddy.Domain.Entities
 
         private void When(GroupLeft e)
         {
-            _previousGroups.Add(CurrentGroupId);
             CurrentGroupId = null;
         }
 

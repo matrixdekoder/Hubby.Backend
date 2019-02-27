@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Buddy.Application.CommandService.MatchBuddy;
 using Buddy.Application.CommandService.MergeGroup;
@@ -27,16 +28,8 @@ namespace Buddy.Application.CommandService.LeaveGroup
         public async Task Handle(LeaveGroupCommand notification, CancellationToken cancellationToken)
         {
             var buddy = await _buddyRepository.GetById(notification.BuddyId);
-            var group = await _groupRepository.GetById(buddy.CurrentGroupId);
-
-            buddy.LeaveGroup();
-            group.RemoveBuddy(buddy.Id);
-
+            buddy.LeaveGroup(notification.GroupIds);
             await _buddyRepository.Save(buddy);
-            await _groupRepository.Save(group);
-
-            await _mediator.Publish(new MatchBuddyCommand(buddy.Id, notification.GroupIds), cancellationToken);
-            await _mediator.Publish(new MergeGroupCommand(group.Id, notification.GroupIds), cancellationToken);
         }
     }
 }

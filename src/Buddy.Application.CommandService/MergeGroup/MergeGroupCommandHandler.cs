@@ -33,7 +33,7 @@ namespace Buddy.Application.CommandService.MergeGroup
 
             var matchedGroup = currentGroup.Match(otherGroups);
             if(matchedGroup != null)
-                await _matchService.MergeGroups(currentGroup, matchedGroup);
+                await _matchService.MergeGroups(currentGroup, matchedGroup, notification.OtherGroupIds);
         }
     }
 }
