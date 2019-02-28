@@ -68,14 +68,6 @@ namespace Buddy.Domain.Entities
             Publish(e);
         }
 
-        public string CreateGroup()
-        {
-            var groupId = Guid.NewGuid().ToString();
-            var e = new BuddyGroupCreated(Id, groupId, RegionId, _genreIds);
-            Publish(e);
-            return groupId;
-        }
-
         public void LeaveGroup()
         {
             if (CurrentGroupId == null)

@@ -35,7 +35,7 @@ namespace Buddy.Infrastructure.Services
             foreach (var groupId in groupIds)
             {
                 var group = await _groupRepository.GetById(groupId);
-                var score = group.Match(buddy);
+                var score = group.GetScore(buddy);
                 if(Math.Abs(score) > 0.0)
                     scoreByGroup.Add(group, score);
             }

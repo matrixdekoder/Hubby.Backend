@@ -45,7 +45,7 @@ namespace Buddy.Domain.Entities
         public void Create(string groupId, string regionId, IList<string> genreIds)
         {
             if (Version > 0)
-                throw new InvalidOperationException("Can't start a group twice");
+                throw new InvalidOperationException("Can't create a group twice");
 
             var e = new GroupCreated(groupId, regionId, genreIds);
             Publish(e);
@@ -66,8 +66,23 @@ namespace Buddy.Domain.Entities
             Publish(e);
         }
 
-        public double Match(Buddy buddy)
+        public void RemoveBuddy(string buddyId)
         {
+            if (!_buddyIds.Any())
+                throw new InvalidOperationException("Group is already empty");
+
+            if (!_buddyIds.Contains(buddyId))
+                throw new InvalidOperationException($"Buddy {buddyId} isn't present in the current group");
+
+            var e = new BuddyRemoved(Id, buddyId);
+            Publish(e);
+        }
+
+        public double GetScore(Buddy buddy)
+        {
+            if(Status == GroupStatus.Merging)
+                throw new InvalidOperationException("Can't match while merging");
+
             if (buddy.RegionId != RegionId)
                 throw new InvalidOperationException("Group region different from group's region");
 
@@ -100,24 +115,13 @@ namespace Buddy.Domain.Entities
                 .Where(HasSameGenres)
                 .Where(HasFreeSpace)
                 .Where(BuddiesAllowed)
+                .Where(x => x.Status != GroupStatus.Merging)
                 .ToList();
 
             var matchedGroup = matchedGroups.OrderByDescending(x => x.FreeSpace).FirstOrDefault();
             if (matchedGroup == null) return;
 
             var e = new GroupMatched(Id, matchedGroup.Id);
-            Publish(e);
-        }
-
-        public void RemoveBuddy(string buddyId)
-        {
-            if (!_buddyIds.Any())
-                throw new InvalidOperationException("Group is already empty");
-
-            if (!_buddyIds.Contains(buddyId))
-                throw new InvalidOperationException($"Buddy {buddyId} isn't present in the current group");
-
-            var e = new BuddyRemoved(Id, buddyId);
             Publish(e);
         }
 
@@ -134,6 +138,15 @@ namespace Buddy.Domain.Entities
 
         public void MergeBuddies(Group otherGroup)
         {
+            if(MaximumGroupSize - CurrentGroupSize < otherGroup.CurrentGroupSize)
+                throw new InvalidOperationException("Can't merge groups, not enough space");
+
+            if(Status != GroupStatus.Merging || otherGroup.Status != GroupStatus.Merging)
+                throw new InvalidOperationException("Both groups must be in merging status to merge");
+
+            if(!BuddiesAllowed(otherGroup))
+                throw new InvalidOperationException("Some of the other groups buddies are blacklisted, unable to merge groups");
+
             foreach (var buddyId in otherGroup.BuddyIds)
             {
                 otherGroup.RemoveBuddy(buddyId);
@@ -177,8 +190,14 @@ namespace Buddy.Domain.Entities
 
         private void When(MergeStarted e)
         {
-            _buddyIdsBlackList.AddRange(e.BlackListedIds.Where(x => !_buddyIdsBlackList.Contains(x)));
+            var otherBlacklistIds = e.BlackListedIds.Except(_buddyIdsBlackList);
+            _buddyIdsBlackList.AddRange(otherBlacklistIds);
             Status = GroupStatus.Merging;
+        }
+
+        private void When(GroupStatusSet e)
+        {
+            Status = e.Status;
         }
 
         private void When(GroupIsReset e)
