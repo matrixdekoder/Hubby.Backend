@@ -1,32 +1,24 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using Library.EventStore;
+using Core.Domain;
 using MediatR;
 
 namespace Buddy.Application.CommandService.Buddy.LeaveGroup
 {
     public class LeaveGroupCommandHandler: INotificationHandler<LeaveGroupCommand>
     {
-        private readonly IEventStoreRepository<Domain.Entities.Buddy> _buddyRepository;
-        private readonly IEventStoreRepository<Domain.Entities.Group> _groupRepository;
-        private readonly IMediator _mediator;
+        private readonly IRepository<Domain.Entities.Buddy> _repository;
 
-        public LeaveGroupCommandHandler(
-            IEventStoreRepository<Domain.Entities.Buddy> buddyRepository,
-            IEventStoreRepository<Domain.Entities.Group> groupRepository,
-            IMediator mediator
-            )
+        public LeaveGroupCommandHandler(IRepository<Domain.Entities.Buddy> repository)
         {
-            _buddyRepository = buddyRepository;
-            _groupRepository = groupRepository;
-            _mediator = mediator;
+            _repository = repository;
         }
 
         public async Task Handle(LeaveGroupCommand notification, CancellationToken cancellationToken)
         {
-            var buddy = await _buddyRepository.GetById(notification.BuddyId);
+            var buddy = await _repository.GetById(notification.BuddyId);
             buddy.LeaveGroup();
-            await _buddyRepository.Save(buddy);
+            await _repository.Save(buddy);
         }
     }
 }

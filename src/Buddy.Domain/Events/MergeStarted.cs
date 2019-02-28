@@ -3,9 +3,9 @@ using Core.Domain;
 
 namespace Buddy.Domain.Events
 {
-    public class GroupMerged: IEvent
+    public class MergeStarted: IEvent
     {
-        public GroupMerged(string id, string matchedGroupId, List<string> blackListedIds)
+        public MergeStarted(string id, string matchedGroupId, List<string> blackListedIds)
         {
             Id = id;
             MatchedGroupId = matchedGroupId;

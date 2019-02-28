@@ -121,24 +121,30 @@ namespace Buddy.Domain.Entities
             Publish(e);
         }
 
-        public void Merge(Group otherGroup)
+        public void StartMerge(Group otherGroup)
         {
             if(Id == otherGroup.Id)
                 throw new InvalidOperationException("Can't merge the 2 same groups");
 
-            var e = new GroupMerged(Id, otherGroup.Id, otherGroup.Blacklist.ToList());
+            otherGroup.SetStatus(GroupStatus.Merging);
+
+            var e = new MergeStarted(Id, otherGroup.Id, otherGroup.Blacklist.ToList());
             Publish(e);
         }
 
-        public void Reset()
+        public void MergeBuddies(Group otherGroup)
         {
-            Publish(new GroupIsReset(Id));
+            if(Status != GroupStatus.Merging)
+                throw new InvalidOperationException("Can only merge when in status \'Merging\'");
+
+            var e = new BuddiesMerged(Id, otherGroup.Id);
+            Publish(e);
         }
 
-        public void SetStatus(GroupStatus status)
+        public void StopMerge(Group matchedGroup)
         {
-            var e = new GroupStatusSet(Id, status);
-            Publish(e);
+            SetStatus(GroupStatus.Open);
+            matchedGroup.Reset();
         }
 
         #endregion
@@ -166,7 +172,7 @@ namespace Buddy.Domain.Entities
             _buddyIdsBlackList.Add(e.BuddyId);
         }
 
-        private void When(GroupMerged e)
+        private void When(MergeStarted e)
         {
             _buddyIdsBlackList.AddRange(e.BlackListedIds.Where(x => !_buddyIdsBlackList.Contains(x)));
             Status = GroupStatus.Merging;
@@ -198,6 +204,16 @@ namespace Buddy.Domain.Entities
         private bool BuddiesAllowed(Group otherGroup)
         {
             return otherGroup.BuddyIds.Except(_buddyIdsBlackList).Count() == otherGroup.BuddyIds.Count();
+        }
+
+        private void Reset()
+        {
+            Publish(new GroupIsReset(Id));
+        }
+
+        private void SetStatus(GroupStatus status)
+        {
+            Publish(new GroupStatusSet(Id, status));
         }
 
         #endregion

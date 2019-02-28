@@ -22,6 +22,8 @@ namespace Buddy.Application.CommandService.Group.MergeBuddies
             var group = await _groupRepository.GetById(notification.GroupId);
             var matchedGroup = await _groupRepository.GetById(notification.MatchedGroupId);
 
+            group.MergeBuddies(matchedGroup);
+            
             foreach (var buddyId in matchedGroup.BuddyIds)
             {
                 var buddy = await _buddyRepository.GetById(buddyId);
@@ -30,11 +32,7 @@ namespace Buddy.Application.CommandService.Group.MergeBuddies
                 await _buddyRepository.Save(buddy);
             }
 
-            group.SetStatus(GroupStatus.Open);
-            matchedGroup.Reset();
-
             await _groupRepository.Save(group);
-            await _groupRepository.Save(matchedGroup);
         }
     }
 }

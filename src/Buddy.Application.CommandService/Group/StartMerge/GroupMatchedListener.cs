@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Buddy.Domain.Events;
 using MediatR;
 
-namespace Buddy.Application.CommandService.Group.Merge
+namespace Buddy.Application.CommandService.Group.StartMerge
 {
     public class GroupMatchedListener: INotificationHandler<GroupMatched>
     {
@@ -16,7 +16,7 @@ namespace Buddy.Application.CommandService.Group.Merge
 
         public async Task Handle(GroupMatched notification, CancellationToken cancellationToken)
         {
-            var command = new MergeGroupCommand(notification.Id, notification.MatchId);
+            var command = new StartGroupMergeCommand(notification.Id, notification.MatchId);
             await _mediator.Publish(command, cancellationToken);
         }
     }

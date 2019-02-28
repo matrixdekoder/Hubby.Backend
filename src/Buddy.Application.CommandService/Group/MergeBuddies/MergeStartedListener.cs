@@ -5,16 +5,16 @@ using MediatR;
 
 namespace Buddy.Application.CommandService.Group.MergeBuddies
 {
-    public class GroupMergedListener: INotificationHandler<GroupMerged>
+    public class MergeStartedListener: INotificationHandler<MergeStarted>
     {
         private readonly IMediator _mediator;
 
-        public GroupMergedListener(IMediator mediator)
+        public MergeStartedListener(IMediator mediator)
         {
             _mediator = mediator;
         }
 
-        public async Task Handle(GroupMerged notification, CancellationToken cancellationToken)
+        public async Task Handle(MergeStarted notification, CancellationToken cancellationToken)
         {
             var command = new MergeBuddiesCommand(notification.Id, notification.MatchedGroupId);
             await _mediator.Publish(command, cancellationToken);

@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Core.Domain;
 using Library.EventStore;
 using MediatR;
 
@@ -8,9 +9,9 @@ namespace Buddy.Application.CommandService.Buddy.ChooseGenres
 {
     public class ChooseGenresCommandHandler: INotificationHandler<ChooseGenresCommand>
     {
-        private readonly IEventStoreRepository<Domain.Entities.Buddy> _repository;
+        private readonly IRepository<Domain.Entities.Buddy> _repository;
 
-        public ChooseGenresCommandHandler(IEventStoreRepository<Domain.Entities.Buddy> repository)
+        public ChooseGenresCommandHandler(IRepository<Domain.Entities.Buddy> repository)
         {
             _repository = repository;
         }

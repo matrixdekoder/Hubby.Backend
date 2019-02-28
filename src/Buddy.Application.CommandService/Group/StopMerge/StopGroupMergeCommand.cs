@@ -1,10 +1,10 @@
 ﻿using MediatR;
 
-namespace Buddy.Application.CommandService.Group.Merge
+namespace Buddy.Application.CommandService.Group.StopMerge
 {
-    public class MergeGroupCommand: INotification
+    public class StopGroupMergeCommand: INotification
     {
-        public MergeGroupCommand(string groupId, string matchedGroupId)
+        public StopGroupMergeCommand(string groupId, string matchedGroupId)
         {
             GroupId = groupId;
             MatchedGroupId = matchedGroupId;

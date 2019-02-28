@@ -11,9 +11,7 @@ namespace Buddy.Application.CommandService.Buddy.MatchGroup
         private readonly IRepository<Domain.Entities.Buddy> _repository;
         private readonly IMatchService _matchService;
 
-        public MatchGroupCommandHandler(
-            IRepository<Domain.Entities.Buddy> repository,
-            IMatchService matchService)
+        public MatchGroupCommandHandler(IRepository<Domain.Entities.Buddy> repository, IMatchService matchService)
         {
             _repository = repository;
             _matchService = matchService;
