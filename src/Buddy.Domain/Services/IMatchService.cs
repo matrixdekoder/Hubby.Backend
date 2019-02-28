@@ -5,6 +5,6 @@ namespace Buddy.Domain.Services
 {
     public interface IMatchService
     {
-        Task<Group> GetBestGroup(string buddyId);
+        Task<Group> GetBestGroup(Entities.Buddy buddy);
     }
 }

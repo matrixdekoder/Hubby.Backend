@@ -16,7 +16,7 @@ namespace Library.EventStore
                 cfg.Port = configuration.GetSection("EventStoreOptions:Port").Value;
             });
             
-            services.AddTransient<IEventStoreContext, EventStoreContext>();
+            services.AddSingleton<IEventStoreContext, EventStoreContext>();
             services.AddTransient(typeof(IRepository<>), typeof(EventStoreRepository<>));
             services.AddTransient<IEventHandler, EventHandler>();
             services.AddTransient<IEventStoreListener, EventStoreListener>();

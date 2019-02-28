@@ -9,24 +9,19 @@ namespace Buddy.Infrastructure.Services
 {
     public class MatchService: IMatchService
     {
-        private readonly IRepository<Domain.Entities.Buddy> _buddyRepository;
         private readonly IRepository<Domain.Entities.Group> _groupRepository;
         private readonly IRepository<Domain.Entities.Region> _regionRepository;
 
         public MatchService(
-            IRepository<Domain.Entities.Buddy> buddyRepository,
             IRepository<Domain.Entities.Group> groupRepository,
             IRepository<Domain.Entities.Region> regionRepository)
         {
-            _buddyRepository = buddyRepository;
             _groupRepository = groupRepository;
             _regionRepository = regionRepository;
         }
 
-        public async Task<Domain.Entities.Group> GetBestGroup(string buddyId)
+        public async Task<Domain.Entities.Group> GetBestGroup(Domain.Entities.Buddy buddy)
         {
-            // Fetch data
-            var buddy = await _buddyRepository.GetById(buddyId);
             var region = await _regionRepository.GetById(buddy.RegionId);
 
             // Get Group Scores

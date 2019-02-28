@@ -24,8 +24,8 @@ namespace Buddy.Application.CommandService.Group.MatchBuddy
 
         public async Task Handle(MatchBuddyCommand notification, CancellationToken cancellationToken)
         {
-            var group = await _matchService.GetBestGroup(notification.BuddyId);
             var buddy = await _buddyRepository.GetById(notification.BuddyId);
+            var group = await _matchService.GetBestGroup(buddy);
             group.AddBuddy(buddy);
             await _groupRepository.Save(group);
         }
