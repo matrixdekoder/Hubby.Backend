@@ -5,11 +5,11 @@ using MediatR;
 
 namespace Buddy.Application.CommandService.Group.Match
 {
-    public class BuddyRemovedListener: INotificationHandler<BuddyRemoved>
+    public class MatchGroupBuddyRemovedListener: INotificationHandler<BuddyRemoved>
     {
         private readonly IMediator _mediator;
 
-        public BuddyRemovedListener(IMediator mediator)
+        public MatchGroupBuddyRemovedListener(IMediator mediator)
         {
             _mediator = mediator;
         }

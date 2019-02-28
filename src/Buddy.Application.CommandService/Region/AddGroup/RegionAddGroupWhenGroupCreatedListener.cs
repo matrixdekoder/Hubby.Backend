@@ -5,11 +5,11 @@ using MediatR;
 
 namespace Buddy.Application.CommandService.Region.AddGroup
 {
-    public class GroupCreatedListener: INotificationHandler<GroupCreated>
+    public class RegionAddGroupWhenGroupCreatedListener: INotificationHandler<GroupCreated>
     {
         private readonly IMediator _mediator;
 
-        public GroupCreatedListener(IMediator mediator)
+        public RegionAddGroupWhenGroupCreatedListener(IMediator mediator)
         {
             _mediator = mediator;
         }

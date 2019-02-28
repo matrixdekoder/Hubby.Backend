@@ -5,11 +5,11 @@ using MediatR;
 
 namespace Buddy.Application.CommandService.Group.MatchBuddy
 {
-    public class GroupLeftListener: INotificationHandler<GroupLeft>
+    public class MatchBuddyGroupLeftListener: INotificationHandler<GroupLeft>
     {
         private readonly IMediator _mediator;
 
-        public GroupLeftListener(IMediator mediator)
+        public MatchBuddyGroupLeftListener(IMediator mediator)
         {
             _mediator = mediator;
         }

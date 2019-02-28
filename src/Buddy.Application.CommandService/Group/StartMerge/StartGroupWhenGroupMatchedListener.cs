@@ -5,11 +5,11 @@ using MediatR;
 
 namespace Buddy.Application.CommandService.Group.StartMerge
 {
-    public class GroupMatchedListener: INotificationHandler<GroupMatched>
+    public class StartGroupWhenGroupMatchedListener: INotificationHandler<GroupMatched>
     {
         private readonly IMediator _mediator;
 
-        public GroupMatchedListener(IMediator mediator)
+        public StartGroupWhenGroupMatchedListener(IMediator mediator)
         {
             _mediator = mediator;
         }

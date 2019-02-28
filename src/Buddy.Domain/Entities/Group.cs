@@ -71,7 +71,7 @@ namespace Buddy.Domain.Entities
             if (!_buddyIds.Any())
                 throw new InvalidOperationException("Group is already empty");
 
-            if(_buddyIds.Count == 1)
+            if(Status != GroupStatus.Merging && _buddyIds.Count == 1)
                 throw new InvalidOperationException("Can't leave group when you're the only one in it");
 
             if (!_buddyIds.Contains(buddyId))

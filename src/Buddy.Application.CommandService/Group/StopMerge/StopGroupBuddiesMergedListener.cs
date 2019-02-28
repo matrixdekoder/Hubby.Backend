@@ -5,11 +5,11 @@ using MediatR;
 
 namespace Buddy.Application.CommandService.Group.StopMerge
 {
-    public class BuddiesMergedListener: INotificationHandler<BuddiesMerged>
+    public class StopGroupBuddiesMergedListener: INotificationHandler<BuddiesMerged>
     {
         private readonly IMediator _mediator;
 
-        public BuddiesMergedListener(IMediator mediator)
+        public StopGroupBuddiesMergedListener(IMediator mediator)
         {
             _mediator = mediator;
         }

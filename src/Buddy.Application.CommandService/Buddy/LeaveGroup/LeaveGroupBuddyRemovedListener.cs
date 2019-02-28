@@ -5,11 +5,11 @@ using MediatR;
 
 namespace Buddy.Application.CommandService.Buddy.LeaveGroup
 {
-    public class BuddyRemovedListener: INotificationHandler<BuddyRemoved>
+    public class LeaveGroupBuddyRemovedListener: INotificationHandler<BuddyRemoved>
     {
         private readonly IMediator _mediator;
 
-        public BuddyRemovedListener(IMediator mediator)
+        public LeaveGroupBuddyRemovedListener(IMediator mediator)
         {
             _mediator = mediator;
         }
