@@ -18,7 +18,7 @@ namespace Host.Api.Controllers
         [HttpGet]
         public async Task<IActionResult> GetRegions()
         {
-            return await SendRequest<RegionsQuery, IList<Region>>(new RegionsQuery());
+            return await SendRequest<RegionsQuery, IList<RegionReadModel>>(new RegionsQuery());
         }
     }
 }
