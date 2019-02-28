@@ -7,7 +7,7 @@ using EventStore.ClientAPI;
 
 namespace Library.EventStore
 {
-    public class EventStoreRepository<T> : IEventStoreRepository<T> where T : IAggregate
+    public class EventStoreRepository<T> : IRepository<T> where T : IAggregate
     {
         private readonly IEventStoreContext _eventStoreContext;
         private readonly IAggregateFactory<T> _aggregateFactory;

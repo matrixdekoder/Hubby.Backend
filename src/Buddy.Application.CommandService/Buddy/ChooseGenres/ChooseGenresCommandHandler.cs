@@ -2,7 +2,6 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Core.Domain;
-using Library.EventStore;
 using MediatR;
 
 namespace Buddy.Application.CommandService.Buddy.ChooseGenres

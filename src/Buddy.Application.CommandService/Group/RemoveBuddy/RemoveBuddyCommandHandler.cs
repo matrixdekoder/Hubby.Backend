@@ -1,15 +1,15 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using Library.EventStore;
+using Core.Domain;
 using MediatR;
 
 namespace Buddy.Application.CommandService.Group.RemoveBuddy
 {
     class RemoveBuddyCommandHandler: INotificationHandler<RemoveBuddyCommand>
     {
-        private readonly IEventStoreRepository<Domain.Entities.Group> _repository;
+        private readonly IRepository<Domain.Entities.Group> _repository;
 
-        public RemoveBuddyCommandHandler(IEventStoreRepository<Domain.Entities.Group> repository)
+        public RemoveBuddyCommandHandler(IRepository<Domain.Entities.Group> repository)
         {
             _repository = repository;
         }
