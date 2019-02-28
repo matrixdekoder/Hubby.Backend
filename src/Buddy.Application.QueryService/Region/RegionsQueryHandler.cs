@@ -7,18 +7,18 @@ using MongoDB.Driver;
 
 namespace Buddy.Application.QueryService.Region
 {
-    public class RegionsQueryHandler: IRequestHandler<RegionsQuery, IList<Domain.Entities.Region>>
+    public class RegionsQueryHandler: IRequestHandler<RegionsQuery, IList<RegionReadModel>>
     {
-        private readonly IMongoCollection<Domain.Entities.Region> _collection;
+        private readonly IMongoCollection<RegionReadModel> _collection;
         
         public RegionsQueryHandler(IMongoContext context)
         {
-            _collection = context.GetCollection<Domain.Entities.Region>();
+            _collection = context.GetCollection<RegionReadModel>();
         }
 
-        public async Task<IList<Domain.Entities.Region>> Handle(RegionsQuery request, CancellationToken cancellationToken)
+        public async Task<IList<RegionReadModel>> Handle(RegionsQuery request, CancellationToken cancellationToken)
         {
-            return await _collection.Find(FilterDefinition<Domain.Entities.Region>.Empty).ToListAsync(cancellationToken);
+            return await _collection.Find(FilterDefinition<RegionReadModel>.Empty).ToListAsync(cancellationToken);
         }
     }
 }

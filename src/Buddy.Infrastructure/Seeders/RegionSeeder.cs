@@ -1,47 +1,41 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Buddy.Domain.Entities;
+using Buddy.Application.CommandService.Region.Create;
+using Buddy.Application.QueryService.Region;
 using Core.Infrastructure;
 using Library.Mongo;
+using MediatR;
 using MongoDB.Driver;
 
 namespace Buddy.Infrastructure.Seeders
 {
     public class RegionSeeder : ISeeder
     {
-        private readonly IMongoCollection<Region> _collection;
+        private readonly IMongoCollection<RegionReadModel> _collection;
+        private readonly IMediator _mediator;
 
-        public RegionSeeder(IMongoContext context)
+        public RegionSeeder(IMongoContext context, IMediator mediator)
         {
-            _collection = context.GetCollection<Region>();
+            _mediator = mediator;
+            _collection = context.GetCollection<RegionReadModel>();
         }
 
         public async Task Seed()
         {
-            var regions = new List<Region>
+            await _collection.DeleteManyAsync(FilterDefinition<RegionReadModel>.Empty);
+
+            var commands = new List<CreateRegionCommand>
             {
-                new Region(Guid.NewGuid().ToString(), "Europe"),
-                new Region(Guid.NewGuid().ToString(), "Asia"),
-                new Region(Guid.NewGuid().ToString(), "Africa"),
-                new Region(Guid.NewGuid().ToString(), "Australia"),
-                new Region(Guid.NewGuid().ToString(), "North America"),
-                new Region(Guid.NewGuid().ToString(), "South America")
+                new CreateRegionCommand("Europe"),
+                new CreateRegionCommand("Asia"),
+                new CreateRegionCommand("Australia"),
+                new CreateRegionCommand("North America"),
+                new CreateRegionCommand("South America")
             };
 
-            // Seed
-            foreach (var region in regions)
+            foreach (var command in commands)
             {
-                var storedRegion = await _collection.Find(x => x.Name == region.Name).FirstOrDefaultAsync();
-                if (storedRegion == null)
-                {
-                    await _collection.InsertOneAsync(region);
-                }
-                else
-                {
-                    var newRegion = new Region(storedRegion.Id, region.Name);
-                    await _collection.ReplaceOneAsync(x => x.Id == storedRegion.Id, newRegion);
-                }
+                await _mediator.Publish(command);
             }
         }
     }

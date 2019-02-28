@@ -63,8 +63,11 @@ namespace Host.Api
             app.UseMvc();
         }
 
-        private static void SeedDatabase(IApplicationBuilder app)
+        private void SeedDatabase(IApplicationBuilder app)
         {
+            var seed = Convert.ToBoolean(Configuration.GetSection("Seed").Value);
+            if (!seed) return;
+
             var scope = app.ApplicationServices.CreateScope();
             var seeders = scope.ServiceProvider.GetServices<ISeeder>();
             foreach (var seeder in seeders)

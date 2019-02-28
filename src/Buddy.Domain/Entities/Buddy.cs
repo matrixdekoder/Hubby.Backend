@@ -68,12 +68,20 @@ namespace Buddy.Domain.Entities
             Publish(e);
         }
 
-        public void LeaveGroup(IList<string> groupIds)
+        public string CreateGroup()
+        {
+            var groupId = Guid.NewGuid().ToString();
+            var e = new BuddyGroupCreated(Id, groupId, RegionId, _genreIds);
+            Publish(e);
+            return groupId;
+        }
+
+        public void LeaveGroup()
         {
             if (CurrentGroupId == null)
                 throw new InvalidOperationException($"Buddy {Id} isn't in a group yet");
 
-            var e = new GroupLeft(Id, CurrentGroupId, groupIds);
+            var e = new GroupLeft(Id, CurrentGroupId);
             Publish(e);
         }
 

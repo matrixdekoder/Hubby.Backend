@@ -1,9 +1,9 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
-using Buddy.Application.CommandService.ChooseGenres;
-using Buddy.Application.CommandService.ChooseRegion;
-using Buddy.Application.CommandService.LeaveGroup;
-using Buddy.Application.CommandService.MatchBuddy;
+using Buddy.Application.CommandService.Buddy.ChooseGenres;
+using Buddy.Application.CommandService.Buddy.ChooseRegion;
+using Buddy.Application.CommandService.Buddy.LeaveGroup;
+using Buddy.Application.CommandService.Buddy.MatchGroup;
 using Buddy.Application.QueryService.Buddy;
 using Buddy.Application.QueryService.Group;
 using Buddy.Application.QueryService.Status;
@@ -45,19 +45,13 @@ namespace Host.Api.Controllers
         [HttpPost("{buddyId}/match")]
         public async Task<IActionResult> Match(string buddyId)
         {
-            var buddy = (await _mediator.Send(new BuddyQuery(x => x.Id == buddyId))).First();
-            var groups = await _mediator.Send(new GroupQuery(x => x.RegionId == buddy.RegionId));
-            var command = new MatchBuddyCommand(buddy.Id, groups.Select(x => x.Id).ToList());
-            return await Publish(command);
+            return await Publish(new MatchGroupCommand(buddyId));
         }
 
         [HttpPost("{buddyId}/leave")]
         public async Task<IActionResult> LeaveGroup(string buddyId)
         {
-            var buddy = (await _mediator.Send(new BuddyQuery(x => x.Id == buddyId))).First();
-            var groups = await _mediator.Send(new GroupQuery(x => x.RegionId == buddy.RegionId));
-            var command = new LeaveGroupCommand(buddy.Id, groups.Select(x => x.Id).ToList());
-            return await Publish(command);
+            return await Publish(new LeaveGroupCommand(buddyId));
         }
     }
 }

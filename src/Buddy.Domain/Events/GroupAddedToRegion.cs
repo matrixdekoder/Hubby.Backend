@@ -2,13 +2,14 @@
 
 namespace Buddy.Domain.Events
 {
-    public class GroupLeft: IEvent
+    public class GroupAddedToRegion: IEvent
     {
-        public GroupLeft(string id, string groupId)
+        public GroupAddedToRegion(string id, string groupId)
         {
             Id = id;
             GroupId = groupId;
         }
+
         public string Id { get; }
         public string GroupId { get; }
     }

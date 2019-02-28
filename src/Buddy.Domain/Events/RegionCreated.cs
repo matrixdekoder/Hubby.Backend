@@ -1,10 +1,10 @@
 ﻿using Core.Domain;
 
-namespace Buddy.Domain.Entities
+namespace Buddy.Domain.Events
 {
-    public class Genre: IEntity
+    public class RegionCreated: IEvent
     {
-        public Genre(string id, string name)
+        public RegionCreated(string id, string name)
         {
             Id = id;
             Name = name;

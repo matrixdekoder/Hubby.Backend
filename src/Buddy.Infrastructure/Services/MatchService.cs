@@ -2,71 +2,39 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Buddy.Domain.Entities;
 using Buddy.Domain.Services;
-using Library.EventStore;
+using Core.Domain;
 
 namespace Buddy.Infrastructure.Services
 {
     public class MatchService: IMatchService
     {
-        private readonly IEventStoreRepository<Group> _groupRepository;
-        private readonly IEventStoreRepository<Domain.Entities.Buddy> _buddyRepository;
+        private readonly IRepository<Domain.Entities.Group> _groupRepository;
+        private readonly IRepository<Domain.Entities.Region> _regionRepository;
 
         public MatchService(
-            IEventStoreRepository<Group> groupRepository,
-            IEventStoreRepository<Domain.Entities.Buddy> buddyRepository)
+            IRepository<Domain.Entities.Group> groupRepository,
+            IRepository<Domain.Entities.Region> regionRepository)
         {
             _groupRepository = groupRepository;
-            _buddyRepository = buddyRepository;
+            _regionRepository = regionRepository;
         }
 
-        public async Task<Group> GetBestGroup(Domain.Entities.Buddy buddy, IList<Group> groups)
+        public async Task<string> GetBestGroupId(Domain.Entities.Buddy buddy)
         {
-            var scoreByGroup = new Dictionary<string, double>();
-            foreach (var group in groups)
+            var region = await _regionRepository.GetById(buddy.RegionId);
+            var groupIds = region.GroupIds.Except(new List<string> {buddy.CurrentGroupId});
+
+            var scoreByGroup = new Dictionary<Domain.Entities.Group, double>();
+            foreach (var groupId in groupIds)
             {
+                var group = await _groupRepository.GetById(groupId);
                 var score = group.Match(buddy);
                 if(Math.Abs(score) > 0.0)
-                    scoreByGroup.Add(group.Id, score);
-            }
-            
-            string matchedGroupId;
-            Group matchedGroup;
-
-            if (scoreByGroup.Any())
-            {
-                matchedGroupId = Guid.NewGuid().ToString();
-                matchedGroup = await _groupRepository.GetById(matchedGroupId);
-                matchedGroup.Start(matchedGroupId, buddy.RegionId, buddy.GenreIds.ToList());
-            }
-            else
-            {
-                matchedGroupId = scoreByGroup.OrderByDescending(x => x.Value).First().Key;
-                matchedGroup = groups.First(x => x.Id == matchedGroupId);
+                    scoreByGroup.Add(group, score);
             }
 
-            return matchedGroup;
-        }
-
-        public async Task MergeGroups(Group currentGroup, Group matchedGroup, IList<string> otherGroupIds)
-        {
-            currentGroup.MergeBlacklist(matchedGroup);
-
-            foreach (var mergedBuddyId in matchedGroup.BuddyIds)
-            {
-                var mergedBuddy = await _buddyRepository.GetById(mergedBuddyId);
-                mergedBuddy.LeaveGroup(otherGroupIds);
-                currentGroup.AddBuddy(mergedBuddy);
-                mergedBuddy.JoinGroup(matchedGroup.Id);
-
-                await _buddyRepository.Save(mergedBuddy);
-            }
-
-            matchedGroup.Clear();
-
-            await _groupRepository.Save(currentGroup);
-            await _groupRepository.Save(matchedGroup);
+            return !scoreByGroup.Any() ? null : scoreByGroup.OrderByDescending(x => x.Value).First().Key.Id;
         }
     }
 }
