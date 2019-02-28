@@ -28,11 +28,10 @@ namespace Buddy.Infrastructure.Services
             // Fetch data
             var buddy = await _buddyRepository.GetById(buddyId);
             var region = await _regionRepository.GetById(buddy.RegionId);
-            var groupIds = region.GroupIds.Except(new List<string> {buddy.CurrentGroupId});
 
             // Get Group Scores
             var scoreByGroup = new Dictionary<Domain.Entities.Group, double>();
-            foreach (var groupId in groupIds)
+            foreach (var groupId in region.GroupIds)
             {
                 var group = await _groupRepository.GetById(groupId);
                 var score = group.GetScore(buddy);

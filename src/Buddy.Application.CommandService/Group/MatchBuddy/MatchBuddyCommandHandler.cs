@@ -8,20 +8,26 @@ namespace Buddy.Application.CommandService.Group.MatchBuddy
 {
     public class MatchBuddyCommandHandler: INotificationHandler<MatchBuddyCommand>
     {
-        private readonly IRepository<Domain.Entities.Group> _repository;
+        private readonly IRepository<Domain.Entities.Group> _groupRepository;
+        private readonly IRepository<Domain.Entities.Buddy> _buddyRepository;
         private readonly IMatchService _matchService;
 
-        public MatchBuddyCommandHandler(IRepository<Domain.Entities.Group> repository, IMatchService matchService)
+        public MatchBuddyCommandHandler(
+            IRepository<Domain.Entities.Group> groupRepository,
+            IRepository<Domain.Entities.Buddy> buddyRepository,
+            IMatchService matchService)
         {
-            _repository = repository;
+            _groupRepository = groupRepository;
+            _buddyRepository = buddyRepository;
             _matchService = matchService;
         }
 
         public async Task Handle(MatchBuddyCommand notification, CancellationToken cancellationToken)
         {
             var group = await _matchService.GetBestGroup(notification.BuddyId);
-            group.AddBuddy(notification.BuddyId);
-            await _repository.Save(group);
+            var buddy = await _buddyRepository.GetById(notification.BuddyId);
+            group.AddBuddy(buddy);
+            await _groupRepository.Save(group);
         }
     }
 }

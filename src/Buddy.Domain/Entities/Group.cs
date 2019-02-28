@@ -51,18 +51,21 @@ namespace Buddy.Domain.Entities
             Publish(e);
         }
 
-        public void AddBuddy(string buddyId)
+        public void AddBuddy(Buddy buddy)
         {
-            if (_buddyIdsBlackList.Contains(buddyId))
+            if(buddy.CurrentGroupId != null)
+                throw new InvalidOperationException("Current group of buddy must be empty before adding him to a group");
+
+            if (_buddyIdsBlackList.Contains(buddy.Id))
                 throw new InvalidOperationException("Buddy is on this group's blacklist");
 
-            if (_buddyIds.Contains(buddyId))
-                throw new InvalidOperationException($"Buddy {buddyId} is already in the group");
+            if (_buddyIds.Contains(buddy.Id))
+                throw new InvalidOperationException($"Buddy {buddy.Id} is already in the group");
 
             if (_buddyIds.Count >= MaximumGroupSize)
                 throw new InvalidOperationException($"Only {MaximumGroupSize} buddies are allowed per group");
 
-            var e = new BuddyAdded(Id, buddyId);
+            var e = new BuddyAdded(Id, buddy.Id);
             Publish(e);
         }
 
@@ -115,6 +118,7 @@ namespace Buddy.Domain.Entities
             if (Status == GroupStatus.Merging) return;
 
             var matchedGroups = otherGroups
+                .Where(x => x.Id != Id)
                 .Where(HasSameGenres)
                 .Where(HasFreeSpace)
                 .Where(BuddiesAllowed)
@@ -139,7 +143,7 @@ namespace Buddy.Domain.Entities
             Publish(e);
         }
 
-        public void MergeBuddies(Group otherGroup)
+        public void MergeBuddies(Group otherGroup, IEnumerable<Buddy> buddiesToMerge)
         {
             if(MaximumGroupSize - CurrentGroupSize < otherGroup.CurrentGroupSize)
                 throw new InvalidOperationException("Can't merge groups, not enough space");
@@ -150,10 +154,10 @@ namespace Buddy.Domain.Entities
             if(!BuddiesAllowed(otherGroup))
                 throw new InvalidOperationException("Some of the other groups buddies are blacklisted, unable to merge groups");
 
-            foreach (var buddyId in otherGroup.BuddyIds)
+            foreach (var buddy in buddiesToMerge)
             {
-                otherGroup.RemoveBuddy(buddyId);
-                AddBuddy(buddyId);
+                otherGroup.RemoveBuddy(buddy.Id);
+                AddBuddy(buddy);
             }
 
             var e = new BuddiesMerged(Id, otherGroup.Id);

@@ -64,6 +64,9 @@ namespace Buddy.Domain.Entities
             if(Status != BuddyStatus.Complete)
                 throw new InvalidOperationException("Buddy not activated yet, please complete the basic setup");
 
+            if(CurrentGroupId != null)
+                throw new InvalidOperationException("Can't join group when still being in another one");
+
             var e = new GroupJoined(Id, groupId);
             Publish(e);
         }

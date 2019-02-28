@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Buddy.Domain.Enums;
 using Core.Domain;
 using MediatR;
 
@@ -23,11 +22,18 @@ namespace Buddy.Application.CommandService.Group.MergeBuddies
         {
             var group = await _groupRepository.GetById(notification.GroupId);
             var matchedGroup = await _groupRepository.GetById(notification.MatchedGroupId);
+            var matchedGroupBuddies = await GetBuddies(matchedGroup.BuddyIds);
 
-            group.MergeBuddies(matchedGroup);
+            group.MergeBuddies(matchedGroup, matchedGroupBuddies);
 
             await _groupRepository.Save(matchedGroup);
             await _groupRepository.Save(group);
+        }
+
+        private async Task<IEnumerable<Domain.Entities.Buddy>> GetBuddies(IEnumerable<string> buddyIds)
+        {
+            var tasks = await Task.WhenAll(buddyIds.Select(x => _buddyRepository.GetById(x)));
+            return tasks.Where(task => task != null).ToList();
         }
     }
 }
