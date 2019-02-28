@@ -21,8 +21,8 @@ namespace Buddy.Application.CommandService.Group.StopMerge
 
             group.StopMerge(matchedGroup);
 
-            await _repository.Save(group);
             await _repository.Save(matchedGroup);
+            await _repository.Save(group);
         }
     }
 }

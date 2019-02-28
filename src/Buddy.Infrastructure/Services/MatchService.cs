@@ -9,22 +9,28 @@ namespace Buddy.Infrastructure.Services
 {
     public class MatchService: IMatchService
     {
+        private readonly IRepository<Domain.Entities.Buddy> _buddyRepository;
         private readonly IRepository<Domain.Entities.Group> _groupRepository;
         private readonly IRepository<Domain.Entities.Region> _regionRepository;
 
         public MatchService(
+            IRepository<Domain.Entities.Buddy> buddyRepository,
             IRepository<Domain.Entities.Group> groupRepository,
             IRepository<Domain.Entities.Region> regionRepository)
         {
+            _buddyRepository = buddyRepository;
             _groupRepository = groupRepository;
             _regionRepository = regionRepository;
         }
 
-        public async Task<string> GetBestGroupId(Domain.Entities.Buddy buddy)
+        public async Task<Domain.Entities.Group> GetBestGroup(string buddyId)
         {
+            // Fetch data
+            var buddy = await _buddyRepository.GetById(buddyId);
             var region = await _regionRepository.GetById(buddy.RegionId);
             var groupIds = region.GroupIds.Except(new List<string> {buddy.CurrentGroupId});
 
+            // Get Group Scores
             var scoreByGroup = new Dictionary<Domain.Entities.Group, double>();
             foreach (var groupId in groupIds)
             {
@@ -34,7 +40,15 @@ namespace Buddy.Infrastructure.Services
                     scoreByGroup.Add(group, score);
             }
 
-            return !scoreByGroup.Any() ? null : scoreByGroup.OrderByDescending(x => x.Value).First().Key.Id;
+            // Return matched group
+            if (scoreByGroup.Any())
+                return scoreByGroup.OrderByDescending(x => x.Value).First().Key;
+
+            // If there is no match, create a matching group
+            var newGroupId = Guid.NewGuid().ToString();
+            var newGroup = await _groupRepository.GetById(newGroupId);
+            newGroup.Create(newGroupId, buddy.RegionId, buddy.GenreIds.ToList());
+            return newGroup;
         }
     }
 }

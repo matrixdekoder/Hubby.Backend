@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Buddy.Domain.Events;
 using MediatR;
 
-namespace Buddy.Application.CommandService.Group.RemoveBuddy
+namespace Buddy.Application.CommandService.Group.MatchBuddy
 {
     public class GroupLeftListener: INotificationHandler<GroupLeft>
     {
@@ -16,7 +16,7 @@ namespace Buddy.Application.CommandService.Group.RemoveBuddy
 
         public async Task Handle(GroupLeft notification, CancellationToken cancellationToken)
         {
-            var command = new RemoveBuddyCommand(notification.Id, notification.GroupId);
+            var command = new MatchBuddyCommand(notification.Id);
             await _mediator.Publish(command, cancellationToken);
         }
     }

@@ -3,7 +3,8 @@ using System.Threading.Tasks;
 using Buddy.Application.CommandService.Buddy.ChooseGenres;
 using Buddy.Application.CommandService.Buddy.ChooseRegion;
 using Buddy.Application.CommandService.Buddy.LeaveGroup;
-using Buddy.Application.CommandService.Buddy.MatchGroup;
+using Buddy.Application.CommandService.Group.MatchBuddy;
+using Buddy.Application.CommandService.Group.RemoveBuddy;
 using Buddy.Application.QueryService.Buddy;
 using Buddy.Application.QueryService.Group;
 using Buddy.Application.QueryService.Status;
@@ -42,16 +43,16 @@ namespace Host.Api.Controllers
             return await SendRequest<BuddyStatusQuery, BuddyStatus>(new BuddyStatusQuery(id));
         }
 
-        [HttpPost("{buddyId}/match")]
-        public async Task<IActionResult> Match(string buddyId)
+        [HttpPost("match")]
+        public async Task<IActionResult> Match([FromBody] MatchBuddyCommand command)
         {
-            return await Publish(new MatchGroupCommand(buddyId));
+            return await Publish(command);
         }
 
-        [HttpPost("{buddyId}/leave")]
-        public async Task<IActionResult> LeaveGroup(string buddyId)
+        [HttpPost("leave")]
+        public async Task<IActionResult> LeaveGroup([FromBody] RemoveBuddyCommand command)
         {
-            return await Publish(new LeaveGroupCommand(buddyId));
+            return await Publish(command);
         }
     }
 }

@@ -20,9 +20,9 @@ namespace Buddy.Application.CommandService.Group.StartMerge
             var matchedGroup = await _repository.GetById(notification.MatchedGroupId);
 
             group.StartMerge(matchedGroup);
-            
-            await _repository.Save(group);
+
             await _repository.Save(matchedGroup);
+            await _repository.Save(group);
         }
     }
 }

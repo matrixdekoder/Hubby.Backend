@@ -1,4 +1,6 @@
-﻿using System.Threading;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Buddy.Domain.Enums;
 using Core.Domain;
@@ -23,15 +25,8 @@ namespace Buddy.Application.CommandService.Group.MergeBuddies
             var matchedGroup = await _groupRepository.GetById(notification.MatchedGroupId);
 
             group.MergeBuddies(matchedGroup);
-            
-            foreach (var buddyId in matchedGroup.BuddyIds)
-            {
-                var buddy = await _buddyRepository.GetById(buddyId);
-                buddy.LeaveGroup();
-                buddy.JoinGroup(group.Id);
-                await _buddyRepository.Save(buddy);
-            }
 
+            await _groupRepository.Save(matchedGroup);
             await _groupRepository.Save(group);
         }
     }

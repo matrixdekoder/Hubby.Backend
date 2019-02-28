@@ -134,8 +134,11 @@ namespace Buddy.Domain.Entities
 
         public void MergeBuddies(Group otherGroup)
         {
-            if(Status != GroupStatus.Merging)
-                throw new InvalidOperationException("Can only merge when in status \'Merging\'");
+            foreach (var buddyId in otherGroup.BuddyIds)
+            {
+                otherGroup.RemoveBuddy(buddyId);
+                AddBuddy(buddyId);
+            }
 
             var e = new BuddiesMerged(Id, otherGroup.Id);
             Publish(e);
