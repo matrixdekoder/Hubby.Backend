@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Buddy.Application.CommandService.Region.Create;
 using Buddy.Application.QueryService.Region;
@@ -35,7 +36,15 @@ namespace Buddy.Infrastructure.Seeders
 
             foreach (var command in commands)
             {
-                await _mediator.Publish(command);
+                try
+                {
+                    await _mediator.Publish(command);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                    throw;
+                }
             }
         }
     }

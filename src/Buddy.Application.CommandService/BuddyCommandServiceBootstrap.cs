@@ -12,6 +12,7 @@ namespace Buddy.Application.CommandService
             services.AddMediatR(typeof(BuddyCommandServiceBootstrap));
             services.AddTransient<IAggregateFactory<Domain.Entities.Buddy>, BuddyFactory>();
             services.AddTransient<IAggregateFactory<Domain.Entities.Group>, GroupFactory>();
+            services.AddTransient<IAggregateFactory<Domain.Entities.Region>, RegionFactory>();
         }
     }
 }

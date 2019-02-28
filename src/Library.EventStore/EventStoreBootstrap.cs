@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Core.Domain;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Library.EventStore
@@ -17,6 +18,7 @@ namespace Library.EventStore
             
             services.AddTransient<IEventStoreContext, EventStoreContext>();
             services.AddTransient(typeof(IEventStoreRepository<>), typeof(EventStoreRepository<>));
+            services.AddTransient(typeof(IRepository<>), typeof(EventStoreRepository<>));
             services.AddTransient<IEventHandler, EventHandler>();
             services.AddTransient<IEventStoreListener, EventStoreListener>();
         }

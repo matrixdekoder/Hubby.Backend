@@ -8,7 +8,7 @@ namespace Buddy.Infrastructure
 {
     public static class BuddyInfrastructureBootstrap
     {
-        public static void ConfigureBuddyInfrastructureSeed(this IServiceCollection services)
+        public static void ConfigureBuddyInfrastructure(this IServiceCollection services)
         {
             services.AddTransient<ISeeder, RegionSeeder>();
             services.AddTransient<ISeeder, GenreSeeder>();

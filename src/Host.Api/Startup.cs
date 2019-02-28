@@ -51,7 +51,7 @@ namespace Host.Api
             services.ConfigureAccountQueryServices();
             services.ConfigureBuddyCommandServices();
             services.ConfigureBuddyQueryServices();
-            services.ConfigureBuddyInfrastructureSeed();
+            services.ConfigureBuddyInfrastructure();
         }
 
         public void Configure(IApplicationBuilder app)
