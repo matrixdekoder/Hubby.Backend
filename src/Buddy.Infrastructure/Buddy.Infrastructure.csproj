@@ -12,11 +12,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Buddy.Application.CommandService\Buddy.Application.CommandService.csproj" />
-    <ProjectReference Include="..\Buddy.Application.QueryService\Buddy.Application.QueryService.csproj" />
     <ProjectReference Include="..\Buddy.Domain\Buddy.Domain.csproj" />
     <ProjectReference Include="..\Core.Infrastructure\Core.Infrastructure.csproj" />
-    <ProjectReference Include="..\Library.EventStore\Library.EventStore.csproj" />
   </ItemGroup>
 
 </Project>

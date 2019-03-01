@@ -19,7 +19,10 @@ namespace Host.Api.Exceptions
                 case SecurityTokenException _:
                     return new UnauthorizedObjectResult(e.Message);
                 default:
-                    return new ObjectResult(e.Message);
+                    return new ObjectResult(e.Message)
+                    {
+                        StatusCode = 500
+                    };
             }
         }
     }

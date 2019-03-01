@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Core.Application;
-using Core.Domain;
 using MongoDB.Driver;
 
 namespace Library.Mongo
 {
-    public class MongoProjectionWriter<T>: IProjectionWriter<T> where T : IEntity
+    public class MongoProjectionWriter<T>: IProjectionWriter<T> where T : IReadModel
     {
         private readonly IMongoCollection<T> _collection;
 

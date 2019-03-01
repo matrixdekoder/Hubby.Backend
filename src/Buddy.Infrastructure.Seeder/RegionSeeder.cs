@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Buddy.Application.CommandService.Region.Create;
 using Buddy.Application.QueryService.Region;
@@ -8,7 +7,7 @@ using Library.Mongo;
 using MediatR;
 using MongoDB.Driver;
 
-namespace Buddy.Infrastructure.Seeders
+namespace Buddy.Infrastructure.Seeder
 {
     public class RegionSeeder : ISeeder
     {
@@ -17,8 +16,8 @@ namespace Buddy.Infrastructure.Seeders
 
         public RegionSeeder(IMongoContext context, IMediator mediator)
         {
-            _mediator = mediator;
             _collection = context.GetCollection<RegionReadModel>();
+            _mediator = mediator;
         }
 
         public async Task Seed()
@@ -36,15 +35,7 @@ namespace Buddy.Infrastructure.Seeders
 
             foreach (var command in commands)
             {
-                try
-                {
-                    await _mediator.Publish(command);
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e);
-                    throw;
-                }
+                await _mediator.Publish(command);
             }
         }
     }

@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
-using Core.Domain;
+using Core.Application;
 
 namespace Buddy.Application.QueryService.Group
 {
-    public class GroupReadModel: IEntity
+    public class GroupReadModel: IReadModel
     {
         public string Id { get; set; }
         public string RegionId { get; set; }

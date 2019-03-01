@@ -3,7 +3,7 @@ using MediatR;
 
 namespace Buddy.Application.QueryService.Genre
 {
-    public class GenresQuery: IRequest<IList<Domain.Entities.Genre>>
+    public class GenresQuery: IRequest<IList<GenreReadModel>>
     {
     }
 }

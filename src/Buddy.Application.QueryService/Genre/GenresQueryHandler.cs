@@ -7,18 +7,18 @@ using MongoDB.Driver;
 
 namespace Buddy.Application.QueryService.Genre
 {
-    public class GenresQueryHandler: IRequestHandler<GenresQuery, IList<Domain.Entities.Genre>>
+    public class GenresQueryHandler: IRequestHandler<GenresQuery, IList<GenreReadModel>>
     {
-        private readonly IMongoCollection<Domain.Entities.Genre> _collection;
+        private readonly IMongoCollection<GenreReadModel> _collection;
 
         public GenresQueryHandler(IMongoContext context)
         {
-            _collection = context.GetCollection<Domain.Entities.Genre>();
+            _collection = context.GetCollection<GenreReadModel>();
         }
 
-        public async Task<IList<Domain.Entities.Genre>> Handle(GenresQuery request, CancellationToken cancellationToken)
+        public async Task<IList<GenreReadModel>> Handle(GenresQuery request, CancellationToken cancellationToken)
         {
-            return await _collection.Find(FilterDefinition<Domain.Entities.Genre>.Empty).ToListAsync(cancellationToken);
+            return await _collection.Find(FilterDefinition<GenreReadModel>.Empty).ToListAsync(cancellationToken);
         }
     }
 }

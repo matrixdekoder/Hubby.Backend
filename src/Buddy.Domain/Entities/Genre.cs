@@ -1,16 +1,27 @@
-﻿using Core.Domain;
+﻿using System.Collections.Generic;
+using Buddy.Domain.Events;
+using Core.Domain;
 
 namespace Buddy.Domain.Entities
 {
-    public class Genre: IEntity
+    public class Genre: Aggregate<Genre>
     {
-        public Genre(string id, string name)
+        private string _name;
+
+        public Genre(IEnumerable<IEvent> events) : base(events)
         {
-            Id = id;
-            Name = name;
         }
 
-        public string Id { get; }
-        public string Name { get; }
+        public void Create(string id, string name)
+        {
+            var e = new GenreCreated(id, name);
+            Publish(e);
+        }
+
+        private void When(GenreCreated e)
+        {
+            Id = e.Id;
+            _name = e.Name;
+        }
     }
 }

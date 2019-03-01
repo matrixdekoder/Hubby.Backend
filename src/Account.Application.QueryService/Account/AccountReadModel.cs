@@ -1,8 +1,8 @@
-using Core.Domain;
+using Core.Application;
 
 namespace Account.Application.QueryService.Account
 {
-    public class AccountReadModel: IEntity
+    public class AccountReadModel: IReadModel
     {
         public string Id { get; set; }
         public string BuddyId { get; set; }

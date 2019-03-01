@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Buddy.Application.QueryService.Genre;
-using Buddy.Domain.Entities;
 using Host.Api.Exceptions;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -18,7 +17,7 @@ namespace Host.Api.Controllers
         [HttpGet]
         public async Task<IActionResult> GetGenres()
         {
-            return await SendRequest<GenresQuery, IList<Genre>>(new GenresQuery());
+            return await SendRequest<GenresQuery, IList<GenreReadModel>>(new GenresQuery());
         }
     }
 }

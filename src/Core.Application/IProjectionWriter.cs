@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Core.Domain;
 
 namespace Core.Application
 {
-    public interface IProjectionWriter<T> where T : IEntity
+    public interface IProjectionWriter<T> where T : IReadModel
     {
         Task Add(T view);
         Task Update(string id, Action<T> updateActions);

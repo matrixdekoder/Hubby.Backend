@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using Buddy.Domain.Enums;
-using Core.Domain;
+using Core.Application;
 
 namespace Buddy.Application.QueryService.Buddy
 {
-    public class BuddyReadModel: IEntity
+    public class BuddyReadModel: IReadModel
     {
         public string Id { get; set; }
         public string AccountId { get; set; }

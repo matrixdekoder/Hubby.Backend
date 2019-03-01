@@ -5,6 +5,7 @@ using Account.Application.QueryService;
 using Buddy.Application.CommandService;
 using Buddy.Application.QueryService;
 using Buddy.Infrastructure;
+using Buddy.Infrastructure.Seeder;
 using Core.Infrastructure;
 using Host.Api.Exceptions;
 using Library.EventStore;
@@ -52,6 +53,7 @@ namespace Host.Api
             services.ConfigureBuddyCommandServices();
             services.ConfigureBuddyQueryServices();
             services.ConfigureBuddyInfrastructure();
+            services.ConfigureBuddyInfrastructureSeeder();
         }
 
         public void Configure(IApplicationBuilder app)
