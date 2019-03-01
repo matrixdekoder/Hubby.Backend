@@ -12,6 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Account.Domain\Account.Domain.csproj" />
     <ProjectReference Include="..\Buddy.Domain\Buddy.Domain.csproj" />
     <ProjectReference Include="..\Core.Domain\Core.Domain.csproj" />
   </ItemGroup>

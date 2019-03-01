@@ -21,6 +21,7 @@ namespace Buddy.Application.QueryService.Buddy.Listeners
             var view = new BuddyReadModel
             {
                 Id = notification.Id,
+                AccountId = notification.AccountId,
                 GenreIds = new List<string>()
             };
 

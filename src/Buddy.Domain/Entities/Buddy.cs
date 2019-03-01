@@ -12,6 +12,8 @@ namespace Buddy.Domain.Entities
         #region Fields
 
         private const int GenresAmount = 5;
+
+        private string _accountId;
         private IList<string> _genreIds;
 
         #endregion
@@ -35,9 +37,9 @@ namespace Buddy.Domain.Entities
 
         #region Public Methods
 
-        public void Create(string buddyId)
+        public void Create(string buddyId, string accountId)
         {
-            var e = new BuddyCreated(buddyId);
+            var e = new BuddyCreated(buddyId, accountId);
             Publish(e);
             ComputeStatus();
         }
@@ -87,6 +89,7 @@ namespace Buddy.Domain.Entities
         private void When(BuddyCreated e)
         {
             Id = e.Id;
+            _accountId = e.AccountId;
         }
 
         private void When(RegionChosen e)
