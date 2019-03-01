@@ -12,10 +12,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Buddy.Domain\Buddy.Domain.csproj" />
-    <ProjectReference Include="..\Core.Infrastructure\Core.Infrastructure.csproj" />
-    <ProjectReference Include="..\Region.Application.QueryService\Region.Application.QueryService.csproj" />
-    <ProjectReference Include="..\Region.Domain\Region.Domain.csproj" />
+    <ProjectReference Include="..\Core.Domain\Core.Domain.csproj" />
+    <ProjectReference Include="..\Genre.Domain\Genre.Domain.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
@@ -8,14 +8,15 @@
   <ItemGroup>
     <PackageReference Include="MediatR" Version="6.0.0" />
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="6.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="2.2.0" />
+    <PackageReference Include="MongoDB.Driver" Version="2.7.2" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Buddy.Domain\Buddy.Domain.csproj" />
-    <ProjectReference Include="..\Core.Infrastructure\Core.Infrastructure.csproj" />
+    <ProjectReference Include="..\Core.Api\Core.Api.csproj" />
+    <ProjectReference Include="..\Region.Application.CommandService\Region.Application.CommandService.csproj" />
     <ProjectReference Include="..\Region.Application.QueryService\Region.Application.QueryService.csproj" />
-    <ProjectReference Include="..\Region.Domain\Region.Domain.csproj" />
   </ItemGroup>
 
 </Project>

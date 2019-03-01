@@ -4,25 +4,26 @@ using System.Linq;
 using System.Threading.Tasks;
 using Buddy.Domain.Services;
 using Core.Domain;
+using MediatR;
+using Region.Application.QueryService.GetRegion;
 
 namespace Buddy.Infrastructure.Services
 {
     public class MatchService: IMatchService
     {
         private readonly IRepository<Domain.Entities.Group> _groupRepository;
-        private readonly IRepository<Domain.Entities.Region> _regionRepository;
+        private readonly IMediator _mediator;
 
         public MatchService(
-            IRepository<Domain.Entities.Group> groupRepository,
-            IRepository<Domain.Entities.Region> regionRepository)
+            IRepository<Domain.Entities.Group> groupRepository, IMediator mediator)
         {
             _groupRepository = groupRepository;
-            _regionRepository = regionRepository;
+            _mediator = mediator;
         }
 
         public async Task<Domain.Entities.Group> GetBestGroup(Domain.Entities.Buddy buddy)
         {
-            var region = await _regionRepository.GetById(buddy.RegionId);
+            var region = await _mediator.Send(new GetRegionQuery(buddy.RegionId));
 
             // Get Group Scores
             var scoreByGroup = new Dictionary<Domain.Entities.Group, double>();
