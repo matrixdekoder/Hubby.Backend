@@ -9,30 +9,28 @@ namespace Buddy.Application.CommandService.Group.MergeBuddies
 {
     public class MergeBuddiesCommandHandler: INotificationHandler<MergeBuddiesCommand>
     {
-        private readonly IRepository<Domain.Entities.Group> _groupRepository;
-        private readonly IRepository<Domain.Entities.Buddy> _buddyRepository;
+        private readonly IRepository _repository;
 
-        public MergeBuddiesCommandHandler(IRepository<Domain.Entities.Group> groupRepository, IRepository<Domain.Entities.Buddy> buddyRepository)
+        public MergeBuddiesCommandHandler(IRepository repository)
         {
-            _groupRepository = groupRepository;
-            _buddyRepository = buddyRepository;
+            _repository = repository;
         }
 
         public async Task Handle(MergeBuddiesCommand notification, CancellationToken cancellationToken)
         {
-            var group = await _groupRepository.GetById(notification.GroupId);
-            var matchedGroup = await _groupRepository.GetById(notification.MatchedGroupId);
+            var group = await _repository.GetById<Domain.Entities.Group>(notification.GroupId);
+            var matchedGroup = await _repository.GetById<Domain.Entities.Group>(notification.MatchedGroupId);
             var matchedGroupBuddies = await GetBuddies(matchedGroup.BuddyIds);
 
             group.MergeBuddies(matchedGroup, matchedGroupBuddies);
 
-            await _groupRepository.Save(matchedGroup);
-            await _groupRepository.Save(group);
+            await _repository.Save(matchedGroup);
+            await _repository.Save(group);
         }
 
         private async Task<IEnumerable<Domain.Entities.Buddy>> GetBuddies(IEnumerable<string> buddyIds)
         {
-            var tasks = await Task.WhenAll(buddyIds.Select(x => _buddyRepository.GetById(x)));
+            var tasks = await Task.WhenAll(buddyIds.Select(x => _repository.GetById<Domain.Entities.Buddy>(x)));
             return tasks.Where(task => task != null).ToList();
         }
     }

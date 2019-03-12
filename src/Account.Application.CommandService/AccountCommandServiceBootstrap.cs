@@ -1,6 +1,4 @@
-﻿using Account.Domain;
-using Core.Domain;
-using MediatR;
+﻿using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Account.Application.CommandService
@@ -11,9 +9,6 @@ namespace Account.Application.CommandService
         {
             // Library services
             services.AddMediatR(typeof(AccountCommandServiceBootstrap));
-            
-            // Domain services
-            services.AddTransient<IAggregateFactory<Domain.Account>, AccountFactory>();
         }
     }
 }

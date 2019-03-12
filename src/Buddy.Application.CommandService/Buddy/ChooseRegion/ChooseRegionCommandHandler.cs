@@ -7,16 +7,16 @@ namespace Buddy.Application.CommandService.Buddy.ChooseRegion
 {
     public class ChooseRegionCommandHandler: INotificationHandler<ChooseRegionCommand>
     {
-        private readonly IRepository<Domain.Entities.Buddy> _repository;
+        private readonly IRepository _repository;
 
-        public ChooseRegionCommandHandler(IRepository<Domain.Entities.Buddy> repository)
+        public ChooseRegionCommandHandler(IRepository repository)
         {
             _repository = repository;
         }
 
         public async Task Handle(ChooseRegionCommand notification, CancellationToken cancellationToken)
         {
-            var buddy = await _repository.GetById(notification.BuddyId);
+            var buddy = await _repository.GetById<Domain.Entities.Buddy>(notification.BuddyId);
             buddy.ChooseRegion(notification.RegionId);
             await _repository.Save(buddy);
         }

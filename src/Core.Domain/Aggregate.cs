@@ -6,17 +6,17 @@ namespace Core.Domain
     public abstract class Aggregate<TEntity>: IAggregate
     {
         private readonly IList<IEvent> _uncommittedEvents = new List<IEvent>();
+        
+        public string Id { get; protected set; }
+        protected int Version { get; private set; }
 
-        protected Aggregate(IEnumerable<IEvent> events)
+        public void Rehydrate(IEnumerable<IEvent> events)
         {
             foreach (var @event in events)
             {
                 Apply(@event);
             }
         }
-        
-        public string Id { get; protected set; }
-        protected int Version { get; private set; }
 
         public IEnumerable<IEvent> GetUncommittedEvents()
         {

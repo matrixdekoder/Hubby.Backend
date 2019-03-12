@@ -13,16 +13,7 @@ namespace Buddy.Domain.Entities
 
         private const int GenresAmount = 5;
 
-        private string _accountId;
         private IList<string> _genreIds;
-
-        #endregion
-
-        #region Constructor
-
-        public Buddy(IEnumerable<IEvent> events) : base(events)
-        {
-        }
 
         #endregion
 
@@ -89,7 +80,6 @@ namespace Buddy.Domain.Entities
         private void When(BuddyCreated e)
         {
             Id = e.Id;
-            _accountId = e.AccountId;
         }
 
         private void When(RegionChosen e)

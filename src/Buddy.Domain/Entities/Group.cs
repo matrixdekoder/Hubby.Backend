@@ -17,15 +17,6 @@ namespace Buddy.Domain.Entities
         private List<string> _genreIds;
         private List<string> _buddyIds;
         private List<string> _buddyIdsBlackList;
-        private List<string> _regionGroupIds;
-
-        #endregion
-
-        #region Constructor
-
-        public Group(IEnumerable<IEvent> events) : base(events)
-        {
-        }
 
         #endregion
 
@@ -37,7 +28,6 @@ namespace Buddy.Domain.Entities
         public IEnumerable<string> GenreIds => _genreIds.AsEnumerable();
         public IEnumerable<string> BuddyIds => _buddyIds.AsEnumerable();
         public IEnumerable<string> Blacklist => _buddyIdsBlackList.AsEnumerable();
-        public IEnumerable<string> RegionGroupIds => _regionGroupIds.AsEnumerable();
         public GroupStatus Status { get; private set; }
 
         #endregion
@@ -183,7 +173,6 @@ namespace Buddy.Domain.Entities
             _genreIds = e.GenreIds.ToList();
             _buddyIds = new List<string>();
             _buddyIdsBlackList = new List<string>();
-            _regionGroupIds = new List<string>();
             Status = GroupStatus.Open;
         }
 

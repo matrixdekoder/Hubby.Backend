@@ -7,23 +7,21 @@ using EventStore.ClientAPI;
 
 namespace Library.EventStore
 {
-    public class EventStoreRepository<T> : IRepository<T> where T : IAggregate
+    public class EventStoreRepository : IRepository
     {
         private readonly IEventStoreContext _eventStoreContext;
-        private readonly IAggregateFactory<T> _aggregateFactory;
 
-        public EventStoreRepository(IEventStoreContext eventStoreContext, IAggregateFactory<T> aggregateFactory)
+        public EventStoreRepository(IEventStoreContext eventStoreContext)
         {
             _eventStoreContext = eventStoreContext;
-            _aggregateFactory = aggregateFactory;
         }
 
-        public async Task<T> GetById(string id)
+        public async Task<T> GetById<T>(string id) where T : IAggregate, new()
         {
             var events = new List<IEvent>();
             StreamEventsSlice currentSlice;
             long nextSliceStart = StreamPosition.Start;
-            var streamName = GetStreamName(id);
+            var streamName = GetStreamName<T>(id);
 
             do
             {
@@ -32,10 +30,12 @@ namespace Library.EventStore
                 events.AddRange(currentSlice.Events.Select(x => x.DeserializeEvent()));
             } while (!currentSlice.IsEndOfStream);
 
-            return _aggregateFactory.Create(events);
+            var aggregate = new T();
+            aggregate.Rehydrate(events);
+            return aggregate;
         }
 
-        public async Task Save(T aggregate)
+        public async Task Save<T>(T aggregate) where T : IAggregate
         {
             var events = aggregate.GetUncommittedEvents().ToArray();
             if (!events.Any()) return;
@@ -46,7 +46,7 @@ namespace Library.EventStore
             aggregate.ClearUncommittedEvents();
         }
 
-        private string GetStreamName(string id)
+        private string GetStreamName<T>(string id)
         {
             return GetStreamName(typeof(T), id);
         }

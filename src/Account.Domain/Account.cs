@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using Core.Domain;
 
 namespace Account.Domain
@@ -7,10 +6,6 @@ namespace Account.Domain
     public class Account: Aggregate<Account>
     {
         private string _buddyId;
-
-        public Account(IEnumerable<IEvent> events): base(events)
-        {
-        }
 
         public void Register(string id, string password)
         {

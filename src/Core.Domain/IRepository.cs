@@ -2,9 +2,9 @@
 
 namespace Core.Domain
 {
-    public interface IRepository<T> where T : IAggregate
+    public interface IRepository 
     {
-        Task<T> GetById(string id);
-        Task Save(T aggregate);
+        Task<T> GetById<T>(string id) where T : IAggregate, new();
+        Task Save<T>(T aggregate) where T : IAggregate;
     }
 }

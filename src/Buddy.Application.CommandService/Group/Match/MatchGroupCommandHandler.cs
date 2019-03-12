@@ -10,29 +10,29 @@ namespace Buddy.Application.CommandService.Group.Match
 {
     public class MatchGroupCommandHandler : INotificationHandler<MatchGroupCommand>
     {
-        private readonly IRepository<Domain.Entities.Group> _groupRepository;
+        private readonly IRepository _repository;
         private readonly IMediator _mediator;
 
 
-        public MatchGroupCommandHandler(IRepository<Domain.Entities.Group> groupRepository, IMediator mediator)
+        public MatchGroupCommandHandler(IRepository repository, IMediator mediator)
         {
-            _groupRepository = groupRepository;
+            _repository = repository;
             _mediator = mediator;
         }
 
         public async Task Handle(MatchGroupCommand notification, CancellationToken cancellationToken)
         {
-            var currentGroup = await _groupRepository.GetById(notification.GroupId);
+            var currentGroup = await _repository.GetById<Domain.Entities.Group>(notification.GroupId);
             var region = await _mediator.Send(new GetRegionQuery(currentGroup.RegionId), cancellationToken);
             var otherGroups = await GetGroups(region.GroupIds);
 
             currentGroup.Match(otherGroups);
-            await _groupRepository.Save(currentGroup);
+            await _repository.Save(currentGroup);
         }
 
         private async Task<IList<Domain.Entities.Group>> GetGroups(IEnumerable<string> groupIds)
         {
-            var tasks = await Task.WhenAll(groupIds.Select(id => _groupRepository.GetById(id)));
+            var tasks = await Task.WhenAll(groupIds.Select(id => _repository.GetById<Domain.Entities.Group>(id)));
             return tasks.Where(task => task != null).ToList();
         }
     }

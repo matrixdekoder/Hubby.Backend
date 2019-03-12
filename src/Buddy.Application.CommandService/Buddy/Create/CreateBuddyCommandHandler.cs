@@ -8,9 +8,9 @@ namespace Buddy.Application.CommandService.Buddy.Create
 {
     public class CreateBuddyCommandHandler: INotificationHandler<CreateBuddyCommand>
     {
-        private readonly IRepository<Domain.Entities.Buddy> _repository;
+        private readonly IRepository _repository;
 
-        public CreateBuddyCommandHandler(IRepository<Domain.Entities.Buddy> repository)
+        public CreateBuddyCommandHandler(IRepository repository)
         {
             _repository = repository;
         }
@@ -18,7 +18,7 @@ namespace Buddy.Application.CommandService.Buddy.Create
         public async Task Handle(CreateBuddyCommand notification, CancellationToken cancellationToken)
         {
             var buddyId = Guid.NewGuid().ToString();
-            var buddy = await _repository.GetById(buddyId);
+            var buddy = await _repository.GetById<Domain.Entities.Buddy>(buddyId);
             buddy.Create(buddyId, notification.AccountId);
             await _repository.Save(buddy);
         }
