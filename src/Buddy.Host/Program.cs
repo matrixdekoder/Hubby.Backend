@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 
-namespace Host.Api
+namespace Buddy.Host
 {
     public class Program
     {

@@ -12,7 +12,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Region.Api;
 
-namespace Host.Api
+namespace Buddy.Host
 {
     public class Startup
     {
