@@ -6,6 +6,7 @@ using MediatR;
 using MongoDB.Driver;
 using Region.Application.CommandService.Create;
 using Region.Application.QueryService;
+using Region.Domain;
 
 namespace Region.Api
 {
@@ -26,11 +27,11 @@ namespace Region.Api
 
             var commands = new List<CreateRegionCommand>
             {
-                new CreateRegionCommand("Europe"),
-                new CreateRegionCommand("Asia"),
-                new CreateRegionCommand("Australia"),
-                new CreateRegionCommand("North America"),
-                new CreateRegionCommand("South America")
+                new CreateRegionCommand(RegionConstants.Europe, "Europe"),
+                new CreateRegionCommand(RegionConstants.Asia, "Asia"),
+                new CreateRegionCommand(RegionConstants.Australia, "Australia"),
+                new CreateRegionCommand(RegionConstants.NorthAmerica, "North America"),
+                new CreateRegionCommand(RegionConstants.SouthAmerica, "South America")
             };
 
             foreach (var command in commands)

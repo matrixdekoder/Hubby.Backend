@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Core.Api;
+using Microsoft.Extensions.DependencyInjection;
 using Region.Application.CommandService;
 using Region.Application.QueryService;
 
@@ -11,6 +12,7 @@ namespace Region.Api
             services.AddMvc().AddApplicationPart(typeof(RegionBootstrap).Assembly);
             services.ConfigureRegionCommandService();
             services.ConfigureRegionQueryService();
+            services.AddTransient<ISeeder, RegionSeeder>();
         }
     }
 }

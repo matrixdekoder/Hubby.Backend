@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using Core.Domain;
 using MediatR;
@@ -17,9 +16,8 @@ namespace Region.Application.CommandService.Create
 
         public async Task Handle(CreateRegionCommand notification, CancellationToken cancellationToken)
         {
-            var id = Guid.NewGuid().ToString();
-            var region = await _repository.GetById(id);
-            region.Create(id, notification.Name);
+            var region = await _repository.GetById(notification.Code);
+            region.Create(notification.Code, notification.Name);
             await _repository.Save(region);
         }
     }
