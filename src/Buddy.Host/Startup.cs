@@ -45,7 +45,7 @@ namespace Buddy.Host
         {
             app.ConfigureCoreApi();
             SeedDatabase(app);
-            CatchUpEvents(app);
+            StartEventStore(app);
         }
 
         private void SeedDatabase(IApplicationBuilder app)
@@ -61,7 +61,7 @@ namespace Buddy.Host
             }
         }
 
-        private static void CatchUpEvents(IApplicationBuilder app)
+        private static void StartEventStore(IApplicationBuilder app)
         {
             var scope = app.ApplicationServices.CreateScope();
             var eventStoreListener = scope.ServiceProvider.GetService<IEventStoreListener>();
