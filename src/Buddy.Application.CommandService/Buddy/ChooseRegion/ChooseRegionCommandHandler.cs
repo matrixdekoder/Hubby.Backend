@@ -16,7 +16,7 @@ namespace Buddy.Application.CommandService.Buddy.ChooseRegion
 
         public async Task Handle(ChooseRegionCommand notification, CancellationToken cancellationToken)
         {
-            var buddy = await _repository.GetById<Domain.Entities.Buddy>(notification.BuddyId);
+            var buddy = await _repository.GetById<Domain.Buddy>(notification.BuddyId);
             buddy.ChooseRegion(notification.RegionId);
             await _repository.Save(buddy);
         }

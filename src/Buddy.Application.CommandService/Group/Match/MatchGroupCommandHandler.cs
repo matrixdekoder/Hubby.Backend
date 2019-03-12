@@ -22,7 +22,7 @@ namespace Buddy.Application.CommandService.Group.Match
 
         public async Task Handle(MatchGroupCommand notification, CancellationToken cancellationToken)
         {
-            var currentGroup = await _repository.GetById<Domain.Entities.Group>(notification.GroupId);
+            var currentGroup = await _repository.GetById<Domain.Group>(notification.GroupId);
             var region = await _mediator.Send(new GetRegionQuery(currentGroup.RegionId), cancellationToken);
             var otherGroups = await GetGroups(region.GroupIds);
 
@@ -30,9 +30,9 @@ namespace Buddy.Application.CommandService.Group.Match
             await _repository.Save(currentGroup);
         }
 
-        private async Task<IList<Domain.Entities.Group>> GetGroups(IEnumerable<string> groupIds)
+        private async Task<IList<Domain.Group>> GetGroups(IEnumerable<string> groupIds)
         {
-            var tasks = await Task.WhenAll(groupIds.Select(id => _repository.GetById<Domain.Entities.Group>(id)));
+            var tasks = await Task.WhenAll(groupIds.Select(id => _repository.GetById<Domain.Group>(id)));
             return tasks.Where(task => task != null).ToList();
         }
     }

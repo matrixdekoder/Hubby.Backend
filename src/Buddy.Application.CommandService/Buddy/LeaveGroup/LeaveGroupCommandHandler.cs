@@ -16,7 +16,7 @@ namespace Buddy.Application.CommandService.Buddy.LeaveGroup
 
         public async Task Handle(LeaveGroupCommand notification, CancellationToken cancellationToken)
         {
-            var buddy = await _repository.GetById<Domain.Entities.Buddy>(notification.BuddyId);
+            var buddy = await _repository.GetById<Domain.Buddy>(notification.BuddyId);
             buddy.LeaveGroup();
             await _repository.Save(buddy);
         }

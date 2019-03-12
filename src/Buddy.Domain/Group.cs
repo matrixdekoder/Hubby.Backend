@@ -5,7 +5,7 @@ using Buddy.Domain.Enums;
 using Buddy.Domain.Events;
 using Core.Domain;
 
-namespace Buddy.Domain.Entities
+namespace Buddy.Domain
 {
     public class Group : Aggregate<Group>
     {

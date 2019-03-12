@@ -16,8 +16,8 @@ namespace Buddy.Application.CommandService.Group.StartMerge
 
         public async Task Handle(StartGroupMergeCommand notification, CancellationToken cancellationToken)
         {
-            var group = await _repository.GetById<Domain.Entities.Group>(notification.GroupId);
-            var matchedGroup = await _repository.GetById<Domain.Entities.Group>(notification.MatchedGroupId);
+            var group = await _repository.GetById<Domain.Group>(notification.GroupId);
+            var matchedGroup = await _repository.GetById<Domain.Group>(notification.MatchedGroupId);
 
             group.StartMerge(matchedGroup);
 

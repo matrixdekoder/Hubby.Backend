@@ -17,7 +17,7 @@ namespace Buddy.Application.CommandService.Buddy.ChooseGenres
 
         public async Task Handle(ChooseGenresCommand notification, CancellationToken cancellationToken)
         {
-            var buddy = await _repository.GetById<Domain.Entities.Buddy>(notification.BuddyId);
+            var buddy = await _repository.GetById<Domain.Buddy>(notification.BuddyId);
             buddy.ChooseGenres(notification.GenreIds.ToList());
             await _repository.Save(buddy);
         }

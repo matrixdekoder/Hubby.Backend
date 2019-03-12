@@ -1,10 +1,9 @@
 ﻿using System.Threading.Tasks;
-using Buddy.Domain.Entities;
 
 namespace Buddy.Domain.Services
 {
     public interface IMatchService
     {
-        Task<Group> GetBestGroup(Entities.Buddy buddy);
+        Task<Group> GetBestGroup(Buddy buddy);
     }
 }

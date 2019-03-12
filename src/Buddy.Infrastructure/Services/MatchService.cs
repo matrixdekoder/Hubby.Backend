@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Buddy.Domain.Entities;
+using Buddy.Domain;
 using Buddy.Domain.Services;
 using Core.Domain;
 using MediatR;
@@ -21,7 +21,7 @@ namespace Buddy.Infrastructure.Services
             _mediator = mediator;
         }
 
-        public async Task<Group> GetBestGroup(Domain.Entities.Buddy buddy)
+        public async Task<Group> GetBestGroup(Domain.Buddy buddy)
         {
             var region = await _mediator.Send(new GetRegionQuery(buddy.RegionId));
 

@@ -18,8 +18,8 @@ namespace Buddy.Application.CommandService.Group.MergeBuddies
 
         public async Task Handle(MergeBuddiesCommand notification, CancellationToken cancellationToken)
         {
-            var group = await _repository.GetById<Domain.Entities.Group>(notification.GroupId);
-            var matchedGroup = await _repository.GetById<Domain.Entities.Group>(notification.MatchedGroupId);
+            var group = await _repository.GetById<Domain.Group>(notification.GroupId);
+            var matchedGroup = await _repository.GetById<Domain.Group>(notification.MatchedGroupId);
             var matchedGroupBuddies = await GetBuddies(matchedGroup.BuddyIds);
 
             group.MergeBuddies(matchedGroup, matchedGroupBuddies);
@@ -28,9 +28,9 @@ namespace Buddy.Application.CommandService.Group.MergeBuddies
             await _repository.Save(group);
         }
 
-        private async Task<IEnumerable<Domain.Entities.Buddy>> GetBuddies(IEnumerable<string> buddyIds)
+        private async Task<IEnumerable<Domain.Buddy>> GetBuddies(IEnumerable<string> buddyIds)
         {
-            var tasks = await Task.WhenAll(buddyIds.Select(x => _repository.GetById<Domain.Entities.Buddy>(x)));
+            var tasks = await Task.WhenAll(buddyIds.Select(x => _repository.GetById<Domain.Buddy>(x)));
             return tasks.Where(task => task != null).ToList();
         }
     }
