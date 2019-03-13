@@ -8,16 +8,16 @@ namespace Buddy.Application.QueryService.Buddy.Listeners
 {
     public class BuddyStatusComputedListener: INotificationHandler<StatusComputed>
     {
-        private readonly IProjectionWriter<BuddyReadModel> _writer;
+        private readonly IProjectionWriter _writer;
 
-        public BuddyStatusComputedListener(IProjectionWriter<BuddyReadModel> writer)
+        public BuddyStatusComputedListener(IProjectionWriter writer)
         {
             _writer = writer;
         }
 
         public async Task Handle(StatusComputed notification, CancellationToken cancellationToken)
         {
-            await _writer.Update(notification.Id, view => view.Status = notification.Status);
+            await _writer.Update<BuddyReadModel>(notification.Id, view => view.Status = notification.Status);
         }
     }
 }

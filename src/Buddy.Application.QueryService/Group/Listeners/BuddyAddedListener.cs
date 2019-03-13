@@ -8,16 +8,16 @@ namespace Buddy.Application.QueryService.Group.Listeners
 {
     public class BuddyAddedListener: INotificationHandler<BuddyAdded>
     {
-        private readonly IProjectionWriter<GroupReadModel> _writer;
+        private readonly IProjectionWriter _writer;
 
-        public BuddyAddedListener(IProjectionWriter<GroupReadModel> writer)
+        public BuddyAddedListener(IProjectionWriter writer)
         {
             _writer = writer;
         }
 
         public async Task Handle(BuddyAdded notification, CancellationToken cancellationToken)
         {
-            await _writer.Update(notification.Id, view => view.BuddyIds.Add(notification.BuddyId));
+            await _writer.Update<GroupReadModel>(notification.Id, view => view.BuddyIds.Add(notification.BuddyId));
         }
     }
 }

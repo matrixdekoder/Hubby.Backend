@@ -15,7 +15,7 @@ namespace Library.Mongo
             });
 
             services.AddSingleton<IMongoContext, MongoContext>();
-            services.AddTransient(typeof(IProjectionWriter<>), typeof(MongoProjectionWriter<>));
+            services.AddTransient<IProjectionWriter, MongoProjectionWriter>();
         }
     }
 }

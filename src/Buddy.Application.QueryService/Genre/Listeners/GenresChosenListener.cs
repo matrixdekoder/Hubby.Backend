@@ -5,20 +5,20 @@ using Buddy.Domain.Events;
 using Core.Application;
 using MediatR;
 
-namespace Buddy.Application.QueryService.Genre
+namespace Buddy.Application.QueryService.Genre.Listeners
 {
     public class GenresChosenListener: INotificationHandler<GenresChosen>
     {
-        private readonly IProjectionWriter<BuddyReadModel> _writer;
+        private readonly IProjectionWriter _writer;
 
-        public GenresChosenListener(IProjectionWriter<BuddyReadModel> writer)
+        public GenresChosenListener(IProjectionWriter writer)
         {
             _writer = writer;
         }
 
         public async Task Handle(GenresChosen notification, CancellationToken cancellationToken)
         {
-            await _writer.Update(notification.Id, view => view.GenreIds = notification.GenreIds);
+            await _writer.Update<BuddyReadModel>(notification.Id, view => view.GenreIds = notification.GenreIds);
         }
     }
 }

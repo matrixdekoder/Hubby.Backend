@@ -9,16 +9,16 @@ namespace Buddy.Application.QueryService.Region.Listeners
 {
     public class RegionChosenListener: INotificationHandler<RegionChosen>
     {
-        private readonly IProjectionWriter<BuddyReadModel> _writer;
+        private readonly IProjectionWriter _writer;
 
-        public RegionChosenListener(IProjectionWriter<BuddyReadModel> writer)
+        public RegionChosenListener(IProjectionWriter writer)
         {
             _writer = writer;
         }
 
         public async Task Handle(RegionChosen notification, CancellationToken cancellationToken)
         {
-            await _writer.Update(notification.Id, x => x.RegionId = notification.RegionId);
+            await _writer.Update<BuddyReadModel>(notification.Id, x => x.RegionId = notification.RegionId);
         }
     }
 }

@@ -3,9 +3,9 @@ using System.Threading.Tasks;
 
 namespace Core.Application
 {
-    public interface IProjectionWriter<T> where T : IReadModel
+    public interface IProjectionWriter
     {
-        Task Add(T view);
-        Task Update(string id, Action<T> updateActions);
+        Task Add<T>(T view) where T : IReadModel;
+        Task Update<T>(string id, Action<T> updateActions) where T : IReadModel;
     }
 }

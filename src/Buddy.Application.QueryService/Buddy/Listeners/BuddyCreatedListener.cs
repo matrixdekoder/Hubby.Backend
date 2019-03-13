@@ -9,9 +9,9 @@ namespace Buddy.Application.QueryService.Buddy.Listeners
 {
     public class BuddyCreatedListener: INotificationHandler<BuddyCreated>
     {
-        private readonly IProjectionWriter<BuddyReadModel> _writer;
+        private readonly IProjectionWriter _writer;
 
-        public BuddyCreatedListener(IProjectionWriter<BuddyReadModel> writer)
+        public BuddyCreatedListener(IProjectionWriter writer)
         {
             _writer = writer;
         }

@@ -9,9 +9,9 @@ namespace Region.Application.QueryService.Listeners
 {
     public class RegionCreatedListener: INotificationHandler<RegionCreated>
     {
-        private readonly IProjectionWriter<RegionReadModel> _writer;
+        private readonly IProjectionWriter _writer;
 
-        public RegionCreatedListener(IProjectionWriter<RegionReadModel> writer)
+        public RegionCreatedListener(IProjectionWriter writer)
         {
             _writer = writer;
         }

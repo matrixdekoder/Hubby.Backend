@@ -8,9 +8,9 @@ namespace Account.Application.QueryService.Account
 {
     public class AccountRegisteredListener: INotificationHandler<AccountRegistered>
     {
-        private readonly IProjectionWriter<AccountReadModel> _writer;
+        private readonly IProjectionWriter _writer;
 
-        public AccountRegisteredListener(IProjectionWriter<AccountReadModel> writer)
+        public AccountRegisteredListener(IProjectionWriter writer)
         {
             _writer = writer;
         }

@@ -5,27 +5,29 @@ using MongoDB.Driver;
 
 namespace Library.Mongo
 {
-    public class MongoProjectionWriter<T>: IProjectionWriter<T> where T : IReadModel
+    public class MongoProjectionWriter : IProjectionWriter
     {
-        private readonly IMongoCollection<T> _collection;
+        private readonly IMongoContext _context;
 
         public MongoProjectionWriter(IMongoContext context)
         {
-            _collection = context.GetCollection<T>();
+            _context = context;
         }
 
-        public async Task Add(T view) 
+        public async Task Add<T>(T view) where T : IReadModel
         {
-            await _collection.InsertOneAsync(view);
+            var collection = _context.GetCollection<T>();
+            await collection.InsertOneAsync(view);
         }
 
-        public async Task Update(string id, Action<T> updateActions)
+        public async Task Update<T>(string id, Action<T> updateActions) where T : IReadModel
         {
-            var view = await _collection.Find(x => x.Id == id).FirstOrDefaultAsync();
+            var collection = _context.GetCollection<T>();
+            var view = await collection.Find(x => x.Id == id).FirstOrDefaultAsync();
             if (view != null)
             {
                 updateActions(view);
-                await _collection.ReplaceOneAsync(x => x.Id == view.Id, view);
+                await collection.ReplaceOneAsync(x => x.Id == view.Id, view);
             }
         }
     }

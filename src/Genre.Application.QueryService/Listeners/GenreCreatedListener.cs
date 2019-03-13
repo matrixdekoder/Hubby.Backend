@@ -8,9 +8,9 @@ namespace Genre.Application.QueryService.Listeners
 {
     public class GenreCreatedListener: INotificationHandler<GenreCreated>
     {
-        private readonly IProjectionWriter<GenreReadModel> _writer;
+        private readonly IProjectionWriter _writer;
 
-        public GenreCreatedListener(IProjectionWriter<GenreReadModel> writer)
+        public GenreCreatedListener(IProjectionWriter writer)
         {
             _writer = writer;
         }
