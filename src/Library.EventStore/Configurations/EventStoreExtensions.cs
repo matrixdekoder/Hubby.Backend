@@ -6,7 +6,7 @@ using EventStore.ClientAPI;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace Library.EventStore
+namespace Library.EventStore.Configurations
 {
     public static class EventStoreExtensions
     {

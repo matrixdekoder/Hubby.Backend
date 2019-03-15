@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using EventStore.ClientAPI;
 
-namespace Library.EventStore
+namespace Library.EventStore.Handlers
 {
     public interface IEventHandler
     {

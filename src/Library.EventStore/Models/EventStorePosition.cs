@@ -1,7 +1,6 @@
-﻿using System;
-using Core.Domain;
+﻿using Core.Domain;
 
-namespace Library.EventStore
+namespace Library.EventStore.Models
 {
     public class EventStorePosition: IEntity
     {

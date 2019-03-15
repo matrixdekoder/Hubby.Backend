@@ -1,4 +1,6 @@
 ﻿using Core.Application;
+using Library.Mongo.Configurations;
+using Library.Mongo.Persistence;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 

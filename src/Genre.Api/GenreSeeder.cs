@@ -5,6 +5,7 @@ using Genre.Application.CommandService.Create;
 using Genre.Application.QueryService;
 using Genre.Domain;
 using Library.Mongo;
+using Library.Mongo.Persistence;
 using MediatR;
 using MongoDB.Driver;
 

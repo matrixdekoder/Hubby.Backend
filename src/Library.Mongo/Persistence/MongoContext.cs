@@ -1,7 +1,8 @@
-﻿using Microsoft.Extensions.Options;
+﻿using Library.Mongo.Configurations;
+using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 
-namespace Library.Mongo
+namespace Library.Mongo.Persistence
 {
     public class MongoContext: IMongoContext
     {

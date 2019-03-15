@@ -1,6 +1,6 @@
 ﻿using EventStore.ClientAPI;
 
-namespace Library.EventStore
+namespace Library.EventStore.Persistence
 {
     public interface IEventStoreContext
     {

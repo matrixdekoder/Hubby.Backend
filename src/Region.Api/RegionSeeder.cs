@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Core.Api;
 using Library.Mongo;
+using Library.Mongo.Persistence;
 using MediatR;
 using MongoDB.Driver;
 using Region.Application.CommandService.Create;

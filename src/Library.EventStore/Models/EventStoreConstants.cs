@@ -1,4 +1,4 @@
-﻿namespace Library.EventStore
+﻿namespace Library.EventStore.Models
 {
     public static class EventStoreConstants
     {

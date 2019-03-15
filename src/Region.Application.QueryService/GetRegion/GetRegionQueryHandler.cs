@@ -1,6 +1,7 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using Library.Mongo;
+using Library.Mongo.Persistence;
 using MediatR;
 using MongoDB.Driver;
 

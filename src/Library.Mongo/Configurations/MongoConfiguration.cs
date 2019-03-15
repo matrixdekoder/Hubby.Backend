@@ -1,4 +1,4 @@
-﻿namespace Library.Mongo
+﻿namespace Library.Mongo.Configurations
 {
     public class MongoConfiguration
     {

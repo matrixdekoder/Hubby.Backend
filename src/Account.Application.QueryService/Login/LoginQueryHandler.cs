@@ -5,6 +5,7 @@ using Account.Application.QueryService.Account;
 using Core.Application.Exceptions;
 using Core.Infrastructure.Security;
 using Library.Mongo;
+using Library.Mongo.Persistence;
 using MediatR;
 using MongoDB.Driver;
 

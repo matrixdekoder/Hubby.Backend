@@ -4,8 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Core.Domain;
 using EventStore.ClientAPI;
+using Library.EventStore.Configurations;
 
-namespace Library.EventStore
+namespace Library.EventStore.Persistence
 {
     public class EventStoreRepository : IRepository
     {
@@ -27,7 +28,7 @@ namespace Library.EventStore
             {
                 currentSlice = await _eventStoreContext.Connection.ReadStreamEventsForwardAsync(streamName, nextSliceStart, 200, false);
                 nextSliceStart = currentSlice.NextEventNumber;
-                events.AddRange(currentSlice.Events.Select(x => x.DeserializeEvent()));
+                events.AddRange(currentSlice.Events.Select(x => EventStoreExtensions.DeserializeEvent(x)));
             } while (!currentSlice.IsEndOfStream);
 
             var aggregate = new T();

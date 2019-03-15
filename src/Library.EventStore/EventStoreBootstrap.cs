@@ -1,4 +1,7 @@
 ﻿using Core.Domain;
+using Library.EventStore.Configurations;
+using Library.EventStore.Handlers;
+using Library.EventStore.Persistence;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 

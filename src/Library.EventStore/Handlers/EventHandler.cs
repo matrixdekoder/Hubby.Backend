@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Threading.Tasks;
 using EventStore.ClientAPI;
+using Library.EventStore.Configurations;
+using Library.EventStore.Models;
 using Library.Mongo;
+using Library.Mongo.Persistence;
 using MediatR;
 using MongoDB.Driver;
 
-namespace Library.EventStore
+namespace Library.EventStore.Handlers
 {
     public class EventHandler : IEventHandler
     {

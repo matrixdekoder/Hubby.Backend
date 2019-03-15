@@ -1,8 +1,9 @@
 ﻿using System;
 using EventStore.ClientAPI;
+using Library.EventStore.Configurations;
 using Microsoft.Extensions.Options;
 
-namespace Library.EventStore
+namespace Library.EventStore.Persistence
 {
     public class EventStoreContext: IEventStoreContext
     {

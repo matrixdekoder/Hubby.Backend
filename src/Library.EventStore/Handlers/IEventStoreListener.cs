@@ -1,6 +1,4 @@
-﻿using System.Threading.Tasks;
-
-namespace Library.EventStore
+﻿namespace Library.EventStore.Handlers
 {
     public interface IEventStoreListener
     {

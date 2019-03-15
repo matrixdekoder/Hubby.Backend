@@ -1,4 +1,4 @@
-﻿namespace Library.EventStore
+﻿namespace Library.EventStore.Configurations
 {
     public class EventStoreConfiguration
     {

@@ -5,6 +5,7 @@ using Core.Api;
 using Core.Infrastructure;
 using Genre.Api;
 using Library.EventStore;
+using Library.EventStore.Handlers;
 using Library.Mongo;
 using MediatR;
 using Microsoft.AspNetCore.Builder;

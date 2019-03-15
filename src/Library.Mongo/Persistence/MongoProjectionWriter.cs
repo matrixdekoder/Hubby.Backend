@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Core.Application;
 using MongoDB.Driver;
 
-namespace Library.Mongo
+namespace Library.Mongo.Persistence
 {
     public class MongoProjectionWriter : IProjectionWriter
     {

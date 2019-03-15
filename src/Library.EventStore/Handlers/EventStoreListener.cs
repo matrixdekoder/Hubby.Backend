@@ -1,8 +1,11 @@
 ﻿using EventStore.ClientAPI;
+using Library.EventStore.Models;
+using Library.EventStore.Persistence;
 using Library.Mongo;
+using Library.Mongo.Persistence;
 using MongoDB.Driver;
 
-namespace Library.EventStore
+namespace Library.EventStore.Handlers
 {
     public class EventStoreListener : IEventStoreListener
     {

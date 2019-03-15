@@ -4,6 +4,7 @@ using Buddy.Application.QueryService.Buddy;
 using Buddy.Domain.Enums;
 using Core.Application.Exceptions;
 using Library.Mongo;
+using Library.Mongo.Persistence;
 using MediatR;
 using MongoDB.Driver;
 
