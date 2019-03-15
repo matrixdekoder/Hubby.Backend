@@ -18,10 +18,7 @@ namespace Buddy.Application.CommandService.Group.StartMerge
         {
             var group = await _repository.GetById<Domain.Group>(notification.GroupId);
             var matchedGroup = await _repository.GetById<Domain.Group>(notification.MatchedGroupId);
-
             group.StartMerge(matchedGroup);
-
-            await _repository.Save(matchedGroup);
             await _repository.Save(group);
         }
     }

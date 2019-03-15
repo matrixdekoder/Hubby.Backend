@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Buddy.Domain.Enums;
 using Core.Domain;
 using MediatR;
 
@@ -23,8 +24,8 @@ namespace Buddy.Application.CommandService.Group.MergeBuddies
             var matchedGroupBuddies = await GetBuddies(matchedGroup.BuddyIds);
 
             group.MergeBuddies(matchedGroup, matchedGroupBuddies);
+            group.SetStatus(GroupStatus.Open);
 
-            await _repository.Save(matchedGroup);
             await _repository.Save(group);
         }
 

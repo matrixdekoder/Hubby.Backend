@@ -2,9 +2,9 @@
 
 namespace Buddy.Domain.Events
 {
-    public class GroupIsReset: IEvent
+    public class GroupIsCleared: IEvent
     {
-        public GroupIsReset(string id)
+        public GroupIsCleared(string id)
         {
             Id = id;
         }

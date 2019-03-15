@@ -107,7 +107,8 @@ namespace Buddy.Domain
 
         public void Match(IList<Group> otherGroups)
         {
-            if (Status == GroupStatus.Merging) return;
+            if (Status == GroupStatus.Merging)
+                return;
 
             var matchedGroups = otherGroups
                 .Where(x => x.Id != Id)
@@ -124,12 +125,15 @@ namespace Buddy.Domain
             Publish(e);
         }
 
+        public void SetStatus(GroupStatus status)
+        {
+            Publish(new GroupStatusSet(Id, status));
+        }
+
         public void StartMerge(Group otherGroup)
         {
             if(Id == otherGroup.Id)
                 throw new InvalidOperationException("Can't merge the 2 same groups");
-
-            otherGroup.SetStatus(GroupStatus.Merging);
 
             var e = new MergeStarted(Id, otherGroup.Id, otherGroup.Blacklist.ToList());
             Publish(e);
@@ -148,7 +152,6 @@ namespace Buddy.Domain
 
             foreach (var buddy in buddiesToMerge)
             {
-                otherGroup.RemoveBuddy(buddy.Id);
                 AddBuddy(buddy);
             }
 
@@ -156,10 +159,9 @@ namespace Buddy.Domain
             Publish(e);
         }
 
-        public void StopMerge(Group matchedGroup)
+        public void Clear()
         {
-            SetStatus(GroupStatus.Open);
-            matchedGroup.Reset();
+            Publish(new GroupIsCleared(Id));
         }
 
         #endregion
@@ -199,7 +201,7 @@ namespace Buddy.Domain
             Status = e.Status;
         }
 
-        private void When(GroupIsReset e)
+        private void When(GroupIsCleared e)
         {
             _buddyIdsBlackList.Clear();
             _buddyIds.Clear();
@@ -225,16 +227,6 @@ namespace Buddy.Domain
         private bool BuddiesAllowed(Group otherGroup)
         {
             return otherGroup.BuddyIds.Except(_buddyIdsBlackList).Count() == otherGroup.BuddyIds.Count();
-        }
-
-        private void Reset()
-        {
-            Publish(new GroupIsReset(Id));
-        }
-
-        private void SetStatus(GroupStatus status)
-        {
-            Publish(new GroupStatusSet(Id, status));
         }
 
         #endregion
