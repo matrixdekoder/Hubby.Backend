@@ -3,6 +3,8 @@ using Buddy.Application.CommandService.Buddy.ChooseGenres;
 using Buddy.Application.CommandService.Buddy.ChooseRegion;
 using Buddy.Application.CommandService.Group.MatchBuddy;
 using Buddy.Application.CommandService.Group.RemoveBuddy;
+using Buddy.Application.QueryService.Buddy;
+using Buddy.Application.QueryService.Buddy.Get;
 using Buddy.Application.QueryService.Status;
 using Buddy.Domain.Enums;
 using Core.Api;
@@ -20,6 +22,12 @@ namespace Buddy.Api
         public BuddyController(IMediator mediator, IExceptionHandler exceptionHandler) : base(mediator, exceptionHandler)
         {
             _mediator = mediator;
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetBuddy(string id)
+        {
+            return await SendRequest<GetBuddyQuery, BuddyReadModel>(new GetBuddyQuery(id));
         }
 
         [HttpPost("region")]
