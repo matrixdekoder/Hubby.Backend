@@ -4,7 +4,7 @@ WORKDIR /app
 FROM microsoft/dotnet:sdk AS build
 WORKDIR /src
 COPY . .
-WORKDIR /src/src/Host.Api
+WORKDIR /src/src/Buddy.Host
 RUN dotnet restore
 RUN dotnet build --no-restore -c Release -o /app
 
@@ -14,4 +14,4 @@ RUN dotnet publish --no-restore -c Release -o /app
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app .
-ENTRYPOINT ["dotnet", "Host.Api.dll"]
+ENTRYPOINT ["dotnet", "Buddy.Host.dll"]
