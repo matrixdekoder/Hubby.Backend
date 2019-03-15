@@ -226,7 +226,12 @@ namespace Buddy.Domain
 
         private bool BuddiesAllowed(Group otherGroup)
         {
-            return otherGroup.BuddyIds.Except(_buddyIdsBlackList).Count() == otherGroup.BuddyIds.Count();
+            // Check if buddies in other groups are allowed
+            if (_buddyIdsBlackList.Except(otherGroup.BuddyIds).Count() != _buddyIdsBlackList.Count)
+                return false;
+
+            // Check if buddies of this group are allowed to match with other group
+            return otherGroup.Blacklist.Except(_buddyIds).Count() == otherGroup.BuddyIds.Count();
         }
 
         #endregion
