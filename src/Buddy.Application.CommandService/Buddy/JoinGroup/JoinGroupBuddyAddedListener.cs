@@ -16,7 +16,7 @@ namespace Buddy.Application.CommandService.Buddy.JoinGroup
 
         public async Task Handle(BuddyAdded notification, CancellationToken cancellationToken)
         {
-            var command = new JoinGroupCommand(notification.BuddyId, notification.Id, notification.IsMerge);
+            var command = new JoinGroupCommand(notification.BuddyId, notification.Id, notification.Type);
             await _mediator.Publish(command, cancellationToken);
         }
     }

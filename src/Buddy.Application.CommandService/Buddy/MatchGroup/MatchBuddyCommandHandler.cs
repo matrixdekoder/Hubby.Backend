@@ -1,5 +1,6 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
+using Buddy.Domain.Enums;
 using Buddy.Domain.Services;
 using Core.Domain;
 using MediatR;
@@ -23,7 +24,7 @@ namespace Buddy.Application.CommandService.Buddy.MatchGroup
         {
             var buddy = await _repository.GetById<Domain.Buddy>(notification.BuddyId);
             var group = await _matchService.GetBestGroup(buddy);
-            group.AddBuddy(buddy, false);
+            group.AddBuddy(buddy, BuddyJoinType.New);
             await _repository.Save(group);
         }
     }

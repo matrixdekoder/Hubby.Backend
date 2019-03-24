@@ -43,7 +43,7 @@ namespace Buddy.Domain
             Publish(e);
         }
 
-        public void AddBuddy(Buddy buddy, bool isMerge)
+        public void AddBuddy(Buddy buddy, BuddyJoinType joinType)
         {
             if (_buddyIdsBlackList.Contains(buddy.Id))
                 throw new InvalidOperationException("Buddy is on this group's blacklist");
@@ -54,7 +54,7 @@ namespace Buddy.Domain
             if (_buddyIds.Count >= MaximumGroupSize)
                 throw new InvalidOperationException($"Only {MaximumGroupSize} buddies are allowed per group");
 
-            var e = new BuddyAdded(Id, buddy.Id, isMerge);
+            var e = new BuddyAdded(Id, buddy.Id, joinType);
             Publish(e);
         }
 
@@ -149,7 +149,7 @@ namespace Buddy.Domain
 
             foreach (var buddy in buddiesToMerge)
             {
-                AddBuddy(buddy, true);
+                AddBuddy(buddy, BuddyJoinType.Merge);
             }
 
             var e = new BuddiesMerged(Id, otherGroup.Id);
