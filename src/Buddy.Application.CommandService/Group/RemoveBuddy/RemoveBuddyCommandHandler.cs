@@ -5,7 +5,7 @@ using MediatR;
 
 namespace Buddy.Application.CommandService.Group.RemoveBuddy
 {
-    class RemoveBuddyCommandHandler: INotificationHandler<RemoveBuddyCommand>
+    public class RemoveBuddyCommandHandler: INotificationHandler<RemoveBuddyCommand>
     {
         private readonly IRepository _repository;
 
