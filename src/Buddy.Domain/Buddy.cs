@@ -52,12 +52,12 @@ namespace Buddy.Domain
             ComputeStatus();
         }
 
-        public void JoinGroup(string groupId)
+        public void JoinGroup(string groupId, bool isMerge)
         {
             if(Status != BuddyStatus.Complete)
                 throw new InvalidOperationException("Buddy not activated yet, please complete the basic setup");
 
-            if(CurrentGroupId != null)
+            if(!isMerge &&CurrentGroupId != null)
                 throw new InvalidOperationException("Can't join group when still being in another one");
 
             var e = new GroupJoined(Id, groupId);

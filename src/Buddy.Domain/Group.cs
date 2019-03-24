@@ -43,11 +43,8 @@ namespace Buddy.Domain
             Publish(e);
         }
 
-        public void AddBuddy(Buddy buddy)
+        public void AddBuddy(Buddy buddy, bool isMerge)
         {
-            if(buddy.CurrentGroupId != null)
-                throw new InvalidOperationException("Current group of buddy must be empty before adding him to a group");
-
             if (_buddyIdsBlackList.Contains(buddy.Id))
                 throw new InvalidOperationException("Buddy is on this group's blacklist");
 
@@ -57,7 +54,7 @@ namespace Buddy.Domain
             if (_buddyIds.Count >= MaximumGroupSize)
                 throw new InvalidOperationException($"Only {MaximumGroupSize} buddies are allowed per group");
 
-            var e = new BuddyAdded(Id, buddy.Id);
+            var e = new BuddyAdded(Id, buddy.Id, isMerge);
             Publish(e);
         }
 
@@ -152,7 +149,7 @@ namespace Buddy.Domain
 
             foreach (var buddy in buddiesToMerge)
             {
-                AddBuddy(buddy);
+                AddBuddy(buddy, true);
             }
 
             var e = new BuddiesMerged(Id, otherGroup.Id);
@@ -231,7 +228,7 @@ namespace Buddy.Domain
                 return false;
 
             // Check if buddies of this group are allowed to match with other group
-            return otherGroup.Blacklist.Except(_buddyIds).Count() == otherGroup.BuddyIds.Count();
+            return otherGroup.Blacklist.Except(_buddyIds).Count() == otherGroup.Blacklist.Count();
         }
 
         #endregion

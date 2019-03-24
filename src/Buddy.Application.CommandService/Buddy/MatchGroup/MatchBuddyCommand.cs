@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace Buddy.Application.CommandService.Group.MatchBuddy
+namespace Buddy.Application.CommandService.Buddy.MatchGroup
 {
     public class MatchBuddyCommand: INotification
     {
