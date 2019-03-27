@@ -1,15 +1,12 @@
 ﻿using System.Threading.Tasks;
 using Buddy.Application.CommandService.Buddy.ChooseGenres;
 using Buddy.Application.CommandService.Buddy.ChooseRegion;
-using Buddy.Application.CommandService.Buddy.LeaveGroup;
 using Buddy.Application.CommandService.Group.MatchBuddy;
 using Buddy.Application.CommandService.Group.RemoveBuddy;
 using Buddy.Application.QueryService.Buddy;
 using Buddy.Application.QueryService.Buddy.Get;
 using Buddy.Application.QueryService.Group;
 using Buddy.Application.QueryService.Group.Get;
-using Buddy.Application.QueryService.Status;
-using Buddy.Domain.Enums;
 using Core.Api;
 using Core.Api.Exceptions;
 using MediatR;
@@ -46,12 +43,6 @@ namespace Buddy.Api
         public async Task<IActionResult> ChooseGenres([FromBody] ChooseGenresCommand command)
         {
             return await Publish(command);
-        }
-
-        [HttpGet("{id}/status")]
-        public async Task<IActionResult> GetStatus(string id)
-        {
-            return await SendRequest<BuddyStatusQuery, BuddyStatus>(new BuddyStatusQuery(id));
         }
 
         [HttpPost("match")]

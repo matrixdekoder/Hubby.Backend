@@ -12,7 +12,6 @@ namespace Buddy.Domain
         #region Fields
 
         private const int GenresAmount = 5;
-
         private IList<string> _genreIds;
 
         #endregion
@@ -21,7 +20,6 @@ namespace Buddy.Domain
 
         public string RegionId { get; private set; }
         public IEnumerable<string> GenreIds => _genreIds.AsEnumerable();
-        public BuddyStatus Status { get; private set; }
         public string CurrentGroupId { get; private set; }
 
         #endregion
@@ -32,14 +30,12 @@ namespace Buddy.Domain
         {
             var e = new BuddyCreated(buddyId, accountId);
             Publish(e);
-            ComputeStatus();
         }
 
         public void ChooseRegion(string regionId)
         {
             var e = new RegionChosen(Id, regionId);
             Publish(e);
-            ComputeStatus();
         }
 
         public void ChooseGenres(IList<string> genreIds)
@@ -49,14 +45,10 @@ namespace Buddy.Domain
 
             var e = new GenresChosen(Id, genreIds);
             Publish(e);
-            ComputeStatus();
         }
 
         public void JoinGroup(string groupId, BuddyJoinType joinType)
         {
-            if(Status != BuddyStatus.Complete)
-                throw new InvalidOperationException("Buddy not activated yet, please complete the basic setup");
-
             if(joinType == BuddyJoinType.New && CurrentGroupId != null)
                 throw new InvalidOperationException("Can't join group when still being in another one");
 
@@ -92,11 +84,6 @@ namespace Buddy.Domain
             _genreIds = e.GenreIds;
         }
 
-        private void When(StatusComputed e)
-        {
-            Status = e.Status;
-        }
-
         private void When(GroupJoined e)
         {
             CurrentGroupId = e.GroupId;
@@ -107,21 +94,6 @@ namespace Buddy.Domain
             CurrentGroupId = null;
         }
 
-
-        #endregion
-
-        #region Private Methods
-
-        private void ComputeStatus()
-        {
-            var status = BuddyStatus.New;
-
-            if (RegionId != null && _genreIds != null && _genreIds.Count == 5)
-                status = BuddyStatus.Complete;
-
-            var e = new StatusComputed(Id, status);
-            Publish(e);
-        }
 
         #endregion
     }

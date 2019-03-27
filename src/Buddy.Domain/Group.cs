@@ -81,9 +81,6 @@ namespace Buddy.Domain
             if (buddy.RegionId != RegionId)
                 throw new InvalidOperationException("Group region different from group's region");
 
-            if (buddy.Status != BuddyStatus.Complete)
-                throw new InvalidOperationException("Buddy not activated yet, please complete the basic setup");
-
             if (CurrentGroupSize >= MaximumGroupSize)
                 return 0.0;
 
@@ -138,11 +135,11 @@ namespace Buddy.Domain
 
         public void MergeBuddies(Group otherGroup, IEnumerable<Buddy> buddiesToMerge)
         {
-            if(MaximumGroupSize - CurrentGroupSize < otherGroup.CurrentGroupSize)
-                throw new InvalidOperationException("Can't merge groups, not enough space");
-
-            if(Status != GroupStatus.Merging || otherGroup.Status != GroupStatus.Merging)
+            if (Status != GroupStatus.Merging || otherGroup.Status != GroupStatus.Merging)
                 throw new InvalidOperationException("Both groups must be in merging status to merge");
+
+            if (MaximumGroupSize - CurrentGroupSize < otherGroup.CurrentGroupSize)
+                throw new InvalidOperationException("Can't merge groups, not enough space");
 
             if(!BuddiesAllowed(otherGroup))
                 throw new InvalidOperationException("Some of the other groups buddies are blacklisted, unable to merge groups");
