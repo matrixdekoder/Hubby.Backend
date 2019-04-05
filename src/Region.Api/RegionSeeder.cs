@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Core.Api;
-using Library.Mongo;
 using Library.Mongo.Persistence;
 using MediatR;
 using MongoDB.Driver;
@@ -24,8 +23,6 @@ namespace Region.Api
 
         public async Task Seed()
         {
-            await _collection.DeleteManyAsync(FilterDefinition<RegionReadModel>.Empty);
-
             var commands = new List<CreateRegionCommand>
             {
                 new CreateRegionCommand(RegionConstants.Europe, "Europe"),

@@ -4,22 +4,23 @@ using Core.Domain;
 
 namespace Region.Domain
 {
-    public class Region: Aggregate<Region>
+    public class Region : Aggregate<Region>
     {
         private IList<string> _groupIds;
 
         public void Create(string id, string name)
         {
+            if(Version != 0) return;
             var e = new RegionCreated(id, name);
             Publish(e);
         }
 
         public void AddGroup(string groupId)
         {
-            if(Version == 0)
+            if (Version == 0)
                 throw new InvalidOperationException("Group needs to be started first");
 
-            if(_groupIds.Contains(groupId))
+            if (_groupIds.Contains(groupId))
                 throw new InvalidOperationException("Group already added to region");
 
             var e = new GroupAddedToRegion(Id, groupId);

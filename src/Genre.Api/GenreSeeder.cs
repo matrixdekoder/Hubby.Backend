@@ -24,8 +24,6 @@ namespace Genre.Api
 
         public async Task Seed()
         {
-            await _collection.DeleteManyAsync(FilterDefinition<GenreReadModel>.Empty);
-
             var commands = new List<CreateGenreCommand>
             {
                 new CreateGenreCommand(GenreConstants.Platform, "Platform"),

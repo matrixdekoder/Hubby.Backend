@@ -6,6 +6,7 @@ namespace Genre.Domain
     {
         public void Create(string id, string name)
         {
+            if(Version != 0) return;
             var e = new GenreCreated(id, name);
             Publish(e);
         }
