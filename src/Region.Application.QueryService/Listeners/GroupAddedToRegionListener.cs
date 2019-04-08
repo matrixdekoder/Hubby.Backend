@@ -1,23 +1,18 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Core.Application;
-using MediatR;
 using Region.Domain;
 
 namespace Region.Application.QueryService.Listeners
 {
-    public class GroupAddedToRegionListener: INotificationHandler<GroupAddedToRegion>
+    public class GroupAddedToRegionListener : QueryListener<GroupAddedToRegion>
     {
-        private readonly IProjectionWriter _writer;
-
-        public GroupAddedToRegionListener(IProjectionWriter writer)
+        public GroupAddedToRegionListener(IProjectionWriter writer) : base(writer)
         {
-            _writer = writer;
         }
 
-        public async Task Handle(GroupAddedToRegion notification, CancellationToken cancellationToken)
+        protected override async Task Handle(GroupAddedToRegion notification)
         {
-            await _writer.Update<RegionReadModel>(notification.Id, x => x.GroupIds.Add(notification.GroupId));
+            await Writer.Update<RegionReadModel>(notification.Id, x => x.GroupIds.Add(notification.GroupId));
         }
     }
 }

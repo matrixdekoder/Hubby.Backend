@@ -1,24 +1,19 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Buddy.Application.QueryService.Buddy;
 using Buddy.Domain.Events;
 using Core.Application;
-using MediatR;
 
 namespace Buddy.Application.QueryService.Genre.Listeners
 {
-    public class GenresChosenListener: INotificationHandler<GenresChosen>
+    public class GenresChosenListener : QueryListener<GenresChosen>
     {
-        private readonly IProjectionWriter _writer;
-
-        public GenresChosenListener(IProjectionWriter writer)
+        public GenresChosenListener(IProjectionWriter writer) : base(writer)
         {
-            _writer = writer;
         }
 
-        public async Task Handle(GenresChosen notification, CancellationToken cancellationToken)
+        protected override async Task Handle(GenresChosen notification)
         {
-            await _writer.Update<BuddyReadModel>(notification.Id, view => view.GenreIds = notification.GenreIds);
+            await Writer.Update<BuddyReadModel>(notification.Id, view => view.GenreIds = notification.GenreIds);
         }
     }
 }

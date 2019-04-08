@@ -1,30 +1,31 @@
 ﻿using EventStore.ClientAPI;
 using Library.EventStore.Models;
 using Library.EventStore.Persistence;
-using Library.Mongo;
 using Library.Mongo.Persistence;
 using MongoDB.Driver;
 
 namespace Library.EventStore.Handlers
 {
-    public class EventStoreListener : IEventStoreListener
+    public class QueryStreamListener : IEventStoreListener
     {
         private readonly IEventStoreContext _eventStoreContext;
-        private readonly IEventHandler _eventHandler;
+        private readonly IQueryStreamHandler _eventHandler;
         private readonly IMongoCollection<EventStorePosition> _collection;
 
-        public EventStoreListener(IEventStoreContext eventStoreContext, IMongoContext mongoContext, IEventHandler eventHandler)
+        public QueryStreamListener(IEventStoreContext eventStoreContext, IMongoContext mongoContext, IQueryStreamHandler eventHandler)
         {
             _eventStoreContext = eventStoreContext;
             _eventHandler = eventHandler;
             _collection = mongoContext.GetCollection<EventStorePosition>();
         }
 
+        public string Type => EventStoreConstants.QueryType;
+
         public void Listen()
         {
             Position? position = Position.Start;
 
-            if (_collection.AsQueryable().Any())
+            if (IAsyncCursorSourceExtensions.Any(_collection.AsQueryable()))
             {
                 var result = _collection.Find(x => x.Name == EventStoreConstants.PositionKey).FirstOrDefault();
                 position = new Position(result.CommitPosition, result.PreparedPosition);

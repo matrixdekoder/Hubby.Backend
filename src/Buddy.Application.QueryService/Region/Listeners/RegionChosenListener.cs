@@ -1,24 +1,19 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Buddy.Application.QueryService.Buddy;
 using Buddy.Domain.Events;
 using Core.Application;
-using MediatR;
 
 namespace Buddy.Application.QueryService.Region.Listeners
 {
-    public class RegionChosenListener: INotificationHandler<RegionChosen>
+    public class RegionChosenListener : QueryListener<RegionChosen>
     {
-        private readonly IProjectionWriter _writer;
-
-        public RegionChosenListener(IProjectionWriter writer)
+        public RegionChosenListener(IProjectionWriter writer) : base(writer)
         {
-            _writer = writer;
         }
 
-        public async Task Handle(RegionChosen notification, CancellationToken cancellationToken)
+        protected override async Task Handle(RegionChosen notification)
         {
-            await _writer.Update<BuddyReadModel>(notification.Id, x => x.RegionId = notification.RegionId);
+            await Writer.Update<BuddyReadModel>(notification.Id, x => x.RegionId = notification.RegionId);
         }
     }
 }

@@ -1,23 +1,21 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using Buddy.Domain.Events;
+using Core.Application;
 using MediatR;
 
 namespace Buddy.Application.CommandService.Buddy.JoinGroup
 {
-    public class JoinGroupBuddyAddedListener: INotificationHandler<BuddyAdded>
+    public class JoinGroupBuddyAddedListener: CommandListener<BuddyAdded>
     {
-        private readonly IMediator _mediator;
-
-        public JoinGroupBuddyAddedListener(IMediator mediator)
+        public JoinGroupBuddyAddedListener(IMediator mediator): base(mediator)
         {
-            _mediator = mediator;
         }
 
-        public async Task Handle(BuddyAdded notification, CancellationToken cancellationToken)
+        protected override async Task Handle(BuddyAdded notification, CancellationToken cancellationToken)
         {
             var command = new JoinGroupCommand(notification.BuddyId, notification.Id, notification.Type);
-            await _mediator.Publish(command, cancellationToken);
+            await Mediator.Publish(command, cancellationToken);
         }
     }
 }

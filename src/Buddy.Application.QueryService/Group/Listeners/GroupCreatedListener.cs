@@ -1,32 +1,27 @@
 ﻿using System.Collections.Generic;
-using System.Threading;
 using System.Threading.Tasks;
 using Buddy.Domain.Events;
 using Core.Application;
-using MediatR;
 
 namespace Buddy.Application.QueryService.Group.Listeners
 {
-    public class GroupCreatedListener: INotificationHandler<GroupCreated>
+    public class GroupCreatedListener : QueryListener<GroupCreated>
     {
-        private readonly IProjectionWriter _writer;
-
-        public GroupCreatedListener(IProjectionWriter writer)
+        public GroupCreatedListener(IProjectionWriter writer) : base(writer)
         {
-            _writer = writer;
         }
 
-        public async Task Handle(GroupCreated notification, CancellationToken cancellationToken)
+        protected override async Task Handle(GroupCreated notification)
         {
             var view = new GroupReadModel
             {
-                Id = notification.Id, 
-                RegionId = notification.RegionId, 
-                GenreIds = notification.GenreIds, 
+                Id = notification.Id,
+                RegionId = notification.RegionId,
+                GenreIds = notification.GenreIds,
                 BuddyIds = new List<string>()
             };
 
-            await _writer.Add(view);
+            await Writer.Add(view);
         }
     }
 }

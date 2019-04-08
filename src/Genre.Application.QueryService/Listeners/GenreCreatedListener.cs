@@ -1,29 +1,24 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Core.Application;
 using Genre.Domain;
-using MediatR;
 
 namespace Genre.Application.QueryService.Listeners
 {
-    public class GenreCreatedListener: INotificationHandler<GenreCreated>
+    public class GenreCreatedListener : QueryListener<GenreCreated>
     {
-        private readonly IProjectionWriter _writer;
-
-        public GenreCreatedListener(IProjectionWriter writer)
+        public GenreCreatedListener(IProjectionWriter writer) : base(writer)
         {
-            _writer = writer;
         }
 
-        public async Task Handle(GenreCreated notification, CancellationToken cancellationToken)
+        protected override async Task Handle(GenreCreated notification)
         {
             var view = new GenreReadModel
             {
-                Id = notification.Id, 
+                Id = notification.Id,
                 Name = notification.Name
             };
 
-            await _writer.Add(view);
+            await Writer.Add(view);
         }
     }
 }

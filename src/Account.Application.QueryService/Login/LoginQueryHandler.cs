@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using Account.Application.QueryService.Account;
 using Core.Application.Exceptions;
 using Core.Infrastructure.Security;
-using Library.Mongo;
 using Library.Mongo.Persistence;
 using MediatR;
 using MongoDB.Driver;
@@ -33,7 +32,7 @@ namespace Account.Application.QueryService.Login
             if (!isAuthorized) throw new UnauthorizedAccessException("Password incorrect.");
             
             var token = _tokenHandler.Create(request.Id);
-            return new LoginQueryResponse(view.Id, view.BuddyId, token);
+            return new LoginQueryResponse(view.Id, token);
         }
     }
 }

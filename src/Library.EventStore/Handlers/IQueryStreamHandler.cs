@@ -3,7 +3,7 @@ using EventStore.ClientAPI;
 
 namespace Library.EventStore.Handlers
 {
-    public interface IEventHandler
+    public interface IQueryStreamHandler
     {
         Task HandleEvent(EventStoreCatchUpSubscription subscription, ResolvedEvent resolvedEvent);
     }

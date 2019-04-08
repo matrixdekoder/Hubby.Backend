@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Buddy.Application.CommandService.Buddy.ChooseGenres;
 using Buddy.Application.CommandService.Buddy.ChooseRegion;
+using Buddy.Application.CommandService.Buddy.UpdateTasks;
 using Buddy.Application.CommandService.Group.MatchBuddy;
 using Buddy.Application.CommandService.Group.RemoveBuddy;
 using Buddy.Application.QueryService.Buddy;
@@ -53,6 +54,12 @@ namespace Buddy.Api
 
         [HttpPost("leave")]
         public async Task<IActionResult> LeaveGroup([FromBody] RemoveBuddyCommand command)
+        {
+            return await Publish(command);
+        }
+
+        [HttpPut("task")]
+        public async Task<IActionResult> UpdateTasks([FromBody] UpdateTasksCommand command)
         {
             return await Publish(command);
         }

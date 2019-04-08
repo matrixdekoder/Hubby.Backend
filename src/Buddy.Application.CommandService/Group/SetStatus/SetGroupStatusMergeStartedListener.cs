@@ -2,23 +2,21 @@
 using System.Threading.Tasks;
 using Buddy.Domain.Enums;
 using Buddy.Domain.Events;
+using Core.Application;
 using MediatR;
 
 namespace Buddy.Application.CommandService.Group.SetStatus
 {
-    public class SetGroupStatusMergeStartedListener: INotificationHandler<MergeStarted>
+    public class SetGroupStatusMergeStartedListener : CommandListener<MergeStarted>
     {
-        private readonly IMediator _mediator;
-
-        public SetGroupStatusMergeStartedListener(IMediator mediator)
+        protected SetGroupStatusMergeStartedListener(IMediator mediator) : base(mediator)
         {
-            _mediator = mediator;
         }
 
-        public async Task Handle(MergeStarted notification, CancellationToken cancellationToken)
+        protected override async Task Handle(MergeStarted notification, CancellationToken cancellationToken)
         {
             var command = new SetGroupStatusCommand(notification.MatchedGroupId, GroupStatus.Merging);
-            await _mediator.Publish(command, cancellationToken);
+            await Mediator.Publish(command, cancellationToken);
         }
     }
 }

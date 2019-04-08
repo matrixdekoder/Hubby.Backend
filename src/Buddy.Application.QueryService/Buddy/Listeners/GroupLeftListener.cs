@@ -6,18 +6,15 @@ using MediatR;
 
 namespace Buddy.Application.QueryService.Buddy.Listeners
 {
-    public class GroupLeftListener: INotificationHandler<GroupLeft>
+    public class GroupLeftListener: QueryListener<GroupLeft>
     {
-        private readonly IProjectionWriter _writer;
-
-        public GroupLeftListener(IProjectionWriter writer)
+        public GroupLeftListener(IProjectionWriter writer): base(writer)
         {
-            _writer = writer;
         }
 
-        public async Task Handle(GroupLeft notification, CancellationToken cancellationToken)
+        protected override async Task Handle(GroupLeft notification)
         {
-            await _writer.Update<BuddyReadModel>(notification.Id, view => view.GroupId = null);
+            await Writer.Update<BuddyReadModel>(notification.Id, view => view.GroupId = null);
         }
     }
 }

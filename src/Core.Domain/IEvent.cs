@@ -1,8 +1,6 @@
-﻿using MediatR;
-
-namespace Core.Domain
+﻿namespace Core.Domain
 {
-    public interface IEvent: IEntity, INotification
+    public interface IEvent: IEntity
     {
     }
 }

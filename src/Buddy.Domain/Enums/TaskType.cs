@@ -1,8 +1,8 @@
 ﻿namespace Buddy.Domain.Enums
 {
-    public enum GroupStatus
+    public enum TaskStatus
     {
         Open,
-        Merging,
+        Completed
     }
 }

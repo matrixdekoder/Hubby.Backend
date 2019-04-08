@@ -1,23 +1,18 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Buddy.Domain.Events;
 using Core.Application;
-using MediatR;
 
 namespace Buddy.Application.QueryService.Group.Listeners
 {
-    public class BuddyRemovedListener: INotificationHandler<BuddyRemoved>
+    public class BuddyRemovedListener: QueryListener<BuddyRemoved>
     {
-        private readonly IProjectionWriter _writer;
-
-        public BuddyRemovedListener(IProjectionWriter writer)
+        public BuddyRemovedListener(IProjectionWriter writer) : base(writer)
         {
-            _writer = writer;
         }
 
-        public async Task Handle(BuddyRemoved notification, CancellationToken cancellationToken)
+        protected override async Task Handle(BuddyRemoved notification)
         {
-            await _writer.Update<GroupReadModel>(notification.Id, view => view.BuddyIds.Remove(notification.BuddyId));
+            await Writer.Update<GroupReadModel>(notification.Id, view => view.BuddyIds.Remove(notification.BuddyId));
         }
     }
 }

@@ -65,8 +65,12 @@ namespace Buddy.Host
         private static void StartEventStore(IApplicationBuilder app)
         {
             var scope = app.ApplicationServices.CreateScope();
-            var eventStoreListener = scope.ServiceProvider.GetService<IEventStoreListener>();
-            eventStoreListener.Listen();
+            var eventStoreListener = scope.ServiceProvider.GetServices<IEventStoreListener>();
+            foreach (var storeListener in eventStoreListener)
+            {
+                storeListener.Listen();
+            }
+            
         }
     }
 }

@@ -1,22 +1,17 @@
 ﻿using System.Collections.Generic;
-using System.Threading;
 using System.Threading.Tasks;
 using Core.Application;
-using MediatR;
 using Region.Domain;
 
 namespace Region.Application.QueryService.Listeners
 {
-    public class RegionCreatedListener: INotificationHandler<RegionCreated>
+    public class RegionCreatedListener : QueryListener<RegionCreated>
     {
-        private readonly IProjectionWriter _writer;
-
-        public RegionCreatedListener(IProjectionWriter writer)
+        public RegionCreatedListener(IProjectionWriter writer) : base(writer)
         {
-            _writer = writer;
         }
 
-        public async Task Handle(RegionCreated notification, CancellationToken cancellationToken)
+        protected override async Task Handle(RegionCreated notification)
         {
             var view = new RegionReadModel
             {
@@ -25,7 +20,7 @@ namespace Region.Application.QueryService.Listeners
                 GroupIds = new List<string>()
             };
 
-            await _writer.Add(view);
+            await Writer.Add(view);
         }
     }
 }

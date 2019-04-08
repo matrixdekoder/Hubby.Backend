@@ -1,23 +1,21 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using Buddy.Domain.Events;
+using Core.Application;
 using MediatR;
 
 namespace Buddy.Application.CommandService.Buddy.LeaveGroup
 {
-    public class LeaveGroupWhenBuddyRemovedHandler: INotificationHandler<BuddyRemoved>
+    public class LeaveGroupWhenBuddyRemovedHandler: CommandListener<BuddyRemoved>
     {
-        private readonly IMediator _mediator;
-
-        public LeaveGroupWhenBuddyRemovedHandler(IMediator mediator)
+        public LeaveGroupWhenBuddyRemovedHandler(IMediator mediator): base(mediator)
         {
-            _mediator = mediator;
         }
 
-        public async Task Handle(BuddyRemoved notification, CancellationToken cancellationToken)
+        protected override async Task Handle(BuddyRemoved notification, CancellationToken cancellationToken)
         {
             var command = new LeaveGroupCommand((notification.BuddyId));
-            await _mediator.Publish(command, cancellationToken);
+            await Mediator.Publish(command, cancellationToken);
         }
     }
 }

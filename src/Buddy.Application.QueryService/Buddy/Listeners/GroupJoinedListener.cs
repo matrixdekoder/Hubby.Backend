@@ -1,23 +1,18 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Buddy.Domain.Events;
 using Core.Application;
-using MediatR;
 
 namespace Buddy.Application.QueryService.Buddy.Listeners
 {
-    public class GroupJoinedListener: INotificationHandler<GroupJoined>
+    public class GroupJoinedListener : QueryListener<GroupJoined>
     {
-        private readonly IProjectionWriter _writer;
-
-        public GroupJoinedListener(IProjectionWriter writer)
+        public GroupJoinedListener(IProjectionWriter writer) : base(writer)
         {
-            _writer = writer;
         }
 
-        public async Task Handle(GroupJoined notification, CancellationToken cancellationToken)
+        protected override async Task Handle(GroupJoined notification)
         {
-            await _writer.Update<BuddyReadModel>(notification.Id, view => view.GroupId = notification.GroupId);
+            await Writer.Update<BuddyReadModel>(notification.Id, view => view.GroupId = notification.GroupId);
         }
     }
 }

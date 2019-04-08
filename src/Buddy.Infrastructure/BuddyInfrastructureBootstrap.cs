@@ -9,6 +9,7 @@ namespace Buddy.Infrastructure
         public static void ConfigureBuddyInfrastructure(this IServiceCollection services)
         {
             services.AddTransient<IMatchService, MatchService>();
+            services.AddTransient<ITaskService, TaskService>();
         }
     }
 }

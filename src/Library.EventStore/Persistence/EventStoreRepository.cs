@@ -56,7 +56,5 @@ namespace Library.EventStore.Persistence
         {
             return $"{type.Name}-{id}";
         }
-
-        
     }
 }

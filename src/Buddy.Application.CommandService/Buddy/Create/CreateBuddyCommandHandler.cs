@@ -17,9 +17,8 @@ namespace Buddy.Application.CommandService.Buddy.Create
 
         public async Task Handle(CreateBuddyCommand notification, CancellationToken cancellationToken)
         {
-            var buddyId = Guid.NewGuid().ToString();
-            var buddy = await _repository.GetById<Domain.Buddy>(buddyId);
-            buddy.Create(buddyId, notification.AccountId);
+            var buddy = await _repository.GetById<Domain.Buddy>(notification.AccountId);
+            buddy.Create(notification.AccountId);
             await _repository.Save(buddy);
         }
     }

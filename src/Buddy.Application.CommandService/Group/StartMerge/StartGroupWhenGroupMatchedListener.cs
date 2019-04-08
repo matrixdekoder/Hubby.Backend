@@ -1,23 +1,21 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using Buddy.Domain.Events;
+using Core.Application;
 using MediatR;
 
 namespace Buddy.Application.CommandService.Group.StartMerge
 {
-    public class StartGroupWhenGroupMatchedListener: INotificationHandler<GroupMatched>
+    public class StartGroupWhenGroupMatchedListener: CommandListener<GroupMatched>
     {
-        private readonly IMediator _mediator;
-
-        public StartGroupWhenGroupMatchedListener(IMediator mediator)
+        public StartGroupWhenGroupMatchedListener(IMediator mediator):base(mediator)
         {
-            _mediator = mediator;
         }
 
-        public async Task Handle(GroupMatched notification, CancellationToken cancellationToken)
+        protected override async Task Handle(GroupMatched notification, CancellationToken cancellationToken)
         {
             var command = new StartGroupMergeCommand(notification.Id, notification.MatchId);
-            await _mediator.Publish(command, cancellationToken);
+            await Mediator.Publish(command, cancellationToken);
         }
     }
 }
