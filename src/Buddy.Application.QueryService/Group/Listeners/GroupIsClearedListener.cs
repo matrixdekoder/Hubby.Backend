@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Buddy.Domain.Events;
 using Core.Application;
+using Core.Application.Query;
 
 namespace Buddy.Application.QueryService.Group.Listeners
 {

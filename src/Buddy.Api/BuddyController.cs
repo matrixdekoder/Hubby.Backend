@@ -3,7 +3,7 @@ using Buddy.Application.CommandService.Buddy.ChooseGenres;
 using Buddy.Application.CommandService.Buddy.ChooseRegion;
 using Buddy.Application.CommandService.Buddy.UpdateTasks;
 using Buddy.Application.CommandService.Group.MatchBuddy;
-using Buddy.Application.CommandService.Group.RemoveBuddy;
+using Buddy.Application.CommandService.Group.RemoveBuddySaga;
 using Buddy.Application.QueryService.Buddy;
 using Buddy.Application.QueryService.Buddy.Get;
 using Buddy.Application.QueryService.Group;
@@ -53,7 +53,7 @@ namespace Buddy.Api
         }
 
         [HttpPost("leave")]
-        public async Task<IActionResult> LeaveGroup([FromBody] RemoveBuddyCommand command)
+        public async Task<IActionResult> LeaveGroup([FromBody] RemoveBuddySagaCommand command)
         {
             return await Publish(command);
         }

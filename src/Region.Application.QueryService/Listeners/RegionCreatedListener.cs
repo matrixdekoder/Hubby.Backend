@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Core.Application;
+using Core.Application.Query;
 using Region.Domain;
 
 namespace Region.Application.QueryService.Listeners

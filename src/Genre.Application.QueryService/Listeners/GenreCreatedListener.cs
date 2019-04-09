@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Core.Application;
+using Core.Application.Query;
 using Genre.Domain;
 
 namespace Genre.Application.QueryService.Listeners

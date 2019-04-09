@@ -10,11 +10,11 @@ namespace Buddy.Application.CommandService.Group.Match
 {
     public class MatchGroupCommandHandler : INotificationHandler<MatchGroupCommand>
     {
-        private readonly IRepository _repository;
+        private readonly ISagaRepository _repository;
         private readonly IMediator _mediator;
 
 
-        public MatchGroupCommandHandler(IRepository repository, IMediator mediator)
+        public MatchGroupCommandHandler(ISagaRepository repository, IMediator mediator)
         {
             _repository = repository;
             _mediator = mediator;
@@ -27,7 +27,7 @@ namespace Buddy.Application.CommandService.Group.Match
             var otherGroups = await GetGroups(region.GroupIds);
 
             currentGroup.Match(otherGroups);
-            await _repository.Save(currentGroup);
+            await _repository.Save(notification.TransactionId, currentGroup);
         }
 
         private async Task<IList<Domain.Group>> GetGroups(IEnumerable<string> groupIds)

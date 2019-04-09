@@ -7,9 +7,9 @@ namespace Buddy.Application.CommandService.Buddy.JoinGroup
 {
     public class JoinGroupCommandHandler: INotificationHandler<JoinGroupCommand>
     {
-        private readonly IRepository _repository;
+        private readonly ISagaRepository _repository;
 
-        public JoinGroupCommandHandler(IRepository repository)
+        public JoinGroupCommandHandler(ISagaRepository repository)
         {
             _repository = repository;
         }
@@ -18,7 +18,7 @@ namespace Buddy.Application.CommandService.Buddy.JoinGroup
         {
             var buddy = await _repository.GetById<Domain.Buddy>(notification.BuddyId);
             buddy.JoinGroup(notification.GroupId, notification.Type);
-            await _repository.Save(buddy);
+            await _repository.Save(notification.TransactionId, buddy);
         }
     }
 }

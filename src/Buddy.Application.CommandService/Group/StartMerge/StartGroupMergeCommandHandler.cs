@@ -7,9 +7,9 @@ namespace Buddy.Application.CommandService.Group.StartMerge
 {
     public class StartGroupMergeCommandHandler: INotificationHandler<StartGroupMergeCommand>
     {
-        private readonly IRepository _repository;
+        private readonly ISagaRepository _repository;
 
-        public StartGroupMergeCommandHandler(IRepository repository)
+        public StartGroupMergeCommandHandler(ISagaRepository repository)
         {
             _repository = repository;
         }
@@ -19,7 +19,7 @@ namespace Buddy.Application.CommandService.Group.StartMerge
             var group = await _repository.GetById<Domain.Group>(notification.GroupId);
             var matchedGroup = await _repository.GetById<Domain.Group>(notification.MatchedGroupId);
             group.StartMerge(matchedGroup);
-            await _repository.Save(group);
+            await _repository.Save(notification.TransactionId, group);
         }
     }
 }

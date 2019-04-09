@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using Core.Domain;
 using MediatR;
@@ -8,9 +7,9 @@ namespace Buddy.Application.CommandService.Buddy.Create
 {
     public class CreateBuddyCommandHandler: INotificationHandler<CreateBuddyCommand>
     {
-        private readonly IRepository _repository;
+        private readonly ISagaRepository _repository;
 
-        public CreateBuddyCommandHandler(IRepository repository)
+        public CreateBuddyCommandHandler(ISagaRepository repository)
         {
             _repository = repository;
         }
@@ -19,7 +18,7 @@ namespace Buddy.Application.CommandService.Buddy.Create
         {
             var buddy = await _repository.GetById<Domain.Buddy>(notification.AccountId);
             buddy.Create(notification.AccountId);
-            await _repository.Save(buddy);
+            await _repository.Save(notification.TransactionId, buddy);
         }
     }
 }

@@ -21,9 +21,10 @@ namespace Library.EventStore
             
             services.AddSingleton<IEventStoreContext, EventStoreContext>();
             services.AddTransient<IRepository, EventStoreRepository>();
+            services.AddTransient<ISagaRepository, SagaRepository>();
             services.AddTransient<IQueryStreamHandler, QueryStreamHandler>();
-            services.AddTransient<IEventStoreListener, QueryStreamListener>();
             services.AddTransient<ICommandStreamHandler, CommandStreamHandler>();
+            services.AddTransient<IEventStoreListener, QueryStreamListener>();
             services.AddTransient<IEventStoreListener, CommandStreamListener>();
         }
     }

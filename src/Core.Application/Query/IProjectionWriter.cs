@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace Core.Application
+namespace Core.Application.Query
 {
     public interface IProjectionWriter
     {

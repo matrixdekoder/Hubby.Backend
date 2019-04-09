@@ -1,4 +1,5 @@
 ﻿using Core.Application;
+using Core.Application.Query;
 using Library.Mongo.Configurations;
 using Library.Mongo.Persistence;
 using Microsoft.Extensions.Configuration;

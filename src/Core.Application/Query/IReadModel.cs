@@ -1,4 +1,4 @@
-﻿namespace Core.Application
+﻿namespace Core.Application.Query
 {
     public interface IReadModel
     {

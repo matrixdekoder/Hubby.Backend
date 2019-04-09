@@ -1,4 +1,5 @@
 ﻿using Core.Application;
+using Core.Application.Query;
 
 namespace Genre.Application.QueryService
 {

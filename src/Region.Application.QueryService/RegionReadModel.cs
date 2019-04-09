@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Core.Application;
+using Core.Application.Query;
 
 namespace Region.Application.QueryService
 {

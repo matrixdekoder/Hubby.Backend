@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Buddy.Domain.Events;
 using Core.Application;
+using Core.Application.Command;
 using MediatR;
 
 namespace Region.Application.CommandService.AddGroup

@@ -1,14 +1,15 @@
 ﻿using Core.Domain;
 using MediatR;
 
-namespace Core.Application
+namespace Core.Application.Query
 {
-    public class CommandEvent<T>: INotification where T : IEvent
+    public class QueryEvent<T>: INotification where T : IEvent
     {
-        public CommandEvent(T e)
+        public QueryEvent(T e)
         {
             Event = e;
         }
+
         public T Event { get; }
     }
 }

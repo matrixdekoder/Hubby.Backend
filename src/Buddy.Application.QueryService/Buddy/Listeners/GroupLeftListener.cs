@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Buddy.Domain.Events;
 using Core.Application;
+using Core.Application.Query;
 using MediatR;
 
 namespace Buddy.Application.QueryService.Buddy.Listeners

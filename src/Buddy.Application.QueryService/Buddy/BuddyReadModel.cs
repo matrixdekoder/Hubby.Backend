@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Buddy.Domain;
 using Core.Application;
+using Core.Application.Query;
 
 namespace Buddy.Application.QueryService.Buddy
 {

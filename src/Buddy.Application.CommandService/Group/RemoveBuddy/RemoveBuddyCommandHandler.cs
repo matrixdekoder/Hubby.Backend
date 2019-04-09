@@ -7,9 +7,9 @@ namespace Buddy.Application.CommandService.Group.RemoveBuddy
 {
     public class RemoveBuddyCommandHandler: INotificationHandler<RemoveBuddyCommand>
     {
-        private readonly IRepository _repository;
+        private readonly ISagaRepository _repository;
 
-        public RemoveBuddyCommandHandler(IRepository repository)
+        public RemoveBuddyCommandHandler(ISagaRepository repository)
         {
             _repository = repository;
         }
@@ -18,7 +18,7 @@ namespace Buddy.Application.CommandService.Group.RemoveBuddy
         {
             var group = await _repository.GetById<Domain.Group>(notification.GroupId);
             group.RemoveBuddy(notification.BuddyId);
-            await _repository.Save(group);
+            await _repository.Save(notification.TransactionId, group);
         }
     }
 }

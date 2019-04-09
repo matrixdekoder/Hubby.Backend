@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using Account.Application.CommandService.Register;
+using Account.Application.CommandService.RegisterSaga;
 using Account.Application.QueryService.Login;
 using Core.Api;
 using Core.Api.Exceptions;
@@ -18,7 +18,7 @@ namespace Account.Api
 
         [HttpPost]
         [AllowAnonymous]
-        public async Task<IActionResult> Register([FromBody] RegisterAccountCommand command)
+        public async Task<IActionResult> Register([FromBody] RegisterAccountSagaCommand command)
         {
             return await Publish(command);
         }

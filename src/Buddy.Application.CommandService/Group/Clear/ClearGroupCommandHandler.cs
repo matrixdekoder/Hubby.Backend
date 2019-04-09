@@ -7,9 +7,9 @@ namespace Buddy.Application.CommandService.Group.Clear
 {
     public class ClearGroupCommandHandler: INotificationHandler<ClearGroupCommand>
     {
-        private readonly IRepository _repository;
+        private readonly ISagaRepository _repository;
 
-        public ClearGroupCommandHandler(IRepository repository)
+        public ClearGroupCommandHandler(ISagaRepository repository)
         {
             _repository = repository;
         }
@@ -18,7 +18,7 @@ namespace Buddy.Application.CommandService.Group.Clear
         {
             var group = await _repository.GetById<Domain.Group>(notification.GroupId);
             group.Clear();
-            await _repository.Save(group);
+            await _repository.Save(notification.TransactionId, group);
         }
     }
 }

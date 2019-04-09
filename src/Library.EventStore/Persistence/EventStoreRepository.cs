@@ -47,12 +47,12 @@ namespace Library.EventStore.Persistence
             aggregate.ClearUncommittedEvents();
         }
 
-        private string GetStreamName<T>(string id)
+        protected string GetStreamName<T>(string id)
         {
             return GetStreamName(typeof(T), id);
         }
 
-        private static string GetStreamName(Type type, string id)
+        protected static string GetStreamName(Type type, string id)
         {
             return $"{type.Name}-{id}";
         }

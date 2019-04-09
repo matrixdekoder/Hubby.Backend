@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Core.Domain;
 using MediatR;
 
-namespace Core.Application
+namespace Core.Application.Command
 {
     public abstract class CommandListener<T>: INotificationHandler<CommandEvent<T>> where T : IEvent
     {

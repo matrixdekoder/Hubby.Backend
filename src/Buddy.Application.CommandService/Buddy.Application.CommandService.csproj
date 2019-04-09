@@ -16,6 +16,7 @@
     <ProjectReference Include="..\Buddy.Domain\Buddy.Domain.csproj" />
     <ProjectReference Include="..\Core.Domain\Core.Domain.csproj" />
     <ProjectReference Include="..\Library.EventStore\Library.EventStore.csproj" />
+    <ProjectReference Include="..\Region.Application.CommandService\Region.Application.CommandService.csproj" />
     <ProjectReference Include="..\Region.Application.QueryService\Region.Application.QueryService.csproj" />
     <ProjectReference Include="..\Region.Domain\Region.Domain.csproj" />
   </ItemGroup>

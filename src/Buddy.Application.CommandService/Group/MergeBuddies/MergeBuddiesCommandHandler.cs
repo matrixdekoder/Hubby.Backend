@@ -10,9 +10,9 @@ namespace Buddy.Application.CommandService.Group.MergeBuddies
 {
     public class MergeBuddiesCommandHandler: INotificationHandler<MergeBuddiesCommand>
     {
-        private readonly IRepository _repository;
+        private readonly ISagaRepository _repository;
 
-        public MergeBuddiesCommandHandler(IRepository repository)
+        public MergeBuddiesCommandHandler(ISagaRepository repository)
         {
             _repository = repository;
         }
@@ -20,13 +20,15 @@ namespace Buddy.Application.CommandService.Group.MergeBuddies
         public async Task Handle(MergeBuddiesCommand notification, CancellationToken cancellationToken)
         {
             var group = await _repository.GetById<Domain.Group>(notification.GroupId);
+            group.Rehydrate(notification.Events);
+
             var matchedGroup = await _repository.GetById<Domain.Group>(notification.MatchedGroupId);
             var matchedGroupBuddies = await GetBuddies(matchedGroup.BuddyIds);
 
-            group.MergeBuddies(matchedGroup, matchedGroupBuddies);
+            group.MergeBuddies(matchedGroup, matchedGroupBuddies, notification.MatchedGroupTransaction);
             group.SetStatus(GroupStatus.Open);
 
-            await _repository.Save(group);
+            await _repository.Save(notification.TransactionId, group);
         }
 
         private async Task<IEnumerable<Domain.Buddy>> GetBuddies(IEnumerable<string> buddyIds)

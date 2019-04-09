@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Core.Application;
+using Core.Application.Query;
 using Core.Domain;
 using EventStore.ClientAPI;
 using Library.EventStore.Configurations;

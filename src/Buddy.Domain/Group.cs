@@ -133,7 +133,7 @@ namespace Buddy.Domain
             Publish(e);
         }
 
-        public void MergeBuddies(Group otherGroup, IEnumerable<Buddy> buddiesToMerge)
+        public void MergeBuddies(Group otherGroup, IEnumerable<Buddy> buddiesToMerge, long matchedGroupTransaction)
         {
             if (Status != GroupStatus.Merging || otherGroup.Status != GroupStatus.Merging)
                 throw new InvalidOperationException("Both groups must be in merging status to merge");
@@ -149,7 +149,7 @@ namespace Buddy.Domain
                 AddBuddy(buddy, BuddyJoinType.Merge);
             }
 
-            var e = new BuddiesMerged(Id, otherGroup.Id);
+            var e = new BuddiesMerged(Id, otherGroup.Id, matchedGroupTransaction);
             Publish(e);
         }
 

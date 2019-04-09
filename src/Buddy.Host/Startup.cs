@@ -2,6 +2,7 @@
 using Account.Api;
 using Buddy.Api;
 using Core.Api;
+using Core.Application;
 using Core.Infrastructure;
 using Genre.Api;
 using Library.EventStore;
@@ -26,14 +27,15 @@ namespace Buddy.Host
 
         public void ConfigureServices(IServiceCollection services)
         {
-            // Core
-            services.ConfigureCoreApiServices(Configuration);
-            services.ConfigureCoreInfrastructure(Configuration);
-
             // Library services
             services.AddMediatR(typeof(Startup));
             services.ConfigureEventStore(Configuration);
             services.ConfigureMongoDb(Configuration);
+
+            // Core
+            services.ConfigureCoreApiServices(Configuration);
+            services.ConfigureCoreInfrastructure(Configuration);
+            services.ConfigureCoreApplication();
 
             // Application services
             services.ConfigureGenre();

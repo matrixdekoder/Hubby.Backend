@@ -7,7 +7,6 @@ namespace Account.Application.CommandService
     {
         public static void ConfigureAccountCommandServices(this IServiceCollection services)
         {
-            // Library services
             services.AddMediatR(typeof(AccountCommandServiceBootstrap));
         }
     }

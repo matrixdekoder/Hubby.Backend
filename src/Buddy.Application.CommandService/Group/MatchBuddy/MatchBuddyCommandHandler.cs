@@ -9,11 +9,11 @@ namespace Buddy.Application.CommandService.Group.MatchBuddy
 {
     public class MatchBuddyCommandHandler: INotificationHandler<MatchBuddyCommand>
     {
-        private readonly IRepository _repository;
+        private readonly ISagaRepository _repository;
         private readonly IMatchService _matchService;
 
         public MatchBuddyCommandHandler(
-            IRepository repository,
+            ISagaRepository repository,
             IMatchService matchService)
         {
             _repository = repository;
@@ -24,8 +24,10 @@ namespace Buddy.Application.CommandService.Group.MatchBuddy
         {
             var buddy = await _repository.GetById<Domain.Buddy>(notification.BuddyId);
             var group = await _matchService.GetBestGroup(buddy);
+            var transactionId = await _repository.StartTransaction<Domain.Group>(group.Id);
+
             group.AddBuddy(buddy, BuddyJoinType.New);
-            await _repository.Save(group);
+            await _repository.Save(transactionId, group);
         }
     }
 }

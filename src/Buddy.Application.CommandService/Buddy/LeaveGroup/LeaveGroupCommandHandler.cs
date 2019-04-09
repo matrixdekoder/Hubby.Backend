@@ -7,9 +7,9 @@ namespace Buddy.Application.CommandService.Buddy.LeaveGroup
 {
     public class LeaveGroupCommandHandler: INotificationHandler<LeaveGroupCommand>
     {
-        private readonly IRepository _repository;
+        private readonly ISagaRepository _repository;
 
-        public LeaveGroupCommandHandler(IRepository repository)
+        public LeaveGroupCommandHandler(ISagaRepository repository)
         {
             _repository = repository;
         }
@@ -18,7 +18,7 @@ namespace Buddy.Application.CommandService.Buddy.LeaveGroup
         {
             var buddy = await _repository.GetById<Domain.Buddy>(notification.BuddyId);
             buddy.LeaveGroup();
-            await _repository.Save(buddy);
+            await _repository.Save(notification.TransactionId, buddy);
         }
     }
 }
