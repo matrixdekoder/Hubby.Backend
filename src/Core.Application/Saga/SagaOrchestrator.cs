@@ -7,7 +7,7 @@ using MediatR;
 
 namespace Core.Application.Saga
 {
-    public class SagaOrchestrator: ISagaOrchestrator
+    public class SagaOrchestrator : ISagaOrchestrator
     {
         private readonly IMediator _mediator;
         private readonly IList<long> _transactions;
@@ -18,10 +18,10 @@ namespace Core.Application.Saga
             _mediator = mediator;
             _repository = repository;
             _transactions = new List<long>();
-            TransactionEvents = new Dictionary<long, IList<IEvent>>();
+            TransactionEvents = new Dictionary<string, IList<IEvent>>();
         }
 
-        public IDictionary<long, IList<IEvent>> TransactionEvents { get; }
+        public IDictionary<string, IList<IEvent>> TransactionEvents { get; }
 
         public async Task<long> StartTransaction<T>(string id) where T : IAggregate
         {
@@ -43,15 +43,17 @@ namespace Core.Application.Saga
             }
         }
 
-        public void AddEventToTransaction(long id, IEvent @event)
+        public void AddEventToTransaction(IEvent @event)
         {
-            TransactionEvents.TryGetValue(id, out var events);
-            if(events == null)
-                events = new List<IEvent>();
-            events.Add(@event);
+            TransactionEvents.TryGetValue(@event.Id, out var events);
+
+            if (events == null)
+                TransactionEvents.Add(@event.Id, new List<IEvent> { @event });
+            else
+                events.Add(@event);
         }
 
-        public IList<IEvent> GetTransactionEvents(long id)
+        public IList<IEvent> GetTransactionEvents(string id)
         {
             TransactionEvents.TryGetValue(id, out var events);
             return events ?? new List<IEvent>();

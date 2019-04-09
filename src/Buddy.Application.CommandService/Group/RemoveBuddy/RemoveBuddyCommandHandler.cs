@@ -16,9 +16,10 @@ namespace Buddy.Application.CommandService.Group.RemoveBuddy
 
         public async Task Handle(RemoveBuddyCommand notification, CancellationToken cancellationToken)
         {
+            var transactionId = await _repository.StartTransaction<Domain.Group>(notification.GroupId);
             var group = await _repository.GetById<Domain.Group>(notification.GroupId);
             group.RemoveBuddy(notification.BuddyId);
-            await _repository.Save(notification.TransactionId, group);
+            await _repository.Save(transactionId, group);
         }
     }
 }

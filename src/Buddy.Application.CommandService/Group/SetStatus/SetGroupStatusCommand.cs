@@ -5,15 +5,13 @@ namespace Buddy.Application.CommandService.Group.SetStatus
 {
     public class SetGroupStatusCommand: INotification
     {
-        public SetGroupStatusCommand(string groupId, GroupStatus status, long transactionId)
+        public SetGroupStatusCommand(string groupId, GroupStatus status)
         {
             GroupId = groupId;
             Status = status;
-            TransactionId = transactionId;
         }
 
         public string GroupId { get; }
         public GroupStatus Status { get; }
-        public long TransactionId { get; }
     }
 }

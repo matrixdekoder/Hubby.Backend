@@ -1,5 +1,4 @@
 ﻿using Buddy.Domain.Events;
-using Core.Application;
 using System.Threading.Tasks;
 using Core.Application.Query;
 

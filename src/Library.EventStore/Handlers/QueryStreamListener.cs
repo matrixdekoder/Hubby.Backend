@@ -25,7 +25,7 @@ namespace Library.EventStore.Handlers
         {
             Position? position = Position.Start;
 
-            if (IAsyncCursorSourceExtensions.Any(_collection.AsQueryable()))
+            if (_collection.AsQueryable().Any())
             {
                 var result = _collection.Find(x => x.Name == EventStoreConstants.PositionKey).FirstOrDefault();
                 position = new Position(result.CommitPosition, result.PreparedPosition);
