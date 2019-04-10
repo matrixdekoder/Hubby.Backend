@@ -1,6 +1,5 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using Core.Domain;
 using Core.Domain.Entities;
 using MediatR;
 

@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using Buddy.Domain.Enums;
 using Buddy.Domain.Services;
-using Core.Domain;
 using Core.Domain.Entities;
 using MediatR;
 

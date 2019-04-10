@@ -1,6 +1,5 @@
 using System;
 using System.Threading.Tasks;
-using Buddy.Infrastructure;
 using Core.Api.Exceptions;
 using Core.Infrastructure;
 using MediatR;

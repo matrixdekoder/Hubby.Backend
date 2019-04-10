@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Core.Domain;
 using Core.Domain.Entities;
 
 namespace Region.Domain

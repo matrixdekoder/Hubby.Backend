@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Buddy.Infrastructure;
 using Core.Domain.Events;
 using Core.Infrastructure;
 using EventStore.ClientAPI;

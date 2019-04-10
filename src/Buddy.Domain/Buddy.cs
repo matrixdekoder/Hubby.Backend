@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Buddy.Domain.Constants;
 using Buddy.Domain.Enums;
 using Buddy.Domain.Events;
-using Core.Domain;
 using Core.Domain.Entities;
 
 namespace Buddy.Domain
@@ -42,7 +40,6 @@ namespace Buddy.Domain
         {
             var e = new RegionChosen(Id, regionId);
             Publish(e);
-            CompleteTask(TaskType.ChooseRegion);
         }
 
         public void ChooseGenres(IList<string> genreIds)
@@ -52,7 +49,6 @@ namespace Buddy.Domain
 
             var e = new GenresChosen(Id, genreIds);
             Publish(e);
-            CompleteTask(TaskType.ChooseGenres);
         }
 
         public void JoinGroup(string groupId, BuddyJoinType joinType)
@@ -81,18 +77,15 @@ namespace Buddy.Domain
             Publish(e);
         }
 
-        public void CompleteTask(string taskType)
+        public void SetTaskStatus(string taskType, TaskStatus newStatus)
         {
             var task = _tasks.FirstOrDefault(x => x.Type == taskType);
 
             if (task == null)
                 throw new InvalidOperationException($"Task with type {taskType} doesn't exists");
 
-            if (task.Status == TaskStatus.Completed)
-                throw new InvalidOperationException($"Task {taskType} already completed");
-
-            task.SetStatus(TaskStatus.Completed);
-            var e = new TaskCompleted(Id, task);
+            task.SetStatus(newStatus);
+            var e = new TaskStatusSet(Id, taskType, newStatus);
             Publish(e);
         }
 
@@ -132,10 +125,10 @@ namespace Buddy.Domain
             _tasks.AddRange(e.Tasks);
         }
 
-        private void When(TaskCompleted e)
+        private void When(TaskStatusSet e)
         {
-            var index = _tasks.FindIndex(task => task.Type == e.Task.Type);
-            _tasks[index] = e.Task;
+            var index = _tasks.FindIndex(task => task.Type == e.Type);
+            _tasks[index].SetStatus(e.NewStatus);
         }
 
         #endregion

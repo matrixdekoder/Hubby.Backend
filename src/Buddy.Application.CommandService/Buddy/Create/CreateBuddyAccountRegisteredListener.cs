@@ -5,9 +5,9 @@ using MediatR;
 
 namespace Buddy.Application.CommandService.Buddy.Create
 {
-    public class AccountRegisteredListener: CommandListener<AccountRegistered>
+    public class CreateBuddyAccountRegisteredListener: CommandListener<AccountRegistered>
     {
-        public AccountRegisteredListener(IMediator mediator) : base(mediator)
+        public CreateBuddyAccountRegisteredListener(IMediator mediator) : base(mediator)
         {
         }
 

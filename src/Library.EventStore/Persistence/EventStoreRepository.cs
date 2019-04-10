@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Buddy.Infrastructure;
 using Core.Application;
-using Core.Domain;
 using Core.Domain.Entities;
 using Core.Domain.Events;
 using Core.Infrastructure;

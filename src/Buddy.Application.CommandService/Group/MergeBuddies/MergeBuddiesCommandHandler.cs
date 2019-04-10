@@ -3,7 +3,6 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Buddy.Domain.Enums;
-using Core.Domain;
 using Core.Domain.Entities;
 using MediatR;
 
