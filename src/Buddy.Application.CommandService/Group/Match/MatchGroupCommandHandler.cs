@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Core.Domain;
+using Core.Domain.Entities;
 using MediatR;
 using Region.Application.QueryService.GetRegion;
 
@@ -10,11 +11,11 @@ namespace Buddy.Application.CommandService.Group.Match
 {
     public class MatchGroupCommandHandler : INotificationHandler<MatchGroupCommand>
     {
-        private readonly ISagaRepository _repository;
+        private readonly IRepository _repository;
         private readonly IMediator _mediator;
 
 
-        public MatchGroupCommandHandler(ISagaRepository repository, IMediator mediator)
+        public MatchGroupCommandHandler(IRepository repository, IMediator mediator)
         {
             _repository = repository;
             _mediator = mediator;
@@ -27,7 +28,7 @@ namespace Buddy.Application.CommandService.Group.Match
             var otherGroups = await GetGroups(region.GroupIds);
 
             currentGroup.Match(otherGroups);
-            await _repository.Save(notification.TransactionId, currentGroup);
+            await _repository.Save(currentGroup);
         }
 
         private async Task<IList<Domain.Group>> GetGroups(IEnumerable<string> groupIds)

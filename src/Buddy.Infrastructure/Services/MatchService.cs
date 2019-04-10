@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Buddy.Domain;
 using Buddy.Domain.Services;
 using Core.Domain;
+using Core.Domain.Entities;
 using MediatR;
 using Region.Application.QueryService.GetRegion;
 

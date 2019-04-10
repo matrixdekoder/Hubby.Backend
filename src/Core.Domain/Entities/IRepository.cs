@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace Core.Domain
+namespace Core.Domain.Entities
 {
     public interface IRepository 
     {

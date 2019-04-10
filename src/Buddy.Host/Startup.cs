@@ -27,15 +27,15 @@ namespace Buddy.Host
 
         public void ConfigureServices(IServiceCollection services)
         {
-            // Library services
-            services.AddMediatR(typeof(Startup));
-            services.ConfigureEventStore(Configuration);
-            services.ConfigureMongoDb(Configuration);
-
             // Core
             services.ConfigureCoreApiServices(Configuration);
             services.ConfigureCoreInfrastructure(Configuration);
             services.ConfigureCoreApplication();
+
+            // Library services
+            services.AddMediatR(typeof(Startup));
+            services.ConfigureEventStore(Configuration);
+            services.ConfigureMongoDb(Configuration);
 
             // Application services
             services.ConfigureGenre();
@@ -47,8 +47,8 @@ namespace Buddy.Host
         public void Configure(IApplicationBuilder app)
         {
             app.ConfigureCoreApi();
-            SeedDatabase(app);
             StartEventStore(app);
+            SeedDatabase(app);
         }
 
         private void SeedDatabase(IApplicationBuilder app)
@@ -67,12 +67,8 @@ namespace Buddy.Host
         private static void StartEventStore(IApplicationBuilder app)
         {
             var scope = app.ApplicationServices.CreateScope();
-            var eventStoreListener = scope.ServiceProvider.GetServices<IEventStoreListener>();
-            foreach (var storeListener in eventStoreListener)
-            {
-                storeListener.Listen();
-            }
-            
+            var eventStoreListener = scope.ServiceProvider.GetService<IEventStoreListener>();
+            eventStoreListener.Listen();
         }
     }
 }

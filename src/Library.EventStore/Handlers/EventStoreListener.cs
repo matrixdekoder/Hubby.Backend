@@ -6,20 +6,18 @@ using MongoDB.Driver;
 
 namespace Library.EventStore.Handlers
 {
-    public class QueryStreamListener : IEventStoreListener
+    public class EventStoreListener : IEventStoreListener
     {
         private readonly IEventStoreContext _eventStoreContext;
-        private readonly IQueryStreamHandler _eventHandler;
+        private readonly IStreamHandler _eventHandler;
         private readonly IMongoCollection<EventStorePosition> _collection;
 
-        public QueryStreamListener(IEventStoreContext eventStoreContext, IMongoContext mongoContext, IQueryStreamHandler eventHandler)
+        public EventStoreListener(IEventStoreContext eventStoreContext, IMongoContext mongoContext, IStreamHandler eventHandler)
         {
             _eventStoreContext = eventStoreContext;
             _eventHandler = eventHandler;
             _collection = mongoContext.GetCollection<EventStorePosition>();
         }
-
-        public string Type => EventStoreConstants.QueryType;
 
         public void Listen()
         {
@@ -38,7 +36,7 @@ namespace Library.EventStore.Handlers
                 });
             }
 
-            _eventStoreContext.Connection.SubscribeToAllFrom(position, CatchUpSubscriptionSettings.Default, _eventHandler.HandleEvent);
+            _eventStoreContext.Connection.SubscribeToAllFrom(position, CatchUpSubscriptionSettings.Default, _eventHandler.HandleReadEvents);
         }
     }
 }

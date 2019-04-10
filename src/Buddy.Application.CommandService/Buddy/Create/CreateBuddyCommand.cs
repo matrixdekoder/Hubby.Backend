@@ -4,13 +4,13 @@ namespace Buddy.Application.CommandService.Buddy.Create
 {
     public class CreateBuddyCommand: INotification
     {
-        public CreateBuddyCommand(string accountId, long transactionId)
+        public CreateBuddyCommand(string accountId, string buddyId)
         {
             AccountId = accountId;
-            TransactionId = transactionId;
+            BuddyId = buddyId;
         }
 
         public string AccountId { get; }
-        public long TransactionId { get; }
+        public string BuddyId { get; }
     }
 }

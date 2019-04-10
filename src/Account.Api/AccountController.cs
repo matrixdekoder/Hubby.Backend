@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
-using Account.Application.CommandService.RegisterSaga;
+using Account.Application.CommandService.Register;
 using Account.Application.QueryService.Login;
+using Buddy.Infrastructure;
 using Core.Api;
 using Core.Api.Exceptions;
 using MediatR;
@@ -12,13 +13,13 @@ namespace Account.Api
     [Route("api/[controller]")]
     public class AccountController: BaseController
     {
-        public AccountController(IMediator mediator, IExceptionHandler exceptionHandler): base(mediator, exceptionHandler)
+        public AccountController(IMediator mediator, IExceptionHandler exceptionHandler, IUnitOfWork unitOfWork): base(mediator, exceptionHandler, unitOfWork)
         {
         }
 
         [HttpPost]
         [AllowAnonymous]
-        public async Task<IActionResult> Register([FromBody] RegisterAccountSagaCommand command)
+        public async Task<IActionResult> Register([FromBody] RegisterAccountCommand command)
         {
             return await Publish(command);
         }

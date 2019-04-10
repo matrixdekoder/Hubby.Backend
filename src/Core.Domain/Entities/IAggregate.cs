@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
+using Core.Domain.Events;
 
-namespace Core.Domain
+namespace Core.Domain.Entities
 {
     public interface IAggregate: IEntity
     {

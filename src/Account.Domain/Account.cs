@@ -1,5 +1,6 @@
 ﻿using System;
 using Core.Domain;
+using Core.Domain.Entities;
 
 namespace Account.Domain
 {
@@ -10,7 +11,8 @@ namespace Account.Domain
             if(Version > 0)
                 throw new InvalidOperationException($"Account with username {id} already exists.");
 
-            var e = new AccountRegistered(id, password);
+            var buddyId = Guid.NewGuid().ToString();
+            var e = new AccountRegistered(id, password, buddyId);
             Publish(e);
         }
 

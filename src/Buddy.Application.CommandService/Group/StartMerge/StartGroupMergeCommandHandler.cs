@@ -1,15 +1,16 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using Core.Domain;
+using Core.Domain.Entities;
 using MediatR;
 
 namespace Buddy.Application.CommandService.Group.StartMerge
 {
     public class StartGroupMergeCommandHandler: INotificationHandler<StartGroupMergeCommand>
     {
-        private readonly ISagaRepository _repository;
+        private readonly IRepository _repository;
 
-        public StartGroupMergeCommandHandler(ISagaRepository repository)
+        public StartGroupMergeCommandHandler(IRepository repository)
         {
             _repository = repository;
         }
@@ -19,7 +20,7 @@ namespace Buddy.Application.CommandService.Group.StartMerge
             var group = await _repository.GetById<Domain.Group>(notification.GroupId);
             var matchedGroup = await _repository.GetById<Domain.Group>(notification.MatchedGroupId);
             group.StartMerge(matchedGroup);
-            await _repository.Save(notification.TransactionId, group);
+            await _repository.Save(group);
         }
     }
 }

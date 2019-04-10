@@ -1,4 +1,5 @@
 ﻿using Core.Domain;
+using Core.Domain.Events;
 using MediatR;
 
 namespace Core.Application.Query

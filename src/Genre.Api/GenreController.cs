@@ -5,6 +5,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Buddy.Infrastructure;
 using Genre.Application.QueryService.GetGenres;
 
 namespace Genre.Api
@@ -12,7 +13,7 @@ namespace Genre.Api
     [Route("api/[controller]")]
     public class GenreController: BaseController
     {
-        public GenreController(IMediator mediator, IExceptionHandler exceptionHandler) : base(mediator, exceptionHandler)
+        public GenreController(IMediator mediator, IExceptionHandler exceptionHandler, IUnitOfWork unitOfWork) : base(mediator, exceptionHandler, unitOfWork)
         {
         }
 

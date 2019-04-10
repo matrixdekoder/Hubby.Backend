@@ -1,15 +1,16 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using Core.Domain;
+using Core.Domain.Entities;
 using MediatR;
 
 namespace Buddy.Application.CommandService.Group.Clear
 {
     public class ClearGroupCommandHandler: INotificationHandler<ClearGroupCommand>
     {
-        private readonly ISagaRepository _repository;
+        private readonly IRepository _repository;
 
-        public ClearGroupCommandHandler(ISagaRepository repository)
+        public ClearGroupCommandHandler(IRepository repository)
         {
             _repository = repository;
         }
@@ -18,7 +19,7 @@ namespace Buddy.Application.CommandService.Group.Clear
         {
             var group = await _repository.GetById<Domain.Group>(notification.GroupId);
             group.Clear();
-            await _repository.Save(notification.TransactionId, group);
+            await _repository.Save(group);
         }
     }
 }

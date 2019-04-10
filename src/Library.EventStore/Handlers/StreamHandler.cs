@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Core.Application;
-using Core.Application.Query;
-using Core.Domain;
 using EventStore.ClientAPI;
 using Library.EventStore.Configurations;
 using Library.EventStore.Models;
@@ -12,20 +10,18 @@ using MongoDB.Driver;
 
 namespace Library.EventStore.Handlers
 {
-    public class QueryStreamHandler : IQueryStreamHandler
+    public class StreamHandler : IStreamHandler
     {
         private readonly IMediator _mediator;
         private readonly IMongoCollection<EventStorePosition> _collection;
 
-        public QueryStreamHandler(IMediator mediator, IMongoContext mongoContext)
+        public StreamHandler(IMediator mediator, IMongoContext mongoContext)
         {
             _mediator = mediator;
             _collection = mongoContext.GetCollection<EventStorePosition>();
         }
 
-        public string Type => EventStoreConstants.QueryType;
-
-        public async Task HandleEvent(EventStoreCatchUpSubscription subscription, ResolvedEvent resolvedEvent)
+        public async Task HandleReadEvents(EventStoreCatchUpSubscription subscription, ResolvedEvent resolvedEvent)
         {
             if (resolvedEvent.OriginalPosition == null) throw new ArgumentNullException(nameof(resolvedEvent.OriginalPosition));
 
@@ -33,18 +29,10 @@ namespace Library.EventStore.Handlers
 
             if (@event != null)
             {
-                var queryEvent = CreateQueryEvent(@event);
+                var queryEvent = GenericEventActivator.CreateQueryEvent(@event);
                 await _mediator.Publish(queryEvent);
                 await UpdatePosition(resolvedEvent.OriginalPosition.Value);
             }
-        }
-
-        private static object CreateQueryEvent(IEvent @event)
-        {
-            var generic = typeof(QueryEvent<>);
-            var type = @event.GetType();
-            var genericType = generic.MakeGenericType(type);
-            return Activator.CreateInstance(genericType, @event);
         }
 
         private async Task UpdatePosition(Position newPosition)

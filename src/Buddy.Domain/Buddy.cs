@@ -5,6 +5,7 @@ using Buddy.Domain.Constants;
 using Buddy.Domain.Enums;
 using Buddy.Domain.Events;
 using Core.Domain;
+using Core.Domain.Entities;
 
 namespace Buddy.Domain
 {
@@ -28,12 +29,12 @@ namespace Buddy.Domain
 
         #region Public Methods
 
-        public void Create(string accountId)
+        public void Create(string accountId, string buddyId)
         {
             if (Version > 0)
                 throw new InvalidOperationException($"Buddy with Id {accountId} already exists");
 
-            var e = new BuddyCreated(accountId);
+            var e = new BuddyCreated(accountId, buddyId);
             Publish(e);
         }
 

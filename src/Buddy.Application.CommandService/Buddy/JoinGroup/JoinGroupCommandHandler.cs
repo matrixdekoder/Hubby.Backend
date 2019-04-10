@@ -1,15 +1,16 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using Core.Domain;
+using Core.Domain.Entities;
 using MediatR;
 
 namespace Buddy.Application.CommandService.Buddy.JoinGroup
 {
     public class JoinGroupCommandHandler: INotificationHandler<JoinGroupCommand>
     {
-        private readonly ISagaRepository _repository;
+        private readonly IRepository _repository;
 
-        public JoinGroupCommandHandler(ISagaRepository repository)
+        public JoinGroupCommandHandler(IRepository repository)
         {
             _repository = repository;
         }
@@ -18,7 +19,7 @@ namespace Buddy.Application.CommandService.Buddy.JoinGroup
         {
             var buddy = await _repository.GetById<Domain.Buddy>(notification.BuddyId);
             buddy.JoinGroup(notification.GroupId, notification.Type);
-            await _repository.Save(notification.TransactionId, buddy);
+            await _repository.Save(buddy);
         }
     }
 }

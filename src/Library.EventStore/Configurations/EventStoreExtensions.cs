@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Core.Domain;
+using Core.Domain.Events;
 using EventStore.ClientAPI;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;

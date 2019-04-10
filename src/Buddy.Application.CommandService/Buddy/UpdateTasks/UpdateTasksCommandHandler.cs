@@ -3,6 +3,7 @@ using Core.Domain;
 using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
+using Core.Domain.Entities;
 
 namespace Buddy.Application.CommandService.Buddy.UpdateTasks
 {

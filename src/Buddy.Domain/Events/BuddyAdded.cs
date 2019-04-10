@@ -1,5 +1,6 @@
 ﻿using Buddy.Domain.Enums;
 using Core.Domain;
+using Core.Domain.Events;
 
 namespace Buddy.Domain.Events
 {

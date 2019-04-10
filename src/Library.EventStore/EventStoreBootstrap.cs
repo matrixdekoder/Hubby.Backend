@@ -1,4 +1,6 @@
-﻿using Core.Domain;
+﻿using Buddy.Infrastructure;
+using Core.Domain;
+using Core.Domain.Entities;
 using Library.EventStore.Configurations;
 using Library.EventStore.Handlers;
 using Library.EventStore.Persistence;
@@ -20,12 +22,10 @@ namespace Library.EventStore
             });
             
             services.AddSingleton<IEventStoreContext, EventStoreContext>();
+            services.AddScoped<IUnitOfWork, EventStoreUnitOfWork>();
             services.AddTransient<IRepository, EventStoreRepository>();
-            services.AddTransient<ISagaRepository, SagaRepository>();
-            services.AddTransient<IQueryStreamHandler, QueryStreamHandler>();
-            services.AddTransient<ICommandStreamHandler, CommandStreamHandler>();
-            services.AddTransient<IEventStoreListener, QueryStreamListener>();
-            services.AddTransient<IEventStoreListener, CommandStreamListener>();
+            services.AddTransient<IStreamHandler, StreamHandler>();
+            services.AddTransient<IEventStoreListener, EventStoreListener>();
         }
     }
 }

@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Core.Domain.Events;
 
-namespace Core.Domain
+namespace Core.Domain.Entities
 {
     public abstract class Aggregate<TEntity>: IAggregate
     {

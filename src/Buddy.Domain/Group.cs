@@ -4,6 +4,7 @@ using System.Linq;
 using Buddy.Domain.Enums;
 using Buddy.Domain.Events;
 using Core.Domain;
+using Core.Domain.Entities;
 
 namespace Buddy.Domain
 {
@@ -133,7 +134,7 @@ namespace Buddy.Domain
             Publish(e);
         }
 
-        public void MergeBuddies(Group otherGroup, IEnumerable<Buddy> buddiesToMerge, long matchedGroupTransaction)
+        public void MergeBuddies(Group otherGroup, IEnumerable<Buddy> buddiesToMerge)
         {
             if (Status != GroupStatus.Merging || otherGroup.Status != GroupStatus.Merging)
                 throw new InvalidOperationException("Both groups must be in merging status to merge");
@@ -149,7 +150,7 @@ namespace Buddy.Domain
                 AddBuddy(buddy, BuddyJoinType.Merge);
             }
 
-            var e = new BuddiesMerged(Id, otherGroup.Id, matchedGroupTransaction);
+            var e = new BuddiesMerged(Id, otherGroup.Id);
             Publish(e);
         }
 

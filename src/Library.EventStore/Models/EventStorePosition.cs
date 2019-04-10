@@ -1,4 +1,5 @@
 ﻿using Core.Domain;
+using Core.Domain.Entities;
 
 namespace Library.EventStore.Models
 {

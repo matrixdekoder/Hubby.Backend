@@ -16,6 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Buddy.Infrastructure\Buddy.Infrastructure.csproj" />
     <ProjectReference Include="..\Core.Domain\Core.Domain.csproj" />
     <ProjectReference Include="..\Library.Mongo\Library.Mongo.csproj" />
   </ItemGroup>

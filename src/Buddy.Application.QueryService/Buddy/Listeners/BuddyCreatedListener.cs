@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Buddy.Domain.Events;
-using Core.Application;
 using Core.Application.Query;
 
 namespace Buddy.Application.QueryService.Buddy.Listeners
@@ -17,6 +16,7 @@ namespace Buddy.Application.QueryService.Buddy.Listeners
             var view = new BuddyReadModel
             {
                 Id = notification.Id,
+                AccountId = notification.AccountId,
                 GenreIds = new List<string>(),
                 Tasks = new List<Domain.Task>()
             };

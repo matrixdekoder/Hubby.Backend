@@ -1,24 +1,23 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using Buddy.Infrastructure;
 using Core.Api;
-using Library.Mongo.Persistence;
 using MediatR;
-using MongoDB.Driver;
 using Region.Application.CommandService.Create;
-using Region.Application.QueryService;
 using Region.Domain;
 
 namespace Region.Api
 {
     public class RegionSeeder : ISeeder
     {
-        private readonly IMongoCollection<RegionReadModel> _collection;
         private readonly IMediator _mediator;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public RegionSeeder(IMongoContext context, IMediator mediator)
+        public RegionSeeder(IMediator mediator, IUnitOfWork unitOfWork)
         {
-            _collection = context.GetCollection<RegionReadModel>();
             _mediator = mediator;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task Seed()
@@ -32,10 +31,21 @@ namespace Region.Api
                 new CreateRegionCommand(RegionConstants.SouthAmerica, "South America")
             };
 
-            foreach (var command in commands)
+            try
             {
-                await _mediator.Publish(command);
+                foreach (var command in commands)
+                {
+                    await _mediator.Publish(command);
+                }
+
+                await _unitOfWork.Commit();
             }
+            catch (Exception)
+            {
+                _unitOfWork.Rollback();
+                throw;
+            }
+
         }
     }
 }

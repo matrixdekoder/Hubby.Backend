@@ -3,11 +3,12 @@ using Buddy.Application.CommandService.Buddy.ChooseGenres;
 using Buddy.Application.CommandService.Buddy.ChooseRegion;
 using Buddy.Application.CommandService.Buddy.UpdateTasks;
 using Buddy.Application.CommandService.Group.MatchBuddy;
-using Buddy.Application.CommandService.Group.RemoveBuddySaga;
+using Buddy.Application.CommandService.Group.RemoveBuddy;
 using Buddy.Application.QueryService.Buddy;
 using Buddy.Application.QueryService.Buddy.Get;
 using Buddy.Application.QueryService.Group;
 using Buddy.Application.QueryService.Group.Get;
+using Buddy.Infrastructure;
 using Core.Api;
 using Core.Api.Exceptions;
 using MediatR;
@@ -18,7 +19,7 @@ namespace Buddy.Api
     [Route("api/[controller]")]
     public class BuddyController: BaseController
     {
-        public BuddyController(IMediator mediator, IExceptionHandler exceptionHandler) : base(mediator, exceptionHandler)
+        public BuddyController(IMediator mediator, IExceptionHandler exceptionHandler, IUnitOfWork unitOfWork) : base(mediator, exceptionHandler, unitOfWork)
         {
         }
 
@@ -53,7 +54,7 @@ namespace Buddy.Api
         }
 
         [HttpPost("leave")]
-        public async Task<IActionResult> LeaveGroup([FromBody] RemoveBuddySagaCommand command)
+        public async Task<IActionResult> LeaveGroup([FromBody] RemoveBuddyCommand command)
         {
             return await Publish(command);
         }

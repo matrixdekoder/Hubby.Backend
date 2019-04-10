@@ -3,18 +3,17 @@ using System.Threading.Tasks;
 using Buddy.Domain.Enums;
 using Buddy.Domain.Services;
 using Core.Domain;
+using Core.Domain.Entities;
 using MediatR;
 
 namespace Buddy.Application.CommandService.Group.MatchBuddy
 {
     public class MatchBuddyCommandHandler: INotificationHandler<MatchBuddyCommand>
     {
-        private readonly ISagaRepository _repository;
+        private readonly IRepository _repository;
         private readonly IMatchService _matchService;
 
-        public MatchBuddyCommandHandler(
-            ISagaRepository repository,
-            IMatchService matchService)
+        public MatchBuddyCommandHandler(IRepository repository, IMatchService matchService)
         {
             _repository = repository;
             _matchService = matchService;
@@ -24,10 +23,9 @@ namespace Buddy.Application.CommandService.Group.MatchBuddy
         {
             var buddy = await _repository.GetById<Domain.Buddy>(notification.BuddyId);
             var group = await _matchService.GetBestGroup(buddy);
-            var transactionId = await _repository.StartTransaction<Domain.Group>(group.Id);
 
             group.AddBuddy(buddy, BuddyJoinType.New);
-            await _repository.Save(transactionId, group);
+            await _repository.Save(group);
         }
     }
 }

@@ -1,25 +1,23 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using Buddy.Infrastructure;
 using Core.Api;
 using Genre.Application.CommandService.Create;
-using Genre.Application.QueryService;
 using Genre.Domain;
-using Library.Mongo;
-using Library.Mongo.Persistence;
 using MediatR;
-using MongoDB.Driver;
 
 namespace Genre.Api
 {
     public class GenreSeeder : ISeeder
     {
         private readonly IMediator _mediator;
-        private readonly IMongoCollection<GenreReadModel> _collection;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public GenreSeeder(IMongoContext context, IMediator mediator)
+        public GenreSeeder(IMediator mediator, IUnitOfWork unitOfWork)
         {
             _mediator = mediator;
-            _collection = context.GetCollection<GenreReadModel>();
+            _unitOfWork = unitOfWork;
         }
 
         public async Task Seed()
@@ -55,9 +53,19 @@ namespace Genre.Api
                 new CreateGenreCommand(GenreConstants.Sports, "Sports"),
             };
 
-            foreach (var command in commands)
+            try
             {
-                await _mediator.Publish(command);
+                foreach (var command in commands)
+                {
+                    await _mediator.Publish(command);
+                }
+
+                await _unitOfWork.Commit();
+            }
+            catch (Exception)
+            {
+                _unitOfWork.Rollback();
+                throw;
             }
         }
     }
