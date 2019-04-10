@@ -1,5 +1,6 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
+using Buddy.Domain.Enums;
 using Core.Domain.Entities;
 using MediatR;
 
@@ -18,6 +19,10 @@ namespace Buddy.Application.CommandService.Group.StartMerge
         {
             var group = await _repository.GetById<Domain.Group>(notification.GroupId);
             var matchedGroup = await _repository.GetById<Domain.Group>(notification.MatchedGroupId);
+
+            matchedGroup.SetStatus(GroupStatus.Merging);
+            await _repository.Save(matchedGroup);
+
             group.StartMerge(matchedGroup);
             await _repository.Save(group);
         }
