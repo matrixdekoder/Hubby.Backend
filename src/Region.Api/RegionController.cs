@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Buddy.Infrastructure;
 using Core.Api;
 using Core.Api.Exceptions;
+using Core.Infrastructure;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Region.Application.QueryService;

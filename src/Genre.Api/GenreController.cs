@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Buddy.Infrastructure;
+using Core.Infrastructure;
 using Genre.Application.QueryService.GetGenres;
 
 namespace Genre.Api

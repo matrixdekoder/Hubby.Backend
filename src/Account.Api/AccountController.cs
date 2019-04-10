@@ -4,6 +4,7 @@ using Account.Application.QueryService.Login;
 using Buddy.Infrastructure;
 using Core.Api;
 using Core.Api.Exceptions;
+using Core.Infrastructure;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

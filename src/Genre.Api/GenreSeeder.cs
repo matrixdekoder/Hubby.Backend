@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Buddy.Infrastructure;
 using Core.Api;
+using Core.Infrastructure;
 using Genre.Application.CommandService.Create;
 using Genre.Domain;
 using MediatR;

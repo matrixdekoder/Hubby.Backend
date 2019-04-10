@@ -1,30 +1,49 @@
 ﻿using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Buddy.Infrastructure;
 using Core.Domain.Events;
+using Core.Infrastructure;
 using EventStore.ClientAPI;
+using Library.EventStore.Configurations;
 
 namespace Library.EventStore.Persistence
 {
     public class EventStoreUnitOfWork: IUnitOfWork
     {
         private readonly IEventStoreContext _eventStoreContext;
-        private readonly ConcurrentDictionary<string, long> _transactions;
-        private readonly ConcurrentDictionary<string, List<IEvent>> _uncommittedEvents;
+        private readonly ConcurrentDictionary<string, EventTransaction> _transactions;
 
         public EventStoreUnitOfWork(IEventStoreContext eventStoreContext)
         {
             _eventStoreContext = eventStoreContext;
-            _transactions = new ConcurrentDictionary<string, long>();
-            _uncommittedEvents = new ConcurrentDictionary<string, List<IEvent>>();
+            _transactions = new ConcurrentDictionary<string, EventTransaction>();
+        }
+
+        public IList<IEvent> GetEvents(string stream)
+        {
+            _transactions.TryGetValue(stream, out var eventTransaction);
+            return eventTransaction?.GetEvents(stream) ?? new List<IEvent>();
+        }
+
+        public async Task SaveChanges(string stream, IList<IEvent> events)
+        {
+            var transaction = await GetTransaction(stream);
+            var transactionEvents = events.Select(x => x.ToEventData()).ToList();
+            await transaction.WriteAsync(transactionEvents);
+
+            if (_transactions.TryGetValue(stream, out var eventTransaction))
+            {
+                eventTransaction.AddEvents(stream, events);
+            }
         }
 
         public async Task Commit()
         {
-            foreach (var transactionId in _transactions.Values)
+            foreach (var eventTransaction in _transactions.Values)
             {
-                var transaction = _eventStoreContext.Connection.ContinueTransaction(transactionId);
+                var transaction = _eventStoreContext.Connection.ContinueTransaction(eventTransaction.Id);
                 await transaction.CommitAsync();
                 transaction.Dispose();
             }
@@ -32,38 +51,28 @@ namespace Library.EventStore.Persistence
 
         public void Rollback()
         {
-            foreach (var transactionId in _transactions.Values)
+            foreach (var eventTransaction in _transactions.Values)
             {
-                var transaction = _eventStoreContext.Connection.ContinueTransaction(transactionId);
+                var transaction = _eventStoreContext.Connection.ContinueTransaction(eventTransaction.Id);
                 transaction.Rollback();
                 transaction.Dispose();
             }
         }
 
-        public async Task<EventStoreTransaction> GetTransaction(string id, string stream)
+        private async Task<EventStoreTransaction> GetTransaction(string stream)
         {
-            var transaction = _transactions.TryGetValue(id, out var transactionId)
-                ? _eventStoreContext.Connection.ContinueTransaction(transactionId)
-                : await _eventStoreContext.Connection.StartTransactionAsync(stream, ExpectedVersion.Any);
-
-            _transactions.AddOrUpdate(id, transaction.TransactionId, (s, l) => transaction.TransactionId);
+            var transaction = _transactions.TryGetValue(stream, out var tx)
+                ? _eventStoreContext.Connection.ContinueTransaction(tx.Id)
+                : await CreateTransaction(stream);
 
             return transaction;
         }
 
-        public void WriteEvents(string id, IList<IEvent> events)
+        private async Task<EventStoreTransaction> CreateTransaction(string stream)
         {
-            _uncommittedEvents.AddOrUpdate(id, new List<IEvent>(events), (s, list) =>
-            {
-                list.AddRange(events);
-                return list;
-            });
-        }
-
-        public IList<IEvent> GetUncommittedEvents(string id)
-        {
-            _uncommittedEvents.TryGetValue(id, out var uncommittedEvents);
-            return uncommittedEvents ?? new List<IEvent>();
+            var transaction = await _eventStoreContext.Connection.StartTransactionAsync(stream, ExpectedVersion.Any);
+            _transactions.TryAdd(stream, new EventTransaction(transaction.TransactionId));
+            return transaction;
         }
     }
 }

@@ -1,6 +1,5 @@
-﻿using Buddy.Infrastructure;
-using Core.Domain;
-using Core.Domain.Entities;
+﻿using Core.Domain.Entities;
+using Core.Infrastructure;
 using Library.EventStore.Configurations;
 using Library.EventStore.Handlers;
 using Library.EventStore.Persistence;
